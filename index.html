@@ -22,6 +22,7 @@
       .tab-section > div { margin-bottom: 12px; }
       .tab-section + .tab-section, .print-summary + .tab-section { break-before: page; page-break-before: always; }
       .chart-box { height: auto !important; }
+      .print-expand { display: block !important; }   /* 畫面上收合的區塊，列印時一律展開 */
       .chart-box canvas { width: 100% !important; height: auto !important; max-width: 100%; }
       .rounded-xl, tr { break-inside: avoid; page-break-inside: avoid; }
       header { padding: 10px 14px !important; }
@@ -466,7 +467,10 @@
         </div>
 
         <div class="ltc-guide bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-3">
-          <div class="font-bold text-slate-800 text-sm">📖 認識長照：什麼是長照？和失能有什麼不同？</div>
+          <button type="button" class="collapse-btn w-full flex justify-between items-center font-bold text-slate-800 text-sm text-left" aria-expanded="false" aria-controls="ltcGuideA" onclick="toggleCollapse(this)">
+            <span>📖 認識長照：什麼是長照？和失能有什麼不同？</span><span class="collapse-icon no-print text-xs text-slate-500 font-normal whitespace-nowrap">▸ 展開</span>
+          </button>
+          <div id="ltcGuideA" class="print-expand hidden space-y-3">
           <p><strong>長期照顧（長照）</strong>是指身體或心智功能受損，<strong>已經或預期持續 6 個月以上</strong>，吃飯、洗澡、上廁所、移動等日常生活需要別人協助（長期照顧服務法第 3 條）。<strong>長照不限年齡</strong>：中風、車禍、癌症、失智都可能在工作年齡發生，而且這時候往往同時失去工作收入，對家庭財務的衝擊比退休後更大。</p>
           <table class="print-table">
             <thead><tr><th style="width:16%"></th><th style="width:42%">長期照顧（長照險）</th><th>失能（失能險／失能扶助險）</th></tr></thead>
@@ -478,8 +482,11 @@
             </tbody>
           </table>
           <p class="text-amber-800 bg-amber-50 rounded px-2 py-1">重點：<strong>需要長照不一定符合失能等級</strong>（例如失智、中風復健中尚未固定），<strong>失能也不一定需要長照</strong>（例如失去一隻手指）。兩種保障互補，檢視保單時最好兩者一起看。</p>
-
-          <div class="font-bold text-slate-800 pt-1">🏛️ 政府長照服務補助參考表（「四包錢」）</div>
+          </div>
+          <button type="button" class="collapse-btn w-full flex justify-between items-center font-bold text-slate-800 text-sm text-left" aria-expanded="false" aria-controls="ltcGuideB" onclick="toggleCollapse(this)">
+            <span>🏛️ 政府長照服務補助參考表（「四包錢」）</span><span class="collapse-icon no-print text-xs text-slate-500 font-normal whitespace-nowrap">▸ 展開</span>
+          </button>
+          <div id="ltcGuideB" class="print-expand hidden space-y-3">
           <p>申請對象須經照管專員評估為長照需要等級（CMS）<strong>第 2 級以上</strong>，且為：65 歲以上、55 歲以上原住民、失智症者（115 年起不限年齡）、領有身心障礙證明者，或急性後期整合照護個案。撥打 <strong>1966</strong> 申請。</p>
           <table class="print-table">
             <thead><tr><th style="width:24%">項目</th><th>給付額度</th><th style="width:30%">自付比例（一般戶／中低收／低收）</th></tr></thead>
@@ -492,6 +499,7 @@
             </tbody>
           </table>
           <p class="text-[10px] text-slate-400">*額度以 114 年公告為基準，長照 3.0 延續此架構並逐年調整；補助會隨健康狀況、評估等級與政策改變，僅供參考，未自動計入上方試算，實際以衛福部及各縣市長照管理中心核定為準。聘僱外籍看護者，部分服務項目會受限制。</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1640,6 +1648,14 @@
       reader.readAsText(file);
     });
     refreshClientList();
+
+    // 收合區塊（列印時由 CSS 強制展開）
+    function toggleCollapse(btn) {
+      const body = document.getElementById(btn.getAttribute('aria-controls'));
+      const open = body.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(open));
+      btn.querySelector('.collapse-icon').textContent = open ? '▾ 收合' : '▸ 展開';
+    }
 
     // 按鈕列印：先畫好三頁與圖表，等瀏覽器繪製完成再開列印視窗（Safari/iPad 不一定觸發 beforeprint）
     function printReport() {
