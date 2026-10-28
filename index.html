@@ -2,143 +2,164 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="CFP戰情室">
-  <title>CFP 全方位生涯財務與稅務傳承戰情室</title>
+  <meta name="apple-mobile-web-app-title" content="財務規劃戰情室">
+  <title>全方位生涯財務與稅務傳承戰情室</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
+    .print-only { display: none; }
     @media print {
+      @page { size: A4; margin: 12mm; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .no-print { display: none !important; }
-      body { background: white !important; padding: 0 !important; }
-      .print-container { border: none !important; box-shadow: none !important; max-width: 100% !important; }
+      .print-only { display: block !important; }
+      body { background: white !important; padding: 0 !important; font-size: 12px; }
+      .print-container { border: none !important; box-shadow: none !important; max-width: 100% !important; border-radius: 0 !important; }
+      .tab-section { display: block !important; padding: 0 !important; }
+      .tab-section > div { margin-bottom: 12px; }
+      .tab-section + .tab-section { break-before: page; page-break-before: always; }
+      canvas { display: none !important; }
+      .print-chart { display: block !important; width: 100%; height: auto; }
+      .h-64, .h-72 { height: auto !important; }
+      .rounded-xl, tr { break-inside: avoid; page-break-inside: avoid; }
+      header { padding: 10px 14px !important; }
     }
-    .tab-btn.active {
-      background-color: #f59e0b;
-      color: #0f172a;
-      font-weight: 700;
-    }
+    .print-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .print-table th, .print-table td { border: 1px solid #cbd5e1; padding: 4px 6px; text-align: left; vertical-align: top; }
+    .print-table th { background: #f1f5f9; }
+    .print-table td.v { white-space: nowrap; font-weight: 700; color: #1e3a8a; }
+    .help-btn { display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; margin-left:4px; border-radius:9999px; font-size:10px; font-weight:700; line-height:1; color:#475569; background:#e2e8f0; cursor:pointer; vertical-align:middle; }
+    .help-btn:hover, .help-btn[aria-expanded="true"] { background:#f59e0b; color:#0f172a; }
+    .help-text { font-size:11px; line-height:1.5; color:#475569; background:#f8fafc; border-left:3px solid #f59e0b; padding:4px 8px; margin-top:4px; border-radius:4px; }
+    .tab-btn.active { background-color: #f59e0b; color: #0f172a; font-weight: 700; }
     input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-      opacity: 1;
-    }
+    input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 p-2 md:p-5 font-sans">
   <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden print-container">
-    
-    <!-- 頂部導覽列 -->
+
     <header class="bg-slate-900 text-white p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-3">
       <div>
         <div class="flex items-center gap-2">
-          <span class="bg-amber-500 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded">CFP PRO 2026</span>
+          <span class="bg-amber-500 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded">115年版</span>
           <h1 class="text-lg md:text-2xl font-bold tracking-tight">全方位生涯財務與稅務傳承戰情室</h1>
         </div>
         <p class="text-slate-400 text-xs mt-1">跨制度退休金流 ✕ 逆算模型 ✕ 115年遺贈稅與流動性現金檢核</p>
       </div>
 
-      <!-- 頁籤切換 -->
       <div class="no-print flex bg-slate-800 p-1 rounded-xl gap-1">
-        <button onclick="switchTab('retire')" id="btn-retire" class="tab-btn active px-3.5 py-2 rounded-lg text-xs md:text-sm transition">
-          1. 退休金流與逆算
-        </button>
-        <button onclick="switchTab('risk')" id="btn-risk" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">
-          2. 長照與醫療防禦
-        </button>
-        <button onclick="switchTab('tax')" id="btn-tax" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">
-          3. 遺贈與房地稅務
-        </button>
+        <button onclick="switchTab('retire')" id="btn-retire" class="tab-btn active px-3.5 py-2 rounded-lg text-xs md:text-sm transition">1. 退休金流與逆算</button>
+        <button onclick="switchTab('risk')" id="btn-risk" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">2. 長照與醫療防禦</button>
+        <button onclick="switchTab('tax')" id="btn-tax" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">3. 遺贈與房地稅務</button>
       </div>
 
+      <input id="clientName" type="text" placeholder="客戶姓名（列印用）" class="no-print text-slate-900 text-xs px-2 py-1.5 rounded-lg w-36">
       <button onclick="window.print()" class="no-print bg-slate-700 hover:bg-slate-600 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded-xl border border-slate-600 transition flex items-center gap-1.5">
         <span>📄 匯出 PDF 報告</span>
       </button>
+      <label class="no-print flex items-center gap-1.5 text-xs text-slate-300 cursor-pointer select-none">
+        <input type="checkbox" id="showAllHelp" class="w-4 h-4 accent-amber-500"> 顯示全部欄位說明
+      </label>
     </header>
 
+    <div class="print-only px-4 pt-3 pb-1 text-sm border-b border-slate-300">
+      <div class="flex justify-between"><span>客戶：<strong id="printClient">＿＿＿＿＿＿</strong></span><span>規劃人：宋秉諭</span><span>報告日期：<span id="printDate2"></span></span></div>
+      <p class="text-[11px] text-slate-500 mt-1">本報告共三部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
+    </div>
+
     <!-- ==================== 模組 1：退休金流與逆算模型 ==================== -->
-    <div id="tab-retire" class="p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div id="tab-retire" class="tab-section p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="print-only print-block lg:col-span-12">
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">一、退休金流與逆算</h2>
+        <p class="text-[11px] text-slate-600 mb-2">「第一層」是勞保與國保年金，「第二層」是勞退個人帳戶，兩者不足的部分就是需要自己準備的「第三層缺口」。下方圖表顯示退休後資產逐年的變化：藍線是照目前的投入，綠色虛線是補足缺口後的情況。</p>
+        <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
+        <div class="print-assumptions" data-section="tab-retire"></div>
+      </div>
       <div class="lg:col-span-5 space-y-4 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
         <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">👤 退休目標與收支參數 (可滑動或輸入)</h2>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-3 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
               <span>目前年齡</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="age_num" value="38" min="20" max="65" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5">
-                <span>歲</span>
-              </div>
+              <div class="flex items-center gap-1"><input type="number" id="age_num" value="38" min="20" max="65" class="w-12 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>歲</span></div>
             </div>
             <input type="range" id="age" min="20" max="65" value="38" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
               <span>預計退休</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="retireAge_num" value="65" min="50" max="75" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5">
-                <span>歲</span>
-              </div>
+              <div class="flex items-center gap-1"><input type="number" id="retireAge_num" value="65" min="50" max="75" class="w-12 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>歲</span></div>
             </div>
             <input type="range" id="retireAge" min="50" max="75" value="65" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>規劃至</span>
+              <div class="flex items-center gap-1"><input type="number" id="lifeAge_num" value="90" min="75" max="105" class="w-12 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>歲</span></div>
+            </div>
+            <input type="range" id="lifeAge" min="75" max="105" value="90" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
         </div>
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
           <div class="flex justify-between items-center text-xs font-medium mb-1">
-            <span>目前月薪 (計算替代率與勞退提繳)</span>
-            <div class="flex items-center gap-1">
-              <input type="number" id="salary_num" value="60000" min="0" max="500000" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5">
-              <span>元</span>
-            </div>
+            <span>目前月薪 (計算勞保與勞退提繳)</span>
+            <div class="flex items-center gap-1"><input type="number" id="salary_num" value="60000" min="0" max="500000" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5"><span>元</span></div>
           </div>
-          <input type="range" id="salary" min="25000" max="250000" step="1000" value="60000" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
+          <input type="range" id="salary" min="29500" max="250000" step="1000" value="60000" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
+        </div>
+
+        <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+          <div class="flex justify-between items-center text-xs font-medium mb-1">
+            <span>目前每月生活支出 (今日物價)</span>
+            <div class="flex items-center gap-1"><input type="number" id="expense_num" value="45000" min="0" max="500000" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5"><span>元</span></div>
+          </div>
+          <input type="range" id="expense" min="10000" max="200000" step="1000" value="45000" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
               <span>年薪成長率</span>
-              <div class="flex items-center gap-0.5">
-                <input type="number" id="salGrowth_num" value="2.5" min="0" max="10" step="0.1" class="w-14 text-right font-bold text-emerald-600 border rounded px-1 py-0.5">
-                <span>%</span>
-              </div>
+              <div class="flex items-center gap-0.5"><input type="number" id="salGrowth_num" value="2.5" min="0" max="10" step="0.1" class="w-14 text-right font-bold text-emerald-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="salGrowth" min="0" max="8" step="0.1" value="2.5" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>目標所得替代率</span>
-              <div class="flex items-center gap-0.5">
-                <input type="number" id="repRate_num" value="70" min="30" max="120" step="1" class="w-14 text-right font-bold text-emerald-600 border rounded px-1 py-0.5">
-                <span>%</span>
-              </div>
+              <span>退休支出佔目前支出</span>
+              <div class="flex items-center gap-0.5"><input type="number" id="repRate_num" value="80" min="30" max="120" step="1" class="w-14 text-right font-bold text-emerald-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
-            <input type="range" id="repRate" min="30" max="100" step="5" value="70" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
+            <input type="range" id="repRate" min="30" max="120" step="5" value="80" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-3 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>預估年通膨率</span>
-              <div class="flex items-center gap-0.5">
-                <input type="number" id="inflation_num" value="2.2" min="0" max="10" step="0.1" class="w-14 text-right font-bold text-amber-600 border rounded px-1 py-0.5">
-                <span>%</span>
-              </div>
+              <span>通膨率</span>
+              <div class="flex items-center gap-0.5"><input type="number" id="inflation_num" value="2.2" min="0" max="10" step="0.1" class="w-12 text-right font-bold text-amber-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="inflation" min="0" max="6" step="0.1" value="2.2" class="w-full accent-amber-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>投資年化報酬</span>
-              <div class="flex items-center gap-0.5">
-                <input type="number" id="roi_num" value="6.0" min="0" max="20" step="0.1" class="w-14 text-right font-bold text-indigo-600 border rounded px-1 py-0.5">
-                <span>%</span>
-              </div>
+              <span>退休前報酬</span>
+              <div class="flex items-center gap-0.5"><input type="number" id="roi_num" value="6.0" min="0" max="20" step="0.1" class="w-12 text-right font-bold text-indigo-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
-            <input type="range" id="roi" min="1" max="12" step="0.5" value="6.0" class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg">
+            <input type="range" id="roi" min="0" max="12" step="0.5" value="6.0" class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg">
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>退休後報酬</span>
+              <div class="flex items-center gap-0.5"><input type="number" id="postRoi_num" value="4.0" min="0" max="12" step="0.1" class="w-12 text-right font-bold text-indigo-600 border rounded px-1 py-0.5"><span>%</span></div>
+            </div>
+            <input type="range" id="postRoi" min="0" max="8" step="0.5" value="4.0" class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
         </div>
 
@@ -146,21 +167,15 @@
         <div class="grid grid-cols-2 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>勞保年資</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="laborYears_num" value="35" min="0" max="50" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5">
-                <span>年</span>
-              </div>
+              <span>勞保年資 (退休時)</span>
+              <div class="flex items-center gap-1"><input type="number" id="laborYears_num" value="35" min="0" max="50" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>年</span></div>
             </div>
             <input type="range" id="laborYears" min="0" max="45" value="35" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
               <span>國保年資</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="natYears_num" value="0" min="0" max="40" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5">
-                <span>年</span>
-              </div>
+              <div class="flex items-center gap-1"><input type="number" id="natYears_num" value="0" min="0" max="40" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>年</span></div>
             </div>
             <input type="range" id="natYears" min="0" max="35" value="0" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
@@ -168,7 +183,7 @@
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
           <div class="flex justify-between items-center text-xs font-medium mb-1">
-            <span>勞保請領年齡 (65歲基準±20%)</span>
+            <span>勞保請領年齡 (65歲基準，每提前/延後1年 ∓4%，最多5年)</span>
             <div class="flex items-center gap-1">
               <input type="number" id="claimAge_num" value="65" min="60" max="70" class="w-14 text-right font-bold text-indigo-600 border rounded px-1 py-0.5">
               <span class="text-xs font-bold text-indigo-600" id="claimAdjBadge">(+0%)</span>
@@ -181,27 +196,43 @@
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
               <span>勞退自提率</span>
-              <div class="flex items-center gap-0.5">
-                <input type="number" id="selfContrib_num" value="0" min="0" max="6" step="1" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5">
-                <span>%</span>
-              </div>
+              <div class="flex items-center gap-0.5"><input type="number" id="selfContrib_num" value="0" min="0" max="6" step="1" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="selfContrib" min="0" max="6" step="1" value="0" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>勞退專戶現有餘額</span>
+              <div class="flex items-center gap-1"><input type="number" id="lpBal_num" value="50" min="0" max="2000" step="5" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+            </div>
+            <input type="range" id="lpBal" min="0" max="500" step="5" value="50" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>勞退基金年報酬</span>
+              <div class="flex items-center gap-0.5"><input type="number" id="lpRoi_num" value="3.5" min="0" max="10" step="0.1" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>%</span></div>
+            </div>
+            <input type="range" id="lpRoi" min="0" max="8" step="0.5" value="3.5" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
               <span>已備退休金/ETF</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="saved_num" value="100" min="0" max="10000" step="10" class="w-16 text-right font-bold text-blue-600 border rounded px-1 py-0.5">
-                <span>萬</span>
-              </div>
+              <div class="flex items-center gap-1"><input type="number" id="saved_num" value="100" min="0" max="10000" step="10" class="w-16 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
             </div>
             <input type="range" id="saved" min="0" max="1500" step="10" value="100" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
         </div>
+
+        <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+          <div class="flex justify-between items-center text-xs font-medium mb-1">
+            <span>目前每月已在投入的退休投資</span>
+            <div class="flex items-center gap-1"><input type="number" id="monthlyInvest_num" value="10000" min="0" max="300000" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5"><span>元</span></div>
+          </div>
+          <input type="range" id="monthlyInvest" min="0" max="100000" step="1000" value="10000" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
+        </div>
+        <p class="text-[10px] text-slate-400">*115年參數：勞保最高投保薪資 45,800 元、國保月投保金額 21,103 元(A式加計 4,049 元)、勞退月提繳工資上限 150,000 元。</p>
       </div>
 
-      <!-- 右側圖表與逆算診斷 -->
       <div class="lg:col-span-7 space-y-5">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl">
@@ -215,9 +246,9 @@
             <div class="text-[10px] text-blue-600" id="pillar2Desc">專戶累積月退</div>
           </div>
           <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl">
-            <div class="text-[11px] text-amber-700 font-medium">退休目標月生活費</div>
+            <div class="text-[11px] text-amber-700 font-medium">退休首年目標月生活費</div>
             <div class="text-base font-bold text-amber-900 mt-0.5" id="cardTargetMonthly">--</div>
-            <div class="text-[10px] text-amber-600">依替代率計算</div>
+            <div class="text-[10px] text-amber-600" id="targetDesc">依目前支出×比例×通膨</div>
           </div>
           <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl">
             <div class="text-[11px] text-rose-700 font-bold">第三層需自備缺口</div>
@@ -227,13 +258,12 @@
         </div>
 
         <div class="bg-white p-4 rounded-xl border border-slate-200">
-          <div class="text-sm font-bold text-slate-700 mb-2 flex justify-between items-center">
-            <span>退休後資產存續模擬 (退休～85歲)</span>
-            <span id="sustainStatusBadge" class="text-xs bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-bold">資產可安穩支撐至 85 歲以上</span>
+          <div class="text-sm font-bold text-slate-700 mb-2 flex justify-between items-center gap-2">
+            <span id="retireChartTitle">退休後資產存續模擬</span>
+            <span id="sustainStatusBadge" class="text-xs bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-bold">--</span>
           </div>
-          <div class="h-64">
-            <canvas id="retireChart"></canvas>
-          </div>
+          <div class="h-64"><canvas id="retireChart"></canvas><img class="print-chart print-only" id="retireChartImg" alt="退休資產軌跡圖"></div>
+          <p class="text-[10px] text-slate-400 mt-1">金額為各年度名目幣值；生活費每年隨通膨成長，勞保/國保年金隨物價調整，勞退月退為固定金額。</p>
         </div>
 
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-1.5">
@@ -243,56 +273,69 @@
       </div>
     </div>
 
-    <!-- ==================== 模組 2：長照與醫療防禦 (獨立頁籤) ==================== -->
-    <div id="tab-risk" class="hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- ==================== 模組 2：長照與醫療防禦 ==================== -->
+    <div id="tab-risk" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="print-only print-block lg:col-span-12">
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">二、長照風險壓力測試</h2>
+        <p class="text-[11px] text-slate-600 mb-2">假設在指定年齡開始需要長期照顧，比較「健康退休」（藍線）與「發生長照」（紅線）兩種情況下退休資產的變化，用來評估長照險保額或長照準備金是否足夠。</p>
+        <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
+        <div class="print-assumptions" data-section="tab-risk"></div>
+      </div>
       <div class="lg:col-span-5 space-y-4 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
-        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">🚨 75～85 歲長照風險壓力測試 (10年照護期)</h2>
-        
+        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">🚨 長照風險壓力測試</h2>
+
         <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-xs text-amber-900 space-y-1">
           <div class="font-bold">💡 說明：</div>
-          <p>本分頁直接繼承您在「第一分頁」算出的退休目標與缺口，專門用來測試萬一在 75 歲發生長照（需聘請看護與購買耗材），您的資產會受到什麼衝擊。</p>
+          <p>本分頁沿用「第一分頁」的退休金流與資產，測試若在指定年齡發生長照（聘請看護、耗材），資產會受到什麼衝擊。長照費用以今日物價輸入，系統會依通膨率換算到發生當年。</p>
         </div>
 
         <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-red-700">模擬 75 歲啟動長照狀態</span>
+            <span class="text-xs font-bold text-red-700">啟動長照情境</span>
             <input type="checkbox" id="ltcToggleRisk" checked class="w-5 h-5 accent-red-600 cursor-pointer">
           </div>
-          <div>
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>長照每月看護與耗材開銷</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="ltcCostRisk_num" value="45000" min="0" max="200000" step="1000" class="w-20 text-right font-bold text-red-600 border rounded px-1 py-0.5">
-                <span>元/月</span>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <div class="flex justify-between items-center text-xs font-medium mb-1">
+                <span>發生年齡</span>
+                <div class="flex items-center gap-1"><input type="number" id="ltcStart_num" value="75" min="50" max="100" class="w-12 text-right font-bold text-red-600 border rounded px-1 py-0.5"><span>歲</span></div>
               </div>
+              <input type="range" id="ltcStart" min="60" max="95" value="75" class="w-full accent-red-600 h-1.5 bg-slate-200 rounded-lg">
             </div>
-            <input type="range" id="ltcCostRisk" min="20000" max="100000" step="5000" value="45000" class="w-full accent-red-600 h-1.5 bg-slate-200 rounded-lg">
+            <div>
+              <div class="flex justify-between items-center text-xs font-medium mb-1">
+                <span>照護期間</span>
+                <div class="flex items-center gap-1"><input type="number" id="ltcYears_num" value="10" min="1" max="30" class="w-12 text-right font-bold text-red-600 border rounded px-1 py-0.5"><span>年</span></div>
+              </div>
+              <input type="range" id="ltcYears" min="1" max="20" value="10" class="w-full accent-red-600 h-1.5 bg-slate-200 rounded-lg">
+            </div>
           </div>
-
           <div>
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>🛡️ 商業長照險每月理賠填補</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="ltcInsRisk_num" value="0" min="0" max="200000" step="1000" class="w-20 text-right font-bold text-emerald-600 border rounded px-1 py-0.5">
-                <span>元/月</span>
-              </div>
+              <span>長照每月看護與耗材開銷 (今日物價)</span>
+              <div class="flex items-center gap-1"><input type="number" id="ltcCostRisk_num" value="45000" min="0" max="200000" step="1000" class="w-20 text-right font-bold text-red-600 border rounded px-1 py-0.5"><span>元/月</span></div>
+            </div>
+            <input type="range" id="ltcCostRisk" min="0" max="100000" step="5000" value="45000" class="w-full accent-red-600 h-1.5 bg-slate-200 rounded-lg">
+          </div>
+          <div>
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>🛡️ 商業長照險每月理賠 (固定金額)</span>
+              <div class="flex items-center gap-1"><input type="number" id="ltcInsRisk_num" value="0" min="0" max="200000" step="1000" class="w-20 text-right font-bold text-emerald-600 border rounded px-1 py-0.5"><span>元/月</span></div>
             </div>
             <input type="range" id="ltcInsRisk" min="0" max="100000" step="5000" value="0" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
+          <p class="text-[10px] text-slate-400">*未計入長照2.0/3.0政府補助；如個案符合資格，可把補助額視同理賠填入。</p>
         </div>
       </div>
 
       <div class="lg:col-span-7 space-y-5">
         <div class="bg-white p-4 rounded-xl border border-slate-200">
-          <div class="text-sm font-bold text-slate-700 mb-2 flex justify-between items-center">
+          <div class="text-sm font-bold text-slate-700 mb-2 flex justify-between items-center gap-2">
             <span>長照壓力測試：健康資產 vs. 長照衝擊資產軌跡</span>
-            <span id="riskBadge" class="text-xs bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full font-bold">⚠️ 壓力測試進行中</span>
+            <span id="riskBadge" class="text-xs bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full font-bold">--</span>
           </div>
-          <div class="h-72">
-            <canvas id="riskChart"></canvas>
-          </div>
+          <div class="h-72"><canvas id="riskChart"></canvas><img class="print-chart print-only" id="riskChartImg" alt="長照衝擊資產軌跡圖"></div>
         </div>
-
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-1.5">
           <div class="font-bold text-slate-800 text-sm">📋 醫療防禦與保險規劃建議：</div>
           <ul class="text-slate-600 space-y-1.5 list-disc pl-4" id="advisorNotesRisk"></ul>
@@ -300,18 +343,21 @@
       </div>
     </div>
 
-    <!-- ==================== 模組 3：115年(2026) 遺贈稅與不動產稅務模組 ==================== -->
-    <div id="tab-tax-section" class="hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- ==================== 模組 3：115年(2026) 遺贈稅與不動產稅務 ==================== -->
+    <div id="tab-tax" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="print-only print-block lg:col-span-12">
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">三、遺產稅與傳承規劃</h2>
+        <p class="text-[11px] text-slate-600 mb-2">依 115 年遺產及贈與稅法試算：遺產總額扣除免稅額、各項扣除額與配偶剩餘財產差額分配請求權後，得出「課稅遺產淨額」與「應納遺產稅」，並檢核家人是否有足夠現金繳稅。</p>
+        <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
+        <div class="print-assumptions" data-section="tab-tax"></div>
+      </div>
       <div class="lg:col-span-5 space-y-3.5 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
-        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">🏛️ 115年(2026) 遺產與不動產結構 (官方核定基準)</h2>
+        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">🏛️ 115年(2026) 遺產與不動產結構</h2>
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
           <div class="flex justify-between items-center text-xs font-medium mb-1">
             <span>金融資產總額 (現金/股票/ETF/債券)</span>
-            <div class="flex items-center gap-1">
-              <input type="number" id="finAsset_num" value="3000" min="0" max="50000" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5">
-              <span>萬</span>
-            </div>
+            <div class="flex items-center gap-1"><input type="number" id="finAsset_num" value="3000" min="0" max="50000" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
           </div>
           <input type="range" id="finAsset" min="0" max="15000" step="100" value="3000" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
         </div>
@@ -319,17 +365,14 @@
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
           <div class="flex justify-between items-center text-xs font-medium mb-1">
             <span>不動產市價總額 (房屋+土地市價)</span>
-            <div class="flex items-center gap-1">
-              <input type="number" id="reMarket_num" value="5000" min="0" max="50000" step="100" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5">
-              <span>萬</span>
-            </div>
+            <div class="flex items-center gap-1"><input type="number" id="reMarket_num" value="5000" min="0" max="50000" step="100" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
           </div>
           <input type="range" id="reMarket" min="0" max="20000" step="100" value="5000" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           <div class="flex justify-between items-center text-[11px] text-slate-500 mt-1">
-            <span>公告現值佔市價比：</span>
+            <span>課稅現值(公告土地現值+房屋評定現值)佔市價比：</span>
             <div class="flex items-center gap-0.5">
               <input type="number" id="reRatio_num" value="35" min="10" max="100" class="w-12 text-right font-semibold text-slate-700 border rounded px-1">
-              <span>% (課稅現值 <strong id="reAssessedLabel">1,750</strong> 萬)</span>
+              <span>% (<strong id="reAssessedLabel">1,750</strong> 萬)</span>
             </div>
           </div>
         </div>
@@ -337,80 +380,89 @@
         <div class="bg-white p-2.5 rounded-lg border border-amber-300">
           <div class="flex justify-between items-center text-xs font-medium mb-1">
             <span>🏦 不動產現有銀行貸款餘額 (未償債務扣除)</span>
-            <div class="flex items-center gap-1">
-              <input type="number" id="reLoan_num" value="1500" min="0" max="30000" step="50" class="w-20 text-right font-bold text-amber-700 border rounded px-1 py-0.5">
-              <span>萬</span>
-            </div>
+            <div class="flex items-center gap-1"><input type="number" id="reLoan_num" value="1500" min="0" max="30000" step="50" class="w-20 text-right font-bold text-amber-700 border rounded px-1 py-0.5"><span>萬</span></div>
           </div>
           <input type="range" id="reLoan" min="0" max="10000" step="100" value="1500" class="w-full accent-amber-600 h-1.5 bg-slate-200 rounded-lg">
-          <p class="text-[10px] text-amber-700 mt-0.5">*未償債務可100%自遺產總額扣除；若貸款＞公告現值，差額還可扣抵未來房地合一稅！</p>
+          <div class="flex justify-between items-center text-[11px] text-slate-600 mt-1">
+            <span>銀行以市價核貸成數（繼承後貸款繳稅用）</span>
+            <div class="flex items-center gap-0.5"><input type="number" id="loanLtv_num" value="70" min="0" max="90" step="5" class="w-12 text-right font-semibold text-slate-700 border rounded px-1"><span>%</span></div>
+          </div>
+          <p class="text-[10px] text-amber-700 mt-0.5">*死亡前確實存在的未償債務可自遺產總額扣除；但死亡前借款若無法說明資金去向，國稅局會把借得的款項列回遺產。</p>
         </div>
 
         <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold text-indigo-900">⚖️ 啟用「夫妻剩餘財產差額分配請求權」(民法1030-1)</span>
+            <span class="text-xs font-bold text-indigo-900">⚖️ 主張「剩餘財產差額分配請求權」(民法1030-1)</span>
             <input type="checkbox" id="claim1030Toggle" checked class="w-4 h-4 accent-indigo-600 cursor-pointer">
           </div>
           <div class="flex justify-between items-center text-xs">
+            <span class="text-indigo-800">被繼承人遺產中屬「婚後財產」比例：</span>
+            <div class="flex items-center gap-1"><input type="number" id="maritalPct_num" value="100" min="0" max="100" step="5" class="w-16 text-right font-bold text-indigo-700 bg-white border border-indigo-300 rounded px-1 py-0.5"><span>%</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs">
             <span class="text-indigo-800">生存配偶名下婚後財產淨額：</span>
-            <div class="flex items-center gap-1">
-              <input type="number" id="spouseWealth_num" value="800" min="0" max="50000" step="50" class="w-20 text-right font-bold text-indigo-700 bg-white border border-indigo-300 rounded px-1 py-0.5">
-              <span>萬</span>
-            </div>
+            <div class="flex items-center gap-1"><input type="number" id="spouseWealth_num" value="800" min="0" max="50000" step="50" class="w-16 text-right font-bold text-indigo-700 bg-white border border-indigo-300 rounded px-1 py-0.5"><span>萬</span></div>
           </div>
-          <div class="text-[11px] text-indigo-700 font-semibold" id="claim1030Result">
-            預估可自遺產扣除請求權金額：-- 萬
-          </div>
+          <p class="text-[10px] text-indigo-600">*婚前財產、繼承或受贈取得、慰撫金不列入婚後財產。</p>
+          <div class="text-[11px] text-indigo-700 font-semibold" id="claim1030Result">預估可自遺產扣除請求權金額：-- 萬</div>
         </div>
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-2">
-          <div class="text-xs font-bold text-slate-700">👨‍👩‍👧‍👦 115年法定免稅額(1,333萬)與親屬扣除額設定</div>
+          <div class="text-xs font-bold text-slate-700">👨‍👩‍👧‍👦 115年免稅額(1,333萬)與親屬扣除額</div>
           <div class="grid grid-cols-2 gap-2 text-xs">
             <div class="flex justify-between items-center border p-1.5 rounded">
               <span>配偶(553萬)</span>
-              <select id="hasSpouse" class="font-bold text-blue-700 bg-slate-50 rounded px-1">
-                <option value="1">有配偶</option>
-                <option value="0">無配偶</option>
-              </select>
+              <select id="hasSpouse" class="font-bold text-blue-700 bg-slate-50 rounded px-1"><option value="1">有配偶</option><option value="0">無配偶</option></select>
             </div>
             <div class="flex justify-between items-center border p-1.5 rounded">
               <span>子女(56萬/人)</span>
               <input type="number" id="kidsCount_num" value="2" min="0" max="10" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
             </div>
             <div class="flex justify-between items-center border p-1.5 rounded">
+              <span>未成年子女距18歲合計年數(56萬/年)</span>
+              <input type="number" id="minorYears_num" value="0" min="0" max="100" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
+            </div>
+            <div class="flex justify-between items-center border p-1.5 rounded">
               <span>父母(138萬/人)</span>
               <input type="number" id="parentsCount_num" value="0" min="0" max="2" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
             </div>
             <div class="flex justify-between items-center border p-1.5 rounded">
-              <span>重度身障(693萬)</span>
+              <span>受扶養兄弟姊妹/祖父母(56萬/人)</span>
+              <input type="number" id="siblingsCount_num" value="0" min="0" max="10" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
+            </div>
+            <div class="flex justify-between items-center border p-1.5 rounded">
+              <span>身心障礙(693萬/人)</span>
               <input type="number" id="disabledCount_num" value="0" min="0" max="5" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
             </div>
           </div>
-          <p class="text-[10px] text-slate-400">*已自動計入115年免稅額 1,333 萬 ＋ 喪葬費定額扣除 138 萬</p>
+          <p class="text-[10px] text-slate-400">*已自動計入115年免稅額 1,333 萬 ＋ 喪葬費扣除 138 萬。拋棄繼承者不得扣除。</p>
         </div>
 
         <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200 space-y-2.5">
-          <div class="text-xs font-bold text-emerald-900">🛡️ 人壽保險指定受益人 (115年最低稅負免計額 3,740萬)</div>
+          <div class="text-xs font-bold text-emerald-900">🛡️ 人壽保險指定受益人 (最低稅負每申報戶免計 3,740萬)</div>
           <div>
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>規劃人壽保險保額 (預留稅源)</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="lifeIns_num" value="1000" min="0" max="20000" step="100" class="w-20 text-right font-bold text-emerald-700 bg-white border border-emerald-300 rounded px-1 py-0.5">
-                <span>萬</span>
-              </div>
+              <span>身故保險金 (保額)</span>
+              <div class="flex items-center gap-1"><input type="number" id="lifeIns_num" value="1000" min="0" max="20000" step="100" class="w-20 text-right font-bold text-emerald-700 bg-white border border-emerald-300 rounded px-1 py-0.5"><span>萬</span></div>
             </div>
             <input type="range" id="lifeIns" min="0" max="6000" step="100" value="1000" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div>
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>生前分年贈與年數 (每年免稅 244萬)</span>
-              <div class="flex items-center gap-1">
-                <input type="number" id="giftYears_num" value="0" min="0" max="30" step="1" class="w-14 text-right font-bold text-emerald-700 bg-white border border-emerald-300 rounded px-1 py-0.5">
-                <span>年</span>
-              </div>
+              <span>累計已繳保費 (從金融資產移出)</span>
+              <div class="flex items-center gap-1"><input type="number" id="lifePremium_num" value="600" min="0" max="20000" step="50" class="w-20 text-right font-bold text-emerald-700 bg-white border border-emerald-300 rounded px-1 py-0.5"><span>萬</span></div>
+            </div>
+            <input type="range" id="lifePremium" min="0" max="6000" step="50" value="600" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
+          </div>
+          <div>
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>生前分年贈與年數 (每位贈與人每年免稅 244萬)</span>
+              <div class="flex items-center gap-1"><input type="number" id="giftYears_num" value="0" min="0" max="30" step="1" class="w-14 text-right font-bold text-emerald-700 bg-white border border-emerald-300 rounded px-1 py-0.5"><span>年</span></div>
             </div>
             <input type="range" id="giftYears" min="0" max="15" step="1" value="0" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
+            <p class="text-[10px] text-emerald-700 mt-0.5">*死亡前2年內贈與配偶、子女等之財產會被併回遺產，本試算假設贈與都在2年之前完成。</p>
           </div>
+          <div class="text-[11px] font-semibold" id="insWarn"></div>
         </div>
       </div>
 
@@ -429,7 +481,7 @@
           <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl">
             <div class="text-[11px] text-emerald-700 font-bold">規劃後節省遺產稅</div>
             <div class="text-lg font-extrabold text-emerald-900 mt-0.5" id="taxSaved">--</div>
-            <div class="text-[10px] text-emerald-600">請求權+保單+贈與</div>
+            <div class="text-[10px] text-emerald-600" id="taxSavedBreak">請求權+保單+贈與</div>
           </div>
           <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl">
             <div class="text-[11px] text-amber-800 font-bold">流動性現金檢核</div>
@@ -438,53 +490,48 @@
           </div>
         </div>
 
-        <div class="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+        <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
           <div class="bg-slate-800 text-white px-4 py-2.5 text-xs font-bold flex justify-between items-center">
-            <span>🏛️ 遺產稅繳納三大途徑動態比較（應納遺產稅 <span id="tableTaxTarget" class="text-amber-400">--</span> 萬）</span>
-            <span class="text-[11px] text-slate-300">公告現值 vs. 銀行融資實務</span>
+            <span>🏛️ 遺產稅繳納途徑比較（應納遺產稅 <span id="tableTaxTarget" class="text-amber-400">--</span> 萬）</span>
+            <span class="text-[11px] text-slate-300">課稅現值 vs. 銀行融資實務</span>
           </div>
           <table class="w-full text-xs text-left">
             <thead class="bg-slate-100 text-slate-700 border-b">
-              <tr>
-                <th class="p-2.5">繳納途徑</th>
-                <th class="p-2.5">依客戶資產動態試算結果</th>
-                <th class="p-2.5">實務風險與卡關痛點</th>
-                <th class="p-2.5 w-24">顧問評級</th>
-              </tr>
+              <tr><th class="p-2.5">繳納途徑</th><th class="p-2.5">依客戶資產動態試算結果</th><th class="p-2.5">實務風險與卡關痛點</th><th class="p-2.5 w-24">綜合評估</th></tr>
             </thead>
             <tbody class="divide-y divide-slate-200">
               <tr class="bg-rose-50/40">
                 <td class="p-2.5 font-bold text-rose-800">1. 拿房地「實物抵繳」</td>
                 <td class="p-2.5 text-rose-700" id="pkRow1Calc">--</td>
-                <td class="p-2.5 text-slate-600">國稅局只認「公告現值」抵稅，市價差額直接白白蒸發！</td>
-                <td class="p-2.5 font-bold text-rose-700">❌ 巨額虧損</td>
+                <td class="p-2.5 text-slate-600">現金不足時才可申請；抵繳價值以課稅現值計，市價與現值的差額等於白白讓出。</td>
+                <td class="p-2.5 font-bold text-rose-700">❌ 價值折損</td>
               </tr>
               <tr>
-                <td class="p-2.5 font-bold text-amber-800">2. 找銀行「市價借貸」繳稅</td>
+                <td class="p-2.5 font-bold text-amber-800">2. 不動產以市價向銀行貸款繳稅（115年新制）</td>
                 <td class="p-2.5 text-amber-800" id="pkRow2Calc">--</td>
-                <td class="p-2.5 text-slate-600">未完稅前無法過戶抵押、受限銀行收支比審查與央行限貸令。</td>
-                <td class="p-2.5 font-bold text-amber-700">⚠️ 門檻極高</td>
+                <td class="p-2.5 text-slate-600">115年修法後，可先把不動產抵押給國稅局取得同意移轉證明書，完成繼承登記後再向銀行貸款。仍需繼承人共同同意（遺產分割前為公同共有），且銀行會審核繼承人還款能力與央行限貸規定。另可申請最多18期分期繳納（已取消30萬門檻，需加計利息）。</td>
+                <td class="p-2.5 font-bold text-amber-700" id="pkRow2Rate">--</td>
               </tr>
               <tr class="bg-emerald-50/50">
                 <td class="p-2.5 font-bold text-emerald-800">3. 人壽保險「指定受益人」</td>
                 <td class="p-2.5 text-emerald-800 font-semibold" id="pkRow3Calc">--</td>
-                <td class="p-2.5 text-slate-600">免計入遺產總額、不卡過戶，理賠現金直達子女帳戶完稅。</td>
-                <td class="p-2.5 font-bold text-emerald-700">⭐ 最佳解方</td>
+                <td class="p-2.5 text-slate-600">指定受益人之身故保險金不計入遺產總額，理賠現金直接給受益人繳稅；需避開實質課稅態樣。</td>
+                <td class="p-2.5 font-bold text-emerald-700">⭐ 首選</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-xs space-y-1.5">
-          <div class="font-bold text-amber-900 text-sm">💡 CFP 稅務與不動產傳承深度診斷：</div>
+          <div class="font-bold text-amber-900 text-sm">💡 稅務與不動產傳承分析：</div>
           <div id="taxAdvisorText" class="text-amber-900 space-y-1.5 leading-relaxed"></div>
         </div>
       </div>
     </div>
 
-    <footer class="bg-slate-50 border-t border-slate-200 px-6 py-3 flex justify-between text-xs text-slate-500">
-      <span>規劃顧問：宋秉諭 ｜ CFP 生涯模擬與 115 年稅務傳承系統</span>
-      <span>諮詢日期：<span id="printDate"></span></span>
+    <footer class="bg-slate-50 border-t border-slate-200 px-6 py-3 flex flex-col md:flex-row gap-1 justify-between text-xs text-slate-500">
+      <span>規劃人：宋秉諭 ｜ 生涯財務模擬與 115 年稅務傳承試算</span>
+      <span>本試算僅供規劃參考，不構成投資、法律或稅務建議；實際稅額以國稅局核定為準 ｜ 諮詢日期：<span id="printDate"></span></span>
     </footer>
   </div>
 
@@ -493,336 +540,566 @@
     let retireChartInstance = null;
     let riskChartInstance = null;
 
+    // ===== 115年(2026) 法定參數 =====
+    const LAW = {
+      LABOR_INS_CAP: 45800,     // 勞保最高月投保薪資
+      NAT_INS_AMT: 21103,       // 國保月投保金額 (115/1/1起)
+      NAT_A_ADD: 4049,          // 國保老年年金 A式加計金額
+      LP_WAGE_CAP: 150000,      // 勞退月提繳工資上限
+      LP_EMPLOYER: 0.06,        // 雇主提繳率
+      EST_EXEMPT: 1333, EST_FUNERAL: 138, EST_SPOUSE: 553, EST_KID: 56, EST_PARENT: 138, EST_DISABLED: 693, EST_SIBLING: 56,
+      GIFT_EXEMPT: 244,
+      AMT_INS_EXEMPT: 3740
+    };
+
+    const num = id => +document.getElementById(id).value;
+    const val = (id, fallback) => { const v = document.getElementById(id).value; return v === '' || isNaN(+v) ? fallback : +v; };
+    const fmt = n => Math.round(n).toLocaleString();
+    const wan = n => Math.round(n / 10000).toLocaleString();
+
     function bindSync(sliderId, numId, callback) {
       const slider = document.getElementById(sliderId);
-      const num = document.getElementById(numId);
-      if (!slider || !num) return;
-      slider.addEventListener('input', () => { num.value = slider.value; callback(); });
-      num.addEventListener('input', () => { if (num.value !== '') { slider.value = num.value; callback(); } });
+      const numEl = document.getElementById(numId);
+      if (!slider || !numEl) return;
+      slider.addEventListener('input', () => { numEl.value = slider.value; callback(); });
+      numEl.addEventListener('input', () => { if (numEl.value !== '') { slider.value = numEl.value; callback(); } });
     }
 
-    // 綁定第一頁退休金流參數
-    const retirePairs = [
-      ['age', 'age_num'], ['retireAge', 'retireAge_num'], ['salary', 'salary_num'],
-      ['salGrowth', 'salGrowth_num'], ['repRate', 'repRate_num'], ['inflation', 'inflation_num'],
-      ['roi', 'roi_num'], ['laborYears', 'laborYears_num'], ['natYears', 'natYears_num'],
-      ['claimAge', 'claimAge_num'], ['selfContrib', 'selfContrib_num'], ['saved', 'saved_num']
-    ];
-    retirePairs.forEach(([s, n]) => bindSync(s, n, calcRetire));
+    [['age','age_num'],['retireAge','retireAge_num'],['lifeAge','lifeAge_num'],['salary','salary_num'],['expense','expense_num'],
+     ['salGrowth','salGrowth_num'],['repRate','repRate_num'],['inflation','inflation_num'],['roi','roi_num'],['postRoi','postRoi_num'],
+     ['laborYears','laborYears_num'],['natYears','natYears_num'],['claimAge','claimAge_num'],['selfContrib','selfContrib_num'],
+     ['lpBal','lpBal_num'],['lpRoi','lpRoi_num'],['saved','saved_num'],['monthlyInvest','monthlyInvest_num']
+    ].forEach(([s, n]) => bindSync(s, n, calcRetire));
 
-    // 綁定第二頁長照風險參數
-    bindSync('ltcCostRisk', 'ltcCostRisk_num', calcRisk);
-    bindSync('ltcInsRisk', 'ltcInsRisk_num', calcRisk);
+    [['ltcCostRisk','ltcCostRisk_num'],['ltcInsRisk','ltcInsRisk_num'],['ltcStart','ltcStart_num'],['ltcYears','ltcYears_num']]
+      .forEach(([s, n]) => bindSync(s, n, calcRisk));
     document.getElementById('ltcToggleRisk').addEventListener('change', calcRisk);
 
-    // 綁定第三頁稅務參數
-    const taxPairs = [
-      ['finAsset', 'finAsset_num'], ['reMarket', 'reMarket_num'], ['reLoan', 'reLoan_num'],
-      ['lifeIns', 'lifeIns_num'], ['giftYears', 'giftYears_num']
-    ];
-    taxPairs.forEach(([s, n]) => bindSync(s, n, calcTax));
-    ['reRatio_num', 'claim1030Toggle', 'spouseWealth_num', 'hasSpouse', 'kidsCount_num', 'parentsCount_num', 'disabledCount_num'].forEach(id => {
-      document.getElementById(id).addEventListener('input', calcTax);
-    });
+    [['finAsset','finAsset_num'],['reMarket','reMarket_num'],['reLoan','reLoan_num'],['lifeIns','lifeIns_num'],
+     ['lifePremium','lifePremium_num'],['giftYears','giftYears_num']].forEach(([s, n]) => bindSync(s, n, calcTax));
+    ['reRatio_num','loanLtv_num','spouseWealth_num','maritalPct_num','kidsCount_num','minorYears_num','parentsCount_num','siblingsCount_num','disabledCount_num']
+      .forEach(id => document.getElementById(id).addEventListener('input', calcTax));
+    ['claim1030Toggle','hasSpouse'].forEach(id => document.getElementById(id).addEventListener('change', calcTax));
 
     function switchTab(tab) {
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.remove('active');
-        b.classList.add('text-slate-300');
-      });
+      document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.add('text-slate-300'); });
       document.getElementById('btn-' + tab).classList.add('active');
       document.getElementById('btn-' + tab).classList.remove('text-slate-300');
-
-      document.getElementById('tab-retire').classList.add('hidden');
-      document.getElementById('tab-risk').classList.add('hidden');
-      document.getElementById('tab-tax-section').classList.add('hidden');
-
-      if (tab === 'retire') {
-        document.getElementById('tab-retire').classList.remove('hidden');
-        calcRetire();
-      } else if (tab === 'risk') {
-        document.getElementById('tab-risk').classList.remove('hidden');
-        calcRisk();
-      } else if (tab === 'tax') {
-        document.getElementById('tab-tax-section').classList.remove('hidden');
-        calcTax();
-      }
+      ['retire', 'risk', 'tax'].forEach(t => document.getElementById('tab-' + t).classList.toggle('hidden', t !== tab));
+      if (tab === 'retire') calcRetire();
+      else if (tab === 'risk') { calcRetire(); calcRisk(); }
+      else if (tab === 'tax') calcTax();
     }
 
-    // 核心資料計算與共享變數
+    // 年金化：本金 pv、月利率 r、期數 n 的每月給付
+    function pmt(pv, r, n) { return r > 0 ? pv * r / (1 - Math.pow(1 + r, -n)) : pv / n; }
+    // 要在 n 期後累積到 fv，每月需投入
+    function sinkingPmt(fv, r, n) { return r > 0 ? fv * r / (Math.pow(1 + r, n) - 1) : fv / n; }
+    function fvAnnuity(p, r, n) { return r > 0 ? p * (Math.pow(1 + r, n) - 1) / r : p * n; }
+
     let globalRetireData = {};
 
     function calcRetire() {
-      const age = +document.getElementById('age_num').value || 35;
-      const retireAge = Math.max(age + 1, +document.getElementById('retireAge_num').value || 65);
-      const salary = +document.getElementById('salary_num').value || 0;
-      const salGrowth = (+document.getElementById('salGrowth_num').value || 0) / 100;
-      const repRate = (+document.getElementById('repRate_num').value || 70) / 100;
-      const inf = (+document.getElementById('inflation_num').value || 0) / 100;
-      const roi = (+document.getElementById('roi_num').value || 0) / 100;
-      const laborYears = +document.getElementById('laborYears_num').value || 0;
-      const natYears = +document.getElementById('natYears_num').value || 0;
-      const claimAge = +document.getElementById('claimAge_num').value || 65;
-      const selfContrib = (+document.getElementById('selfContrib_num').value || 0) / 100;
-      const saved = (+document.getElementById('saved_num').value || 0) * 10000;
+      const age = Math.min(65, Math.max(20, val('age_num', 38)));
+      const retireAge = Math.max(age + 1, val('retireAge_num', 65));
+      const lifeAge = Math.max(retireAge + 1, val('lifeAge_num', 90));
+      const salary = val('salary_num', 0);
+      const g = val('salGrowth_num', 0) / 100;
+      const repRate = val('repRate_num', 80) / 100;
+      const expense = val('expense_num', 0);
+      const inf = val('inflation_num', 0) / 100;
+      const roi = val('roi_num', 0) / 100;
+      const postRoi = val('postRoi_num', 0) / 100;
+      const laborYears = val('laborYears_num', 0);
+      const natYears = val('natYears_num', 0);
+      const claimAgeInput = Math.min(70, Math.max(60, val('claimAge_num', 65)));
+      const selfContrib = val('selfContrib_num', 0) / 100;
+      const lpBal = val('lpBal_num', 0) * 10000;
+      const lpRoi = val('lpRoi_num', 0) / 100;
+      const saved = val('saved_num', 0) * 10000;
+      const monthlyInvest = val('monthlyInvest_num', 0);
 
-      const adj = (claimAge - 65) * 4;
-      document.getElementById('claimAdjBadge').innerText = `(${adj >= 0 ? '+' : ''}${adj}%)`;
-      const workYears = Math.max(1, retireAge - age);
+      const n = retireAge - age;
+      const finalSalary = salary * Math.pow(1 + g, n);
+      const targetToday = expense * repRate;                        // 今日幣值的退休月支出
+      const targetMonthly = targetToday * Math.pow(1 + inf, n);     // 退休首年(名目)
 
-      const insBase = Math.min(salary * Math.pow(1 + salGrowth, Math.min(10, workYears)), 45800);
-      const laborMonthly = laborYears > 0 ? Math.round(insBase * laborYears * 0.0155 * (1 + adj / 100)) : 0;
-      const natMonthly = natYears > 0 ? Math.round(19761 * natYears * 0.013) : 0;
-      const pillar1 = laborMonthly + natMonthly;
-
-      document.getElementById('pillar1Desc').innerText = `勞保 ${laborMonthly.toLocaleString()} + 國保 ${natMonthly.toLocaleString()}`;
-
-      let pot = 0;
-      let curSal = salary;
-      for (let y = 0; y < workYears; y++) {
-        const capSal = Math.min(curSal, 150000);
-        const yrContrib = capSal * (0.06 + selfContrib) * 12;
-        pot = (pot + yrContrib) * (1 + 0.035);
-        curSal *= (1 + salGrowth);
+      // ---- 第一層：勞保老年給付 ----
+      const insBase = Math.min(finalSalary, LAW.LABOR_INS_CAP);    // 最高60個月平均投保薪資(上限名目不變，保守估)
+      const laborFormula = Math.max(insBase * laborYears * 0.0155, insBase * laborYears * 0.00775 + 3000);
+      let laborMonthly = 0, laborLump = 0, laborStart = 65, laborMode = '無', adjPct = 0;
+      if (laborYears >= 15) {
+        laborStart = claimAgeInput;
+        adjPct = (claimAgeInput - 65) * 4;
+        laborMonthly = laborFormula * (1 + adjPct / 100);
+        laborMode = '年金';
+      } else if (laborYears > 0 && laborYears + natYears >= 15) {
+        laborMonthly = laborFormula;                                // 併計國保年資，65歲請領，不能提前減額
+        laborMode = '年金(併計國保年資)';
+      } else if (laborYears > 0) {
+        laborLump = insBase * laborYears;                           // 未滿15年：一次金，每年1個月
+        laborMode = '一次金';
       }
-      const pillar2 = laborYears > 0 ? Math.round(pot / 240) : 0;
-      document.getElementById('pillar2Desc').innerText = `專戶預估累積 ${Math.round(pot/10000)} 萬`;
+      document.getElementById('claimAdjBadge').innerText = laborYears >= 15 ? `(${adjPct >= 0 ? '+' : ''}${adjPct}%)` : '(不適用)';
 
-      const baseTargetMonthly = Math.round(salary * repRate);
-      const monthlyShortfall = Math.max(0, baseTargetMonthly - pillar1 - pillar2);
-      const retireYears = Math.max(15, 85 - retireAge);
+      // ---- 第一層：國保老年年金（65歲起，隨CPI調整）----
+      const natA = LAW.NAT_INS_AMT * natYears * 0.0065 + LAW.NAT_A_ADD;
+      const natB = LAW.NAT_INS_AMT * natYears * 0.013;
+      const natToday = natYears > 0 ? (laborYears > 0 ? natB : Math.max(natA, natB)) : 0; // 領勞保老年給付者不得選A式
+      const nat65 = natToday * Math.pow(1 + inf, Math.max(0, 65 - age));
 
-      const savedFV = saved * Math.pow(1 + roi, workYears);
-      const grossLivingGap = monthlyShortfall * 12 * retireYears;
-      const netGapNeeded = Math.max(0, grossLivingGap - savedFV);
+      // ---- 第二層：勞退新制個人專戶 ----
+      let pot = lpBal, curSal = salary;
+      for (let y = 0; y < n; y++) {
+        const contrib = Math.min(curSal, LAW.LP_WAGE_CAP) * (LAW.LP_EMPLOYER + selfContrib) * 12;
+        pot = pot * (1 + lpRoi) + contrib * (1 + lpRoi / 2);
+        curSal *= (1 + g);
+      }
+      const lpStart = Math.max(retireAge, 60);
+      pot *= Math.pow(1 + lpRoi, lpStart - retireAge);
+      const lpMonthly = pot > 0 ? pmt(pot, lpRoi / 12, (lifeAge - lpStart) * 12) : 0;
 
-      // 逆算每月應存金額
-      const mRate = roi / 12;
-      const mMonths = workYears * 12;
-      const reqMonthlySave = mRate > 0 ? Math.round((netGapNeeded * mRate) / (Math.pow(1 + mRate, mMonths) - 1)) : Math.round(netGapNeeded / mMonths);
+      // ---- 退休期間逐年現金流（名目）----
+      const years = lifeAge - retireAge;
+      const netFlow = [];   // 每年需由自備資產支應的淨額（負值代表當年有結餘）
+      const yearInfo = [];
+      for (let t = 0; t < years; t++) {
+        const a = retireAge + t;
+        const expense = targetMonthly * 12 * Math.pow(1 + inf, t);
+        let income = 0;
+        if (laborMonthly > 0 && a >= laborStart) income += laborMonthly * 12 * Math.pow(1 + inf, a - Math.max(laborStart, retireAge));
+        if (natToday > 0 && a >= 65) income += natToday * 12 * Math.pow(1 + inf, a - age);
+        if (a >= lpStart) income += lpMonthly * 12;
+        if (laborLump > 0 && a === Math.max(65, retireAge)) income += laborLump;
+        netFlow.push(expense - income);
+        yearInfo.push({ a, expense, income });
+      }
+      // 反推：退休當下最少需要多少錢，才能在每年期初提領後一路撐到規劃年齡
+      let need = 0;
+      for (let t = years - 1; t >= 0; t--) need = Math.max(0, netFlow[t] + need / (1 + postRoi));
 
-      document.getElementById('cardPillar1').innerText = 'NT$ ' + pillar1.toLocaleString();
-      document.getElementById('cardPillar2').innerText = 'NT$ ' + pillar2.toLocaleString();
-      document.getElementById('cardTargetMonthly').innerText = 'NT$ ' + baseTargetMonthly.toLocaleString();
-      document.getElementById('cardTotalGap').innerText = Math.round(netGapNeeded / 10000).toLocaleString() + ' 萬';
-      document.getElementById('gapMonthlySave').innerText = `逆算月存 NT$ ${reqMonthlySave.toLocaleString()}`;
+      const m = roi / 12, months = n * 12;
+      const savedFV = saved * Math.pow(1 + roi, n);
+      const investFV = fvAnnuity(monthlyInvest, m, months);
+      const startBal = savedFV + investFV;
+      const gap = Math.max(0, need - startBal);
+      const extraMonthly = gap > 0 ? sinkingPmt(gap, m, months) : 0;
+      const totalMonthlyForNeed = sinkingPmt(Math.max(0, need - savedFV), m, months);
 
-      // 模擬資產存續與撐到幾歲
-      let curNormal = Math.max(grossLivingGap, savedFV);
-      const labels = [];
-      const normalData = [];
-      const realReturn = Math.max(0.01, (1 + 0.04) / (1 + inf) - 1);
+      // 第一年（退休當年）月缺口
+      const firstGapMonthly = Math.max(0, netFlow[0] / 12);
 
-      let sustainAge = 85;
-      let exhausted = false;
+      // ---- 卡片 ----
+      document.getElementById('cardPillar1').innerText = 'NT$ ' + fmt(laborMonthly + nat65);
+      document.getElementById('pillar1Desc').innerText = laborMode === '一次金'
+        ? `勞保一次金 ${wan(laborLump)} 萬 + 國保 ${fmt(nat65)}/月`
+        : `勞保 ${fmt(laborMonthly)}(${laborStart}歲起) + 國保 ${fmt(nat65)}(65歲起)`;
+      document.getElementById('cardPillar2').innerText = 'NT$ ' + fmt(lpMonthly);
+      document.getElementById('pillar2Desc').innerText = `${lpStart}歲專戶約 ${wan(pot)} 萬，月退`;
+      document.getElementById('cardTargetMonthly').innerText = 'NT$ ' + fmt(targetMonthly);
+      document.getElementById('targetDesc').innerText = `約等於今日 ${fmt(targetToday)} 元`;
+      document.getElementById('cardTotalGap').innerText = wan(gap) + ' 萬';
+      document.getElementById('gapMonthlySave').innerText = gap > 0 ? `需再加存 NT$ ${fmt(extraMonthly)}/月` : '目前投入已足夠';
 
-      for (let y = 0; y <= retireYears; y++) {
-        const curAge = retireAge + y;
-        labels.push(curAge + '歲');
-        normalData.push(Math.round(curNormal));
-
-        if (curNormal <= 0 && !exhausted) {
-          sustainAge = curAge;
-          exhausted = true;
-        }
-
-        const yrSpend = monthlyShortfall * 12;
-        curNormal = Math.max(0, curNormal * (1 + realReturn) - yrSpend);
+      // ---- 存續模擬 ----
+      const labels = [], actualData = [], requiredData = [];
+      let bal = startBal, req = need, exhaustedAge = null;
+      for (let t = 0; t <= years; t++) {
+        labels.push((retireAge + t) + '歲');
+        actualData.push(Math.round(bal));
+        requiredData.push(Math.round(req));
+        if (t === years) break;
+        bal = (bal - netFlow[t]);
+        if (bal < 0 && exhaustedAge === null) exhaustedAge = retireAge + t;
+        bal = Math.max(0, bal) * (1 + postRoi);
+        req = Math.max(0, req - netFlow[t]) * (1 + postRoi);
       }
 
+      document.getElementById('retireChartTitle').innerText = `退休後資產存續模擬 (${retireAge}～${lifeAge}歲)`;
       const sustainBadge = document.getElementById('sustainStatusBadge');
-      if (exhausted) {
-        sustainBadge.className = "text-xs bg-red-100 text-red-800 px-2.5 py-0.5 rounded-full font-bold";
-        sustainBadge.innerText = `⚠️ 資金會在 ${sustainAge} 歲時見底（尚缺 ${85 - sustainAge} 年現金流）`;
+      if (exhaustedAge !== null) {
+        sustainBadge.className = 'text-xs bg-red-100 text-red-800 px-2.5 py-0.5 rounded-full font-bold';
+        sustainBadge.innerText = `⚠️ 照目前投入，資金在 ${exhaustedAge} 歲見底（距規劃年齡差 ${lifeAge - exhaustedAge} 年）`;
       } else {
-        sustainBadge.className = "text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold";
-        sustainBadge.innerText = `✅ 自備資產可安穩支撐至 85 歲以上`;
+        sustainBadge.className = 'text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold';
+        sustainBadge.innerText = `✅ 照目前投入，可支撐至 ${lifeAge} 歲`;
       }
 
-      document.getElementById('advisorNotesRetire').innerHTML = `
-        <li><strong>退休金流逆算模型：</strong>目標月開銷 ${baseTargetMonthly.toLocaleString()} 元，扣除法定年金後，逆算得出您在退休時需準備 <strong>${Math.round(grossLivingGap/10000)} 萬元</strong>。</li>
-        <li><strong>每月定額提撥建議：</strong>距離退休尚有 ${workYears} 年，經複利折算後，您目前每月需定期定額存 <strong>${reqMonthlySave.toLocaleString()} 元</strong> 即可完美達標。</li>
-      `;
+      const notes = [
+        `<li><strong>退休目標：</strong>目前月支出 ${fmt(expense)} 元 × ${Math.round(repRate * 100)}% ＝ 今日幣值 ${fmt(targetToday)} 元；依通膨 ${(inf * 100).toFixed(1)}% 換算，退休首年月生活費 <strong>${fmt(targetMonthly)} 元</strong>，之後每年繼續隨通膨成長。（退休當時所得替代率約 ${finalSalary > 0 ? Math.round(targetMonthly / finalSalary * 100) : 0}%）</li>`,
+        `<li><strong>退休金流逆算：</strong>扣除勞保、國保、勞退後，退休當年月缺口約 ${fmt(firstGapMonthly)} 元；要撐到 ${lifeAge} 歲，退休時需備妥 <strong>${wan(need)} 萬</strong>（以退休後報酬 ${(postRoi * 100).toFixed(1)}% 折現）。</li>`,
+        `<li><strong>資金來源：</strong>已備 ${wan(saved)} 萬滾到退休約 ${wan(savedFV)} 萬，目前每月投入 ${fmt(monthlyInvest)} 元可累積約 ${wan(investFV)} 萬。${gap > 0 ? `仍缺 <strong class="text-rose-600">${wan(gap)} 萬</strong>，需每月再加存 <strong>${fmt(extraMonthly)} 元</strong>（合計每月需投入 ${fmt(totalMonthlyForNeed)} 元）。` : '<strong class="text-emerald-700">目前投入已足以達標。</strong>'}</li>`
+      ];
+      if (laborMode === '一次金') notes.push(`<li class="text-rose-600"><strong>勞保年資未滿15年：</strong>只能請領老年一次金（約 ${wan(laborLump)} 萬），無法月領年金；可考慮延長投保或併計國保年資至15年。</li>`);
+      if (laborMode === '年金(併計國保年資)') notes.push(`<li><strong>併計國保年資：</strong>勞保年資未滿15年，靠國保年資併計後於65歲請領勞保年金（不可提前減額請領）。</li>`);
+      if (retireAge < laborStart && laborMonthly > 0) notes.push(`<li><strong>空窗期提醒：</strong>${retireAge} 歲退休、勞保 ${laborStart} 歲才開始領，期間生活費全靠自備資產。</li>`);
+      if (retireAge < 60) notes.push(`<li><strong>勞退提醒：</strong>勞退新制需年滿60歲才能請領，${retireAge}～60歲間無勞退月退。</li>`);
+      notes.push(`<li class="text-slate-400">假設：勞保投保薪資上限維持 45,800 元、勞退年報酬 ${(lpRoi * 100).toFixed(1)}%（保證收益僅為二年期定存利率）、勞退月退以規劃年齡平均攤提。</li>`);
+      document.getElementById('advisorNotesRetire').innerHTML = notes.join('');
 
-      // 儲存全域變數供第二頁使用
-      globalRetireData = { retireAge, grossLivingGap, monthlyShortfall, realReturn, savedFV };
+      globalRetireData = { age, retireAge, lifeAge, inf, postRoi, startBal, netFlow };
 
       const ctx = document.getElementById('retireChart').getContext('2d');
       if (retireChartInstance) retireChartInstance.destroy();
-
       retireChartInstance = new Chart(ctx, {
         type: 'line',
-        data: { labels, datasets: [{ label: '正常退休資產軌跡', data: normalData, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.08)', fill: true, tension: 0.3, borderWidth: 2.5 }] },
+        data: { labels, datasets: [
+          { label: '依目前投入的資產軌跡', data: actualData, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.08)', fill: true, tension: 0.3, borderWidth: 2.5 },
+          { label: '補足缺口後的資產軌跡', data: requiredData, borderColor: '#059669', borderDash: [6, 4], fill: false, tension: 0.3, borderWidth: 2 }
+        ] },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { callback: v => (v / 10000).toLocaleString() + '萬' } } } }
       });
     }
 
     // 第二頁：長照風險壓力測試
     function calcRisk() {
-      const { retireAge, grossLivingGap, monthlyShortfall, realReturn, savedFV } = globalRetireData;
-      if (!retireAge) {
-        // 若直接開第二頁，先初始化第一頁
-        calcRetire();
-        return;
-      }
+      if (!globalRetireData.retireAge) calcRetire();
+      const { age, retireAge, lifeAge, inf, postRoi, startBal, netFlow } = globalRetireData;
 
       const isLtc = document.getElementById('ltcToggleRisk').checked;
-      const ltcCost = +document.getElementById('ltcCostRisk_num').value || 0;
-      const ltcIns = +document.getElementById('ltcInsRisk_num').value || 0;
-      const netLtcMonthlyGap = isLtc ? (ltcCost - ltcIns) : 0;
+      const ltcStart = val('ltcStart_num', 75);
+      const ltcYears = Math.max(1, val('ltcYears_num', 10));
+      const ltcCostToday = val('ltcCostRisk_num', 0);
+      const ltcIns = val('ltcInsRisk_num', 0);
+      const ltcEnd = ltcStart + ltcYears;
 
-      let curNormal = Math.max(grossLivingGap, savedFV);
-      let curShock = curNormal;
-      const labels = [];
-      const normalData = [];
-      const shockData = [];
-      const retireYears = 20;
+      const ltcCostAtStart = ltcCostToday * Math.pow(1 + inf, ltcStart - age);
+      const extraAt = a => (isLtc && a >= ltcStart && a < ltcEnd)
+        ? Math.max(0, ltcCostToday * Math.pow(1 + inf, a - age) - ltcIns) * 12 : 0;
 
-      let shockExhaustedAge = 0;
-      let shockExhausted = false;
-
-      for (let y = 0; y <= retireYears; y++) {
-        const curAge = retireAge + y;
-        labels.push(curAge + '歲');
-        normalData.push(Math.round(curNormal));
-        shockData.push(Math.round(curShock));
-
-        if (curShock <= 0 && !shockExhausted) {
-          shockExhaustedAge = curAge;
-          shockExhausted = true;
-        }
-
-        const yrSpend = monthlyShortfall * 12;
-        curNormal = Math.max(0, curNormal * (1 + realReturn) - yrSpend);
-
-        let shockSpend = yrSpend;
-        if (isLtc && curAge >= 75 && curAge < 85) {
-          shockSpend += netLtcMonthlyGap * 12;
-        }
-        curShock = Math.max(0, curShock * (1 + realReturn) - shockSpend);
+      const labels = [], normalData = [], shockData = [];
+      let normal = startBal, shock = startBal, normalExhaust = null, shockExhaust = null, ltcPV = 0;
+      for (let t = 0; t <= netFlow.length; t++) {
+        const a = retireAge + t;
+        labels.push(a + '歲');
+        normalData.push(Math.round(normal));
+        shockData.push(Math.round(shock));
+        if (t === netFlow.length) break;
+        const extra = extraAt(a);
+        ltcPV += extra / Math.pow(1 + postRoi, t);
+        normal -= netFlow[t];
+        shock -= netFlow[t] + extra;
+        if (normal < 0 && normalExhaust === null) normalExhaust = a;
+        if (shock < 0 && shockExhaust === null) shockExhaust = a;
+        normal = Math.max(0, normal) * (1 + postRoi);
+        shock = Math.max(0, shock) * (1 + postRoi);
       }
 
+      const firstNetGap = Math.max(0, ltcCostAtStart - ltcIns);
       const riskBadge = document.getElementById('riskBadge');
-      if (isLtc && shockExhausted) {
-        riskBadge.className = "text-xs bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full font-bold";
-        riskBadge.innerText = `⚠️ 75歲發生長照後，資產將於 ${shockExhaustedAge} 歲提前見底破產！`;
+      if (!isLtc) {
+        riskBadge.className = 'text-xs bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full font-bold';
+        riskBadge.innerText = '未啟動長照情境';
+      } else if (shockExhaust !== null && shockExhaust !== normalExhaust) {
+        riskBadge.className = 'text-xs bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full font-bold';
+        riskBadge.innerText = `⚠️ 發生長照後，資產將於 ${shockExhaust} 歲見底`;
+      } else if (firstNetGap > 0) {
+        riskBadge.className = 'text-xs bg-amber-100 text-amber-800 px-2.5 py-0.5 rounded-full font-bold';
+        riskBadge.innerText = normalExhaust !== null ? '⚠️ 即使無長照，資產也不足' : '⚠️ 資產撐得住，但被長照侵蝕';
       } else {
-        riskBadge.className = "text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold";
-        riskBadge.innerText = `✅ 商業保險覆蓋完善，資產不受長照影響`;
+        riskBadge.className = 'text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full font-bold';
+        riskBadge.innerText = '✅ 長照險理賠已覆蓋長照費用';
       }
 
-      document.getElementById('advisorNotesRisk').innerHTML = `
-        <li><strong>長照財務衝擊模擬：</strong>75 歲起若發生長照（每月 ${ltcCost.toLocaleString()} 元），扣除商業保險理賠 ${ltcIns.toLocaleString()} 元後，每月淨缺口 <strong>${netLtcMonthlyGap.toLocaleString()} 元</strong>。</li>
-        ${isLtc && netLtcMonthlyGap > 0 ? `<li class="text-rose-600 font-bold">⚠️ 這筆長照開銷將使原本平穩的退休資產在 <strong>${shockExhaustedAge || '數年內'}</strong> 遭嚴重侵蝕歸零，強烈建議提高商業長照保額。</li>` : `<li class="text-emerald-700 font-bold">⭐ 商業長照險已 100% 覆蓋風險，資產軌跡與健康退休一致！</li>`}
-      `;
+      const notes = [];
+      if (!isLtc) {
+        notes.push('<li>目前未啟動長照情境，兩條軌跡相同。</li>');
+      } else {
+        notes.push(`<li><strong>長照財務衝擊：</strong>今日每月 ${fmt(ltcCostToday)} 元的照護費，到 ${ltcStart} 歲時約 <strong>${fmt(ltcCostAtStart)} 元/月</strong>；扣除長照險理賠 ${fmt(ltcIns)} 元後，首年每月淨缺口 <strong>${fmt(firstNetGap)} 元</strong>，持續 ${ltcYears} 年。</li>`);
+        if (ltcPV > 0) notes.push(`<li><strong>長照準備金：</strong>換算到退休時點，需額外準備約 <strong>${wan(ltcPV)} 萬</strong>；若改用保險轉嫁，長照險月給付至少需 <strong>${fmt(ltcCostAtStart)} 元</strong> 才能完全覆蓋首年費用（理賠金額固定不隨通膨成長）。</li>`);
+        if (shockExhaust !== null && shockExhaust !== normalExhaust) notes.push(`<li class="text-rose-600 font-bold">⚠️ 長照開銷會讓資產在 ${shockExhaust} 歲歸零，建議提高長照保額或增加長照準備金。</li>`);
+        if (firstNetGap === 0) notes.push('<li class="text-emerald-700 font-bold">⭐ 長照險理賠已覆蓋發生當年的費用，但後續年度仍需留意通膨侵蝕。</li>');
+        if (ltcStart < retireAge) notes.push(`<li class="text-amber-700">長照發生年齡 ${ltcStart} 歲早於退休年齡 ${retireAge} 歲，退休前的長照支出未計入本模擬。</li>`);
+        if (ltcEnd > lifeAge) notes.push(`<li class="text-slate-500">照護期超過規劃年齡 ${lifeAge} 歲的部分未納入模擬。</li>`);
+      }
+      notes.push('<li class="text-slate-400">參考：衛福部統計國人一生平均長照需求約 7～8 年；外籍看護每月約 3～4 萬元、機構照護約 3～6 萬元。</li>');
+      document.getElementById('advisorNotesRisk').innerHTML = notes.join('');
 
       const ctx = document.getElementById('riskChart').getContext('2d');
       if (riskChartInstance) riskChartInstance.destroy();
-
       riskChartInstance = new Chart(ctx, {
         type: 'line',
-        data: {
-          labels,
-          datasets: [
-            { label: '正常健康資產軌跡', data: normalData, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.05)', fill: true, tension: 0.3, borderWidth: 2 },
-            { label: '發生長照之衝擊軌跡', data: shockData, borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.1)', fill: true, tension: 0.3, borderWidth: 3 }
-          ]
-        },
+        data: { labels, datasets: [
+          { label: '健康退休資產軌跡', data: normalData, borderColor: '#2563eb', backgroundColor: 'rgba(37, 99, 235, 0.05)', fill: true, tension: 0.3, borderWidth: 2 },
+          { label: '發生長照之衝擊軌跡', data: shockData, borderColor: '#dc2626', backgroundColor: 'rgba(220, 38, 38, 0.1)', fill: true, tension: 0.3, borderWidth: 3 }
+        ] },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { callback: v => (v / 10000).toLocaleString() + '萬' } } } }
       });
     }
 
-    // 第三頁：115年(2026) 遺贈稅與流動性現金檢核
+    // 第三頁：115年(2026) 遺贈稅與流動性現金檢核（單位：萬元）
     function calcTax() {
-      const fin = +document.getElementById('finAsset_num').value || 0;
-      const reMarket = +document.getElementById('reMarket_num').value || 0;
-      const reRatio = (+document.getElementById('reRatio_num').value || 35) / 100;
-      const reLoan = +document.getElementById('reLoan_num').value || 0;
+      const fin = val('finAsset_num', 0);
+      const reMarket = val('reMarket_num', 0);
+      const reRatio = val('reRatio_num', 35) / 100;
+      const reLoan = val('reLoan_num', 0);
       const use1030 = document.getElementById('claim1030Toggle').checked;
-      const spouseWealth = +document.getElementById('spouseWealth_num').value || 0;
-      const hasSpouse = +document.getElementById('hasSpouse').value;
-      const kids = +document.getElementById('kidsCount_num').value || 0;
-      const parents = +document.getElementById('parentsCount_num').value || 0;
-      const disabled = +document.getElementById('disabledCount_num').value || 0;
-      const lifeIns = +document.getElementById('lifeIns_num').value || 0;
-      const giftYears = +document.getElementById('giftYears_num').value || 0;
+      const spouseWealth = val('spouseWealth_num', 0);
+      const maritalPct = Math.min(100, Math.max(0, val('maritalPct_num', 100))) / 100;
+      const hasSpouse = num('hasSpouse') === 1;
+      const kids = val('kidsCount_num', 0);
+      const minorYears = val('minorYears_num', 0);
+      const parents = val('parentsCount_num', 0);
+      const siblings = val('siblingsCount_num', 0);
+      const disabled = val('disabledCount_num', 0);
+      const lifeFace = val('lifeIns_num', 0);
+      const lifePremium = val('lifePremium_num', 0);
+      const giftYears = val('giftYears_num', 0);
 
       const reAssessed = Math.round(reMarket * reRatio);
       document.getElementById('reAssessedLabel').innerText = reAssessed.toLocaleString();
 
-      const rawGrossEstate = Math.max(0, fin + reAssessed - reLoan);
-      const shiftedCash = Math.min(fin, giftYears * 244 + lifeIns);
-      const plannedGrossEstate = Math.max(0, (fin - shiftedCash) + reAssessed - reLoan);
+      // 生前移轉：贈與 + 已繳保費（身故保險金本身不計入遺產）
+      const giftTotal = giftYears * LAW.GIFT_EXEMPT;
+      const shifted = Math.min(fin, giftTotal + lifePremium);
+      const rawGross = Math.max(0, fin + reAssessed - reLoan);
+      const plannedGross = Math.max(0, fin - shifted + reAssessed - reLoan);
 
-      const claim1030Deduction = (hasSpouse && use1030) ? Math.max(0, Math.round((plannedGrossEstate - spouseWealth) / 2)) : 0;
+      // 1030-1：(被繼承人婚後財產淨額 − 配偶婚後財產淨額) ÷ 2，以遺贈稅法第10條時價（不動產用課稅現值）計
+      const claimOn = gross => (hasSpouse && use1030) ? Math.max(0, Math.round((gross * maritalPct - spouseWealth) / 2)) : 0;
 
-      const statutoryDeductions = 1333 + 138 + (hasSpouse ? 553 : 0) + (kids * 56) + (parents * 138) + (disabled * 693);
-      const totalAllDeductions = statutoryDeductions + claim1030Deduction;
+      const statutory = LAW.EST_EXEMPT + LAW.EST_FUNERAL + (hasSpouse ? LAW.EST_SPOUSE : 0)
+        + (kids + minorYears) * LAW.EST_KID + parents * LAW.EST_PARENT + siblings * LAW.EST_SIBLING + disabled * LAW.EST_DISABLED;
 
-      const rawNetEstate = Math.max(0, rawGrossEstate - statutoryDeductions);
-      const rawTax = compute2026EstateTax(rawNetEstate).tax;
+      const taxRaw = compute2026EstateTax(Math.max(0, rawGross - statutory)).tax;
+      const claimRaw = claimOn(rawGross);
+      const taxClaimOnly = compute2026EstateTax(Math.max(0, rawGross - statutory - claimRaw)).tax;
 
-      const plannedNetEstate = Math.max(0, plannedGrossEstate - totalAllDeductions);
-      const plannedResult = compute2026EstateTax(plannedNetEstate);
+      const claimPlanned = claimOn(plannedGross);
+      const totalDeductions = statutory + claimPlanned;
+      const plannedNet = Math.max(0, plannedGross - totalDeductions);
+      const plannedResult = compute2026EstateTax(plannedNet);
       const plannedTax = plannedResult.tax;
-      const savedTax = Math.max(0, +(rawTax - plannedTax).toFixed(1));
+      const savedTotal = Math.max(0, +(taxRaw - plannedTax).toFixed(1));
+      const savedByClaim = Math.max(0, +(taxRaw - taxClaimOnly).toFixed(1));
+      const savedByShift = Math.max(0, +(savedTotal - savedByClaim).toFixed(1));
 
-      // 流動性現金檢核：流動資產(金融現金)是否足以支付應納遺產稅？
-      const remainingCash = Math.max(0, fin - shiftedCash);
-      const isCashSufficient = remainingCash >= plannedTax;
+      document.getElementById('claim1030Result').innerText = (hasSpouse && use1030)
+        ? `預估可自遺產扣除請求權金額：${claimPlanned.toLocaleString()} 萬（配偶取得後，將成為配偶日後的遺產）`
+        : '預估可自遺產扣除請求權金額：0 萬（未啟用或無配偶）';
 
-      document.getElementById('taxNetEstate').innerText = plannedNetEstate.toLocaleString() + ' 萬';
-      document.getElementById('taxDeductionInfo').innerText = `總扣除額 ${totalAllDeductions.toLocaleString()} 萬`;
+      // 流動性：遺產中剩餘的金融資產 + 受益人領到的身故保險金
+      const remainingCash = Math.max(0, fin - shifted);
+      const cashAvail = remainingCash + lifeFace;
+      const isCashSufficient = cashAvail >= plannedTax;
+
+      document.getElementById('taxNetEstate').innerText = plannedNet.toLocaleString() + ' 萬';
+      document.getElementById('taxDeductionInfo').innerText = `總扣除額 ${totalDeductions.toLocaleString()} 萬（含請求權 ${claimPlanned.toLocaleString()} 萬）`;
       document.getElementById('taxPayable').innerText = 'NT$ ' + plannedTax.toLocaleString() + ' 萬';
       document.getElementById('taxBracketInfo').innerText = `最高稅率：${plannedResult.rate}`;
-      document.getElementById('taxSaved').innerText = 'NT$ ' + savedTax.toLocaleString() + ' 萬';
-      
+      document.getElementById('taxSaved').innerText = 'NT$ ' + savedTotal.toLocaleString() + ' 萬';
+      document.getElementById('taxSavedBreak').innerText = `請求權 ${savedByClaim} 萬＋保單/贈與 ${savedByShift} 萬`;
+
       const liquidityEl = document.getElementById('liquidityCheckVal');
       const liquidityDesc = document.getElementById('liquidityCheckDesc');
+      liquidityEl.className = 'text-base font-extrabold mt-0.5 ' + (plannedTax > 0 && !isCashSufficient ? 'text-rose-600' : 'text-amber-900');
       if (plannedTax === 0) {
-        liquidityEl.innerText = "無需繳稅";
-        liquidityDesc.innerText = "遺產淨額低於免稅額";
+        liquidityEl.innerText = '無需繳稅';
+        liquidityDesc.innerText = '遺產淨額未超過免稅額與扣除額';
       } else if (isCashSufficient) {
-        liquidityEl.innerText = "現金充足 (OK)";
-        liquidityDesc.innerText = `剩餘現金 ${remainingCash} 萬 ＞ 稅金 ${plannedTax} 萬`;
+        liquidityEl.innerText = '現金充足 (OK)';
+        liquidityDesc.innerText = `現金 ${remainingCash.toLocaleString()} ＋ 保險金 ${lifeFace.toLocaleString()} 萬 ≥ 稅金 ${plannedTax} 萬`;
       } else {
-        liquidityEl.className = "text-base font-extrabold text-rose-600 mt-0.5";
-        liquidityEl.innerText = "⚠️ 現金嚴重不足！";
-        liquidityDesc.innerText = `剩餘現金 ${remainingCash}萬 ＜ 稅金 ${plannedTax}萬 (缺口 ${plannedTax - remainingCash}萬)`;
+        liquidityEl.innerText = '⚠️ 現金不足！';
+        liquidityDesc.innerText = `可用現金 ${cashAvail.toLocaleString()} 萬 ＜ 稅金 ${plannedTax} 萬 (缺口 ${(plannedTax - cashAvail).toFixed(1)} 萬)`;
       }
+
+      // 保單提醒
+      const insWarn = [];
+      if (lifeFace > LAW.AMT_INS_EXEMPT) insWarn.push(`⚠️ 身故保險金超過 3,740 萬的部分，需計入受益人當年度基本所得額（另有 750 萬基本免稅額）。`);
+      if (lifeFace > 0 && lifePremium >= lifeFace * 0.9) insWarn.push('⚠️ 保險金接近或低於所繳保費，屬國稅局「實質課稅」常見態樣，可能被併入遺產。');
+      if (lifePremium > fin) insWarn.push('⚠️ 已繳保費大於金融資產，請確認輸入。');
+      const insWarnEl = document.getElementById('insWarn');
+      insWarnEl.className = 'text-[11px] font-semibold ' + (insWarn.length ? 'text-rose-600' : 'text-emerald-700');
+      insWarnEl.innerHTML = insWarn.length ? insWarn.join('<br>') : '✓ 保額在最低稅負免計額內';
 
       document.getElementById('tableTaxTarget').innerText = plannedTax.toLocaleString();
       const neededMarketLand = reRatio > 0 ? Math.round(plannedTax / reRatio) : 0;
       const evaporatedValue = Math.max(0, neededMarketLand - Math.round(plannedTax));
-
       document.getElementById('pkRow1Calc').innerHTML = plannedTax > 0
-        ? `需拿出市價 <strong>${neededMarketLand.toLocaleString()} 萬</strong> 房地抵稅，白白蒸發 <strong>${evaporatedValue.toLocaleString()} 萬</strong> 市價！`
-        : `應納遺產稅為 0 萬。`;
+        ? `需拿出市價約 <strong>${neededMarketLand.toLocaleString()} 萬</strong> 的房地抵繳，市價與現值差 <strong>${evaporatedValue.toLocaleString()} 萬</strong> 等於讓給國庫。`
+        : '應納遺產稅為 0 萬。';
 
       const mLoanRate = 0.025 / 12;
-      const monthlyPayment = plannedTax > 0 ? Math.round((plannedTax * 10000 * mLoanRate) / (1 - Math.pow(1 + mLoanRate, -240))) : 0;
+      const monthlyPayment = plannedTax > 0 ? Math.round(pmt(plannedTax * 10000, mLoanRate, 240)) : 0;
+      const loanLtv = Math.min(90, Math.max(0, val('loanLtv_num', 70))) / 100;
+      const loanable = Math.max(0, Math.round(reMarket * loanLtv - reLoan));
+      const loanEnough = loanable >= plannedTax;
       document.getElementById('pkRow2Calc').innerHTML = plannedTax > 0
-        ? `向銀行借貸 <strong>${plannedTax} 萬</strong> 繳稅，子女每月需背負 <strong>${monthlyPayment.toLocaleString()} 元</strong> 本息。`
-        : `無須申辦繳稅融資。`;
+        ? `市價 ${reMarket.toLocaleString()} 萬 × ${Math.round(loanLtv * 100)}% − 原貸款 ${reLoan.toLocaleString()} 萬，約可再貸 <strong>${loanable.toLocaleString()} 萬</strong>，${loanEnough ? '足以' : '<strong class="text-rose-600">不足以</strong>'}支應稅款 ${plannedTax} 萬。借 ${plannedTax} 萬（年利率2.5%、20年）每月約 <strong>${monthlyPayment.toLocaleString()} 元</strong> 本息。`
+        : '無須申辦繳稅融資。';
+      const rate2 = document.getElementById('pkRow2Rate');
+      rate2.innerText = plannedTax === 0 ? '—' : (loanEnough ? '✅ 新制可行，需審核' : '⚠️ 額度不足');
 
-      const taxCoverGap = lifeIns - plannedTax;
-      document.getElementById('pkRow3Calc').innerHTML = lifeIns >= plannedTax
-        ? `已規劃壽險 <strong>${lifeIns.toLocaleString()} 萬</strong>，100% 覆蓋遺產稅 ${plannedTax} 萬，現金直達完稅！`
-        : `壽險保額 ${lifeIns} 萬，尚缺 <strong class="text-rose-600">${Math.abs(taxCoverGap)} 萬</strong> 預留稅源！`;
+      document.getElementById('pkRow3Calc').innerHTML = plannedTax === 0
+        ? `無應納稅額；保險金 ${lifeFace.toLocaleString()} 萬可作為家庭生活或平衡遺產分配之用。`
+        : (lifeFace >= plannedTax
+          ? `保險金 <strong>${lifeFace.toLocaleString()} 萬</strong> 可完全支應遺產稅 ${plannedTax} 萬。`
+          : `保險金 ${lifeFace.toLocaleString()} 萬，尚缺 <strong class="text-rose-600">${(plannedTax - lifeFace).toFixed(1)} 萬</strong> 稅源。`);
 
       document.getElementById('taxAdvisorText').innerHTML = `
-        <p>1. <strong>不動產與債務扣除：</strong>市價 ${reMarket.toLocaleString()} 萬，課稅現值僅 <strong>${reAssessed.toLocaleString()} 萬</strong>；現有銀行貸款 <strong>${reLoan.toLocaleString()} 萬</strong> 全額列為未償債務扣除。</p>
-        <p>2. <strong>流動性風險警告：</strong>${isCashSufficient ? `家族流動現金尚可支應應納稅金。` : `<strong class="text-rose-700">⚠️ 嚴重流動性危機：</strong>帳面因不動產債務導致遺產稅看似降低，但現金僅剩 ${remainingCash} 萬，不足以繳納 ${plannedTax} 萬遺產稅！此時若無人壽保險預留稅源，子女將被迫賤賣不動產。`}</p>
-        <p>3. <strong>傳承總結：</strong>透過請求權（扣 ${claim1030Deduction}萬）與保單，共為家族合法節省 <strong>${savedTax} 萬</strong> 遺產稅。</p>
+        <p>1. <strong>不動產與債務：</strong>市價 ${reMarket.toLocaleString()} 萬，課稅現值約 <strong>${reAssessed.toLocaleString()} 萬</strong>；銀行貸款 <strong>${reLoan.toLocaleString()} 萬</strong> 可列為未償債務扣除。子女日後出售繼承的房地，房地合一稅的成本是繼承時的課稅現值（依物價指數調整），不是市價，也不能用貸款抵減，因此未來的房地合一稅可能偏高。</p>
+        <p>2. <strong>流動性檢核：</strong>${plannedTax === 0 ? '目前無應納遺產稅。' : isCashSufficient
+          ? `遺產內現金 ${remainingCash.toLocaleString()} 萬加上保險金 ${lifeFace.toLocaleString()} 萬，足以支應 ${plannedTax} 萬遺產稅。`
+          : `<strong class="text-rose-700">⚠️ 流動性不足：</strong>遺產內現金 ${remainingCash.toLocaleString()} 萬加上保險金 ${lifeFace.toLocaleString()} 萬，不足以繳納 ${plannedTax} 萬遺產稅，子女可能被迫抵繳或賤賣不動產。`}</p>
+        <p>3. <strong>剩餘財產差額分配請求權：</strong>${(hasSpouse && use1030) ? `估計可扣除 ${claimPlanned.toLocaleString()} 萬。注意：須於核定後1年內實際移轉給配偶，否則會被追繳；這筆財產會在配偶過世時再計入配偶遺產（二次課稅）。` : '未啟用。'}</p>
+        <p>4. <strong>115年遺贈稅法修正重點：</strong>過世前2年內的贈與仍併入遺產，但這部分的稅改由受贈人按比例自行負擔；繼承人過半數且應繼分過半數同意（或應繼分逾三分之二同意）即可動用被繼承人存款繳稅；不動產可先抵押給國稅局辦理繼承登記，再出售或貸款繳稅。</p>
+        <p>5. <strong>傳承總結：</strong>相較未規劃（${taxRaw} 萬），共節省 <strong>${savedTotal} 萬</strong>：請求權貢獻 ${savedByClaim} 萬，保單與贈與移轉貢獻 ${savedByShift} 萬。</p>
       `;
     }
 
+    // 115年遺產稅累進速算（單位：萬元）
     function compute2026EstateTax(netWan) {
       if (netWan <= 0) return { tax: 0, rate: '0% (免稅)' };
       if (netWan <= 5621) return { tax: +(netWan * 0.10).toFixed(1), rate: '10%' };
       if (netWan <= 11242) return { tax: +(netWan * 0.15 - 281.05).toFixed(1), rate: '15%' };
       return { tax: +(netWan * 0.20 - 843.15).toFixed(1), rate: '20%' };
     }
+
+    // ===== 欄位說明（給保戶看的白話解釋）=====
+    const FIELD_HELP = {
+      age: '您今年的實際年齡，用來計算距離退休還有幾年可以準備。',
+      retireAge: '您打算停止工作、開始靠退休金生活的年齡。越早退休，準備時間越短、要花用的年數越長。',
+      lifeAge: '退休金要準備到幾歲才夠用。國人平均壽命約 80 歲，女性更長，建議至少規劃到 90 歲，寧可多準備。',
+      salary: '目前稅前每月薪資，用來估算勞保老年年金與勞退帳戶的提繳金額（不是用來估生活費）。',
+      expense: '您家庭目前每個月實際花費，包含房租/房貸以外的食衣住行、保費、娛樂等，以今天的物價填寫。',
+      salGrowth: '預估每年加薪幅度，會影響勞保投保薪資與勞退提繳。一般上班族可抓 1.5%～3%。',
+      repRate: '退休後每月花費大約是現在的幾成。小孩獨立、房貸繳完通常會降低，但醫療與旅遊可能增加，一般抓 70%～90%。',
+      inflation: '物價每年上漲的幅度。台灣長期約 1.5%～2.5%，今天 100 元的東西 30 年後可能要 180 元以上。',
+      roi: '退休前這段時間，投資（如 ETF、基金）預期每年平均報酬。股票比重越高報酬可能越高，但波動也大。',
+      postRoi: '退休後資產的預期年報酬。退休後通常會調整成較保守的配置（多一些債券、配息），建議比退休前低。',
+      laborYears: '到退休時累計的勞保投保年資。滿 15 年才能按月領年金，未滿只能一次領一筆。可在「勞保局 e 化服務」查詢。',
+      natYears: '沒有工作、沒有勞保期間所繳的國民年金年資（例如家管、待業）。65 歲起可另外領國保年金。',
+      claimAge: '開始領勞保年金的年齡。法定 65 歲，每提早 1 年少領 4%（最多提早 5 年），每延後 1 年多領 4%（最多延後 5 年），而且是終身的增減。',
+      selfContrib: '您自己每月額外提撥到勞退帳戶的比例（0～6%）。自提金額可從當年所得中扣除，有節稅效果。',
+      lpBal: '您勞退新制個人帳戶目前已累積的金額，可在勞保局網站或 APP 查詢。',
+      lpRoi: '勞動基金運用的預期年報酬。政府只保證不低於二年期定存利率，這裡是假設值。',
+      saved: '目前已經準備好、專門留給退休用的資產，例如 ETF、基金、儲蓄險解約金等。',
+      monthlyInvest: '目前每個月固定投入、專門給退休用的金額（例如定期定額）。',
+      ltcStart: '假設從幾歲開始需要長期照顧（例如失能、失智）。',
+      ltcYears: '需要長期照顧的年數。衛福部統計國人一生平均約 7～8 年。',
+      ltcCostRisk: '需要照顧時每月的花費，以今天的物價填寫。外籍看護約 3～4 萬，住機構約 3～6 萬，加上耗材、醫療。',
+      ltcInsRisk: '長照險或失能險每月可以理賠的金額。大部分保單理賠金額固定，不會跟著物價上漲。',
+      ltcToggleRisk: '打勾代表模擬「發生長照」的情況，取消則只看健康退休的情況。',
+      finAsset: '名下所有金融資產：存款、股票、ETF、基金、債券等，以目前市值計算。',
+      reMarket: '名下所有房子與土地，現在市場上大概可以賣多少錢。遺產稅不是用市價計算，但子女繼承後若要向銀行貸款繳稅，銀行是看市價核貸。',
+      reRatio: '國稅局計算遺產稅不是用市價，而是用「公告土地現值＋房屋評定現值」，通常只有市價的 3～5 成。可從地價稅單、房屋稅單上的數字推算。',
+      reLoan: '房貸等銀行借款目前還沒還完的餘額。過世時尚未償還的債務可以從遺產中扣除。',
+      claim1030Toggle: '夫妻婚後各自累積的財產，過世時財產較多的一方，配偶可以請求差額的一半，這部分不用繳遺產稅。',
+      maritalPct: '遺產中有多少比例是「結婚後」賺來的。婚前財產、繼承來的、別人贈與的，都不算。',
+      spouseWealth: '配偶名下結婚後累積的財產淨額（扣掉負債）。配偶財產越少，可以主張的請求權越多。',
+      hasSpouse: '過世時是否有配偶。有配偶可多扣除 553 萬。',
+      kidsCount: '子女（直系血親卑親屬）人數，每人可扣除 56 萬。',
+      minorYears: '未滿 18 歲的子女，每人距離 18 歲還有幾年，全部加總後填入，每年可再多扣 56 萬。例如一個 10 歲、一個 15 歲，填 8+3=11。',
+      parentsCount: '過世時父母還健在的人數，每人可扣除 138 萬。',
+      siblingsCount: '由您扶養的兄弟姊妹或祖父母人數，每人可扣除 56 萬。',
+      disabledCount: '配偶、子女、父母等繼承人中，領有重度以上身心障礙證明的人數，每人可再扣 693 萬。',
+      lifeIns: '過世時保險公司會理賠的身故保險金。有指定受益人的保險金不算遺產，可直接給家人拿來繳稅。',
+      lifePremium: '為這些保單總共繳了多少保費。這筆錢已經從您的存款移出，所以會讓遺產變少。',
+      giftYears: '每人每年可以免稅贈與 244 萬。這裡填打算連續贈與幾年。注意：過世前 2 年內的贈與仍會算回遺產，115 年修法後這部分的稅由受贈人按比例自行負擔。',
+      loanLtv: '子女繼承房地後，銀行願意以市價的幾成借錢給子女繳遺產稅。一般住宅約 6～7 成，實際依銀行審核與央行規定。'
+    };
+
+    function initFieldHelp() {
+      const created = [];
+      Object.entries(FIELD_HELP).forEach(([id, text]) => {
+        const input = document.getElementById(id + '_num') || document.getElementById(id);
+        if (!input) return;
+        // 找到該欄位的卡片與標題文字
+        const card = input.closest('.rounded-lg, .rounded') || input.parentElement;
+        const row = input.closest('.flex.justify-between') || card;
+        const label = row.querySelector('span') || card.querySelector('span');
+        if (!label || label.querySelector('.help-btn')) return;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'help-btn no-print';
+        btn.textContent = 'i';
+        btn.setAttribute('aria-label', '欄位說明');
+        btn.setAttribute('aria-expanded', 'false');
+        const tip = document.createElement('p');
+        tip.className = 'help-text hidden';
+        tip.textContent = text;
+        if (row.parentElement.classList.contains('grid')) {
+          // 扣除額小格：說明放在格子內，避免打亂兩欄排版
+          row.classList.add('flex-wrap');
+          tip.classList.add('w-full');
+          row.appendChild(tip);
+        } else {
+          row.insertAdjacentElement('afterend', tip);
+        }
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          const open = tip.classList.toggle('hidden') === false;
+          btn.setAttribute('aria-expanded', String(open));
+        });
+        label.appendChild(btn);
+        created.push([btn, tip]);
+      });
+      document.getElementById('showAllHelp').addEventListener('change', e => {
+        created.forEach(([btn, tip]) => {
+          tip.classList.toggle('hidden', !e.target.checked);
+          btn.setAttribute('aria-expanded', String(e.target.checked));
+        });
+      });
+    }
+    initFieldHelp();
+
+    // ===== 列印報告 =====
+    const PRINT_FIELDS = {
+      'tab-retire': ['age','retireAge','lifeAge','salary','expense','salGrowth','repRate','inflation','roi','postRoi','laborYears','natYears','claimAge','selfContrib','lpBal','lpRoi','saved','monthlyInvest'],
+      'tab-risk': ['ltcToggleRisk','ltcStart','ltcYears','ltcCostRisk','ltcInsRisk'],
+      'tab-tax': ['finAsset','reMarket','reRatio','reLoan','loanLtv','claim1030Toggle','maritalPct','spouseWealth','hasSpouse','kidsCount','minorYears','parentsCount','siblingsCount','disabledCount','lifeIns','lifePremium','giftYears']
+    };
+    const escapeHtml = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+    function fieldLabel(id) {
+      const input = document.getElementById(id + '_num') || document.getElementById(id);
+      const row = input.closest('.flex.justify-between') || input.parentElement;
+      const span = row.querySelector('span');
+      if (!span) return id;
+      const clone = span.cloneNode(true);
+      clone.querySelectorAll('.help-btn').forEach(b => b.remove());
+      return clone.textContent.replace(/[：:]\s*$/, '').replace(/^[^\u4e00-\u9fffA-Za-z0-9]+/u, '').trim();
+    }
+    function fieldValue(id) {
+      const input = document.getElementById(id + '_num') || document.getElementById(id);
+      if (input.type === 'checkbox') return input.checked ? '是' : '否';
+      if (input.tagName === 'SELECT') return input.options[input.selectedIndex].text;
+      const unitEl = input.nextElementSibling;
+      const unit = unitEl && unitEl.tagName === 'SPAN' ? unitEl.textContent.trim().split(/[\s(（]/)[0] : '';
+      const v = input.value === '' ? '—' : Number(input.value).toLocaleString();
+      return v + ' ' + unit;
+    }
+
+    let printChartsBackup = null;
+    let savedAnimation = null;
+    function preparePrint() {
+      const client = document.getElementById('clientName').value.trim();
+      document.getElementById('printClient').innerText = client || '＿＿＿＿＿＿';
+      document.getElementById('printDate2').innerText = new Date().toLocaleDateString('zh-TW');
+      document.querySelectorAll('.print-assumptions').forEach(box => {
+        const rows = PRINT_FIELDS[box.dataset.section].map(id =>
+          `<tr><td>${escapeHtml(fieldLabel(id))}</td><td class="v">${escapeHtml(fieldValue(id))}</td><td>${escapeHtml(FIELD_HELP[id] || '')}</td></tr>`).join('');
+        box.innerHTML = `<table class="print-table"><thead><tr><th style="width:26%">項目</th><th style="width:14%">數值</th><th>說明</th></tr></thead><tbody>${rows}</tbody></table>`;
+      });
+      // 三個分頁都要算過、圖表都要畫好，再轉成圖片供列印
+      const activeBtn = document.querySelector('.tab-btn.active');
+      printChartsBackup = activeBtn ? activeBtn.id.replace('btn-', '') : 'retire';
+      document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('hidden'));
+      savedAnimation = Chart.defaults.animation;
+      Chart.defaults.animation = false;
+      calcRetire(); calcRisk(); calcTax();
+      document.getElementById('retireChartImg').src = retireChartInstance.toBase64Image();
+      document.getElementById('riskChartImg').src = riskChartInstance.toBase64Image();
+    }
+    function restoreAfterPrint() {
+      if (!printChartsBackup) return;
+      Chart.defaults.animation = savedAnimation;
+      switchTab(printChartsBackup);
+      printChartsBackup = null;
+    }
+    window.addEventListener('beforeprint', preparePrint);
+    window.addEventListener('afterprint', restoreAfterPrint);
 
     calcRetire();
   </script>
