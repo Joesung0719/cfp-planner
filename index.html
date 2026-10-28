@@ -17,8 +17,8 @@
       .no-print { display: none !important; }
       .print-only { display: block !important; }
       body { background: white !important; padding: 0 !important; font-size: 12px; }
-      .print-container { border: none !important; box-shadow: none !important; max-width: 100% !important; border-radius: 0 !important; }
-      .tab-section { display: block !important; padding: 0 !important; }
+      .print-container { border: none !important; box-shadow: none !important; max-width: 100% !important; border-radius: 0 !important; overflow: visible !important; }
+      .tab-section { display: block !important; padding: 0 1px !important; }  /* 留 1px，表格左右框線才不會被裁掉 */
       .tab-section > div { margin-bottom: 12px; }
       .tab-section + .tab-section { break-before: page; page-break-before: always; }
       .chart-box { height: auto !important; }
