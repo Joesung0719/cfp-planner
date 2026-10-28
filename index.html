@@ -163,16 +163,67 @@
           </div>
         </div>
 
-        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-1 pt-2">🏛️ 跨制度退休金疊加 (勞保+國保+勞退)</h2>
-        <div class="grid grid-cols-2 gap-3">
+        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-1 pt-2">🏛️ 跨制度退休金疊加 (社會保險＋職業退休金＋國保)</h2>
+        <div class="bg-white p-2.5 rounded-lg border border-amber-300">
+          <div class="flex justify-between items-center text-xs font-medium gap-2">
+            <span>職業別</span>
+            <select id="career" class="font-bold text-blue-700 bg-slate-50 border rounded px-1 py-0.5 text-xs">
+              <option value="labor">勞工（勞保＋勞退）</option>
+              <option value="private">私校教職員（公保＋私校退撫儲金）</option>
+              <option value="teacherDB">公立學校教師（112/6/30前到職，月退）</option>
+              <option value="civilDB">公務人員（112/6/30前到職，月退）</option>
+              <option value="publicDC">公教人員（112/7/1後初任，個人專戶制）</option>
+              <option value="military">軍人（軍職退休俸）</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="career-field pub-only hidden grid grid-cols-2 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>目前本俸／本薪 (月)</span>
+              <div class="flex items-center gap-1"><input type="number" id="pubBase_num" value="50000" min="0" max="200000" step="500" class="w-20 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>元</span></div>
+            </div>
+            <input type="range" id="pubBase" min="20000" max="120000" step="500" value="50000" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
+          </div>
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>退休時任職年資</span>
+              <div class="flex items-center gap-1"><input type="number" id="pubYears_num" value="30" min="0" max="45" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>年</span></div>
+            </div>
+            <input type="range" id="pubYears" min="0" max="45" value="30" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
+          </div>
+          <div class="career-field rate-only hidden bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>退休所得替代率</span>
+              <div class="flex items-center gap-0.5"><input type="number" id="pubRate_num" value="61.5" min="0" max="95" step="0.5" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>%</span></div>
+            </div>
+            <p class="text-[10px] text-slate-400" id="pubRateNote">依年資自動帶入，可自行修改</p>
+          </div>
+          <div class="career-field start-only hidden bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>月退／專戶起領年齡</span>
+              <div class="flex items-center gap-1"><input type="number" id="pubStartAge_num" value="65" min="50" max="70" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>歲</span></div>
+            </div>
+            <p class="text-[10px] text-slate-400">依身分自動帶入，可自行修改</p>
+          </div>
+          <div class="career-field gepi-only hidden bg-white p-2.5 rounded-lg border border-slate-200">
+            <div class="flex justify-between items-center text-xs font-medium mb-1">
+              <span>公保養老年金給付率 (每年)</span>
+              <div class="flex items-center gap-0.5"><input type="number" id="gepiRate_num" value="1.3" min="0" max="1.3" step="0.05" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="career-field labor-only bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
               <span>勞保年資 (退休時)</span>
               <div class="flex items-center gap-1"><input type="number" id="laborYears_num" value="35" min="0" max="50" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>年</span></div>
             </div>
             <input type="range" id="laborYears" min="0" max="45" value="35" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
-          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200 nat-card">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
               <span>國保年資</span>
               <div class="flex items-center gap-1"><input type="number" id="natYears_num" value="0" min="0" max="40" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>年</span></div>
@@ -181,7 +232,7 @@
           </div>
         </div>
 
-        <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+        <div class="career-field labor-only bg-white p-2.5 rounded-lg border border-slate-200">
           <div class="flex justify-between items-center text-xs font-medium mb-1">
             <span>勞保請領年齡 (65歲基準，每提前/延後1年 ∓4%，最多5年)</span>
             <div class="flex items-center gap-1">
@@ -193,23 +244,23 @@
         </div>
 
         <div class="grid grid-cols-2 gap-3">
-          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+          <div class="career-field pot-only bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>勞退自提率</span>
+              <span><span id="lbl-selfContrib">勞退自提率</span></span>
               <div class="flex items-center gap-0.5"><input type="number" id="selfContrib_num" value="0" min="0" max="6" step="1" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="selfContrib" min="0" max="6" step="1" value="0" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
-          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+          <div class="career-field pot-only bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>勞退專戶現有餘額</span>
+              <span><span id="lbl-lpBal">勞退專戶現有餘額</span></span>
               <div class="flex items-center gap-1"><input type="number" id="lpBal_num" value="50" min="0" max="2000" step="5" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
             </div>
             <input type="range" id="lpBal" min="0" max="500" step="5" value="50" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
-          <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+          <div class="career-field pot-only bg-white p-2.5 rounded-lg border border-slate-200">
             <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>勞退基金年報酬</span>
+              <span><span id="lbl-lpRoi">勞退基金年報酬</span></span>
               <div class="flex items-center gap-0.5"><input type="number" id="lpRoi_num" value="3.5" min="0" max="10" step="0.1" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="lpRoi" min="0" max="8" step="0.5" value="3.5" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
@@ -230,18 +281,18 @@
           </div>
           <input type="range" id="monthlyInvest" min="0" max="100000" step="1000" value="10000" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
         </div>
-        <p class="text-[10px] text-slate-400">*115年參數：勞保最高投保薪資 45,800 元、國保月投保金額 21,103 元(A式加計 4,049 元)、勞退月提繳工資上限 150,000 元。</p>
+        <p class="text-[10px] text-slate-400">*115年參數：勞保最高投保薪資 45,800 元、國保月投保金額 21,103 元(A式加計 4,049 元)、勞退月提繳工資上限 150,000 元；私校退撫儲金提撥率 12%、公教個人專戶提撥率 15%（皆以本俸×2計）；公教月退所得替代率依 114 年 12 月修法以 112 年上限計。</p>
       </div>
 
       <div class="lg:col-span-7 space-y-5">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl">
-            <div class="text-[11px] text-emerald-700 font-medium">第一層：勞保+國保</div>
+            <div class="text-[11px] text-emerald-700 font-medium" id="pillar1Title">第一層：勞保+國保</div>
             <div class="text-base font-bold text-emerald-900 mt-0.5" id="cardPillar1">--</div>
             <div class="text-[10px] text-emerald-600" id="pillar1Desc">雙制度合計月領</div>
           </div>
           <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl">
-            <div class="text-[11px] text-blue-700 font-medium">第二層：勞退新制</div>
+            <div class="text-[11px] text-blue-700 font-medium" id="pillar2Title">第二層：勞退新制</div>
             <div class="text-base font-bold text-blue-900 mt-0.5" id="cardPillar2">--</div>
             <div class="text-[10px] text-blue-600" id="pillar2Desc">專戶累積月退</div>
           </div>
@@ -547,6 +598,10 @@
       NAT_A_ADD: 4049,          // 國保老年年金 A式加計金額
       LP_WAGE_CAP: 150000,      // 勞退月提繳工資上限
       LP_EMPLOYER: 0.06,        // 雇主提繳率
+      PRIVATE_FUND_RATE: 0.12,  // 私校退撫儲金提撥率（本薪×2）
+      PUBLIC_DC_RATE: 0.15,     // 公教個人專戶提撥率（本俸×2，112/7/1後初任）
+      GEPI_MAX_YEARS: 35,       // 公保養老年金年資採計上限
+      MIL_BASE_RATE: 55, MIL_STEP: 2, MIL_CAP: 90, // 軍職退休俸：滿20年55%，每年+2%，軍官上限90%
       EST_EXEMPT: 1333, EST_FUNERAL: 138, EST_SPOUSE: 553, EST_KID: 56, EST_PARENT: 138, EST_DISABLED: 693, EST_SIBLING: 56,
       GIFT_EXEMPT: 244,
       AMT_INS_EXEMPT: 3740
@@ -570,6 +625,12 @@
      ['laborYears','laborYears_num'],['natYears','natYears_num'],['claimAge','claimAge_num'],['selfContrib','selfContrib_num'],
      ['lpBal','lpBal_num'],['lpRoi','lpRoi_num'],['saved','saved_num'],['monthlyInvest','monthlyInvest_num']
     ].forEach(([s, n]) => bindSync(s, n, calcRetire));
+    bindSync('pubBase', 'pubBase_num', calcRetire);
+    bindSync('pubYears', 'pubYears_num', () => { applyCareerUI(); calcRetire(); });
+    document.getElementById('career').addEventListener('change', () => { applyCareerUI(); calcRetire(); });
+    document.getElementById('pubRate_num').addEventListener('input', e => { pubRateDirty = e.target.value !== ''; if (!pubRateDirty) applyCareerUI(); calcRetire(); });
+    document.getElementById('pubStartAge_num').addEventListener('input', e => { pubStartDirty = e.target.value !== ''; if (!pubStartDirty) applyCareerUI(); calcRetire(); });
+    document.getElementById('gepiRate_num').addEventListener('input', calcRetire);
 
     [['ltcCostRisk','ltcCostRisk_num'],['ltcInsRisk','ltcInsRisk_num'],['ltcStart','ltcStart_num'],['ltcYears','ltcYears_num']]
       .forEach(([s, n]) => bindSync(s, n, calcRisk));
@@ -599,6 +660,64 @@
 
     let globalRetireData = {};
 
+    // 公教月退所得替代率上限（114/12 修法後以 112 年附表認定）：15年39%，每年+1.5%，35年69%，之後每年+0.5%至40年
+    function dbReplacementRate(years) {
+      if (years < 15) return 0;
+      if (years <= 35) return 39 + 1.5 * (years - 15);
+      return Math.min(71.5, 69 + 0.5 * (years - 35));
+    }
+    function militaryRate(years) {
+      return years < 20 ? 0 : Math.min(LAW.MIL_CAP, LAW.MIL_BASE_RATE + LAW.MIL_STEP * (years - 20));
+    }
+    // 公保養老年金請領年齡：滿15年65歲、滿20年60歲、滿30年55歲
+    function gepiEligibleAge(years) {
+      if (years >= 30) return 55;
+      if (years >= 20) return 60;
+      if (years >= 15) return 65;
+      return null;
+    }
+    const CAREER_UI = {
+      labor:     { p1: '第一層：勞保+國保', p2: '第二層：勞退新制', self: '勞退自提率', bal: '勞退專戶現有餘額', roi: '勞退基金年報酬', start: null },
+      private:   { p1: '第一層：公保+國保', p2: '第二層：私校退撫儲金', self: '儲金自願增提率', bal: '私校退撫儲金現有餘額', roi: '儲金年報酬', start: null },
+      teacherDB: { p1: '第一層：公保+國保', p2: '第二層：教師月退休金', start: 60 },
+      civilDB:   { p1: '第一層：公保+國保', p2: '第二層：公務人員月退休金', start: 65 },
+      publicDC:  { p1: '第一層：公保+國保', p2: '第二層：個人專戶', self: '自願增提率', bal: '個人專戶現有餘額', roi: '個人專戶年報酬', start: 65 },
+      military:  { p1: '第一層：軍保+國保', p2: '第二層：軍職退休俸', start: null }
+    };
+    let pubRateDirty = false, pubStartDirty = false;
+    function applyCareerUI() {
+      const c = document.getElementById('career').value;
+      const ui = CAREER_UI[c];
+      const show = {
+        'labor-only': c === 'labor',
+        'pub-only': c !== 'labor',
+        'rate-only': ['teacherDB', 'civilDB', 'military'].includes(c),
+        'start-only': ['teacherDB', 'civilDB', 'publicDC'].includes(c),
+        'gepi-only': ['private', 'publicDC'].includes(c),
+        'pot-only': ['labor', 'private', 'publicDC'].includes(c)
+      };
+      document.querySelectorAll('.career-field').forEach(el => {
+        const key = Object.keys(show).find(k => el.classList.contains(k));
+        if (key) el.classList.toggle('hidden', !show[key]);
+      });
+      document.getElementById('pillar1Title').innerText = ui.p1;
+      document.getElementById('pillar2Title').innerText = ui.p2;
+      if (ui.self) {
+        document.getElementById('lbl-selfContrib').innerText = ui.self;
+        document.getElementById('lbl-lpBal').innerText = ui.bal;
+        document.getElementById('lbl-lpRoi').innerText = ui.roi;
+      }
+      const years = val('pubYears_num', 0);
+      if (!pubRateDirty) {
+        const auto = c === 'military' ? militaryRate(years) : dbReplacementRate(years);
+        document.getElementById('pubRate_num').value = auto;
+      }
+      document.getElementById('pubRateNote').innerText = c === 'military'
+        ? '依年資自動帶入（滿20年55%，每年+2%），可自行修改'
+        : '依年資自動帶入（112年附表上限），可自行修改';
+      if (!pubStartDirty && ui.start) document.getElementById('pubStartAge_num').value = ui.start;
+    }
+
     function calcRetire() {
       const age = Math.min(65, Math.max(20, val('age_num', 38)));
       const retireAge = Math.max(age + 1, val('retireAge_num', 65));
@@ -624,55 +743,136 @@
       const targetToday = expense * repRate;                        // 今日幣值的退休月支出
       const targetMonthly = targetToday * Math.pow(1 + inf, n);     // 退休首年(名目)
 
-      // ---- 第一層：勞保老年給付 ----
-      const insBase = Math.min(finalSalary, LAW.LABOR_INS_CAP);    // 最高60個月平均投保薪資(上限名目不變，保守估)
-      const laborFormula = Math.max(insBase * laborYears * 0.0155, insBase * laborYears * 0.00775 + 3000);
+      const career = document.getElementById('career').value;
+      const isLabor = career === 'labor';
+      const pubBase = val('pubBase_num', 0);
+      const pubYears = val('pubYears_num', 0);
+      const pubRate = val('pubRate_num', 0) / 100;
+      const pubStartAge = val('pubStartAge_num', 65);
+      const gepiRate = val('gepiRate_num', 1.3) / 100;
+      const baseAtRetire = pubBase * Math.pow(1 + g, n);   // 退休時本俸（隨調薪成長）
+
+      // 收入來源：monthly = 起領當年名目月額；indexFrom = 從幾歲起依通膨調整（null 代表固定金額）
+      const streams = [], lumps = [], careerNotes = [];
+      let p1Monthly = 0, p2Monthly = 0, p1Desc = '', p2Desc = '';
       let laborMonthly = 0, laborLump = 0, laborStart = 65, laborMode = '無', adjPct = 0;
-      if (laborYears >= 15) {
-        laborStart = claimAgeInput;
-        adjPct = (claimAgeInput - 65) * 4;
-        laborMonthly = laborFormula * (1 + adjPct / 100);
-        laborMode = '年金';
-      } else if (laborYears > 0 && laborYears + natYears >= 15) {
-        laborMonthly = laborFormula;                                // 併計國保年資，65歲請領，不能提前減額
-        laborMode = '年金(併計國保年資)';
-      } else if (laborYears > 0) {
-        laborLump = insBase * laborYears;                           // 未滿15年：一次金，每年1個月
-        laborMode = '一次金';
+
+      // 勞退／私校儲金／個人專戶：確定提撥帳戶累積後年金化
+      function accumulatePot(rateOnBase, baseFn, cap) {
+        let pot = lpBal, cur = baseFn;
+        for (let y = 0; y < n; y++) {
+          const contrib = Math.min(cur, cap) * rateOnBase * 12;
+          pot = pot * (1 + lpRoi) + contrib * (1 + lpRoi / 2);
+          cur *= (1 + g);
+        }
+        return pot;
+      }
+
+      if (isLabor) {
+        // ---- 第一層：勞保老年給付 ----
+        const insBase = Math.min(finalSalary, LAW.LABOR_INS_CAP);    // 最高60個月平均投保薪資(上限名目不變，保守估)
+        const laborFormula = Math.max(insBase * laborYears * 0.0155, insBase * laborYears * 0.00775 + 3000);
+        if (laborYears >= 15) {
+          laborStart = claimAgeInput;
+          adjPct = (claimAgeInput - 65) * 4;
+          laborMonthly = laborFormula * (1 + adjPct / 100);
+          laborMode = '年金';
+        } else if (laborYears > 0 && laborYears + natYears >= 15) {
+          laborMonthly = laborFormula;                                // 併計國保年資，65歲請領，不能提前減額
+          laborMode = '年金(併計國保年資)';
+        } else if (laborYears > 0) {
+          laborLump = insBase * laborYears;                           // 未滿15年：一次金，每年1個月
+          laborMode = '一次金';
+          lumps.push({ amount: laborLump, age: Math.max(65, retireAge) });
+        }
+        if (laborMonthly > 0) streams.push({ monthly: laborMonthly, start: laborStart, indexFrom: Math.max(laborStart, retireAge) });
+        p1Monthly = laborMonthly;
+        p1Desc = laborMode === '一次金' ? `勞保一次金 ${wan(laborLump)} 萬` : (laborMode === '無' ? '無勞保年資' : `勞保 ${fmt(laborMonthly)}(${laborStart}歲起)`);
+
+        // ---- 第二層：勞退新制個人專戶 ----
+        let pot = accumulatePot(LAW.LP_EMPLOYER + selfContrib, salary, LAW.LP_WAGE_CAP);
+        const lpStart = Math.max(retireAge, 60);
+        pot *= Math.pow(1 + lpRoi, lpStart - retireAge);
+        p2Monthly = pot > 0 ? pmt(pot, lpRoi / 12, (lifeAge - lpStart) * 12) : 0;
+        if (p2Monthly > 0) streams.push({ monthly: p2Monthly, start: lpStart, indexFrom: null });
+        p2Desc = `${lpStart}歲專戶約 ${wan(pot)} 萬，月退`;
+        if (laborMode === '一次金') careerNotes.push(`<li class="text-rose-600"><strong>勞保年資未滿15年：</strong>只能請領老年一次金（約 ${wan(laborLump)} 萬），無法月領年金；可考慮延長投保或併計國保年資至15年。</li>`);
+        if (laborMode === '年金(併計國保年資)') careerNotes.push('<li><strong>併計國保年資：</strong>勞保年資未滿15年，靠國保年資併計後於65歲請領勞保年金（不可提前減額請領）。</li>');
+        if (retireAge < laborStart && laborMonthly > 0) careerNotes.push(`<li><strong>空窗期提醒：</strong>${retireAge} 歲退休、勞保 ${laborStart} 歲才開始領，期間生活費全靠自備資產。</li>`);
+        if (retireAge < 60) careerNotes.push(`<li><strong>勞退提醒：</strong>勞退新制需年滿60歲才能請領，${retireAge}～60歲間無勞退月退。</li>`);
+        careerNotes.push(`<li class="text-slate-400">假設：勞保投保薪資上限維持 45,800 元、勞退年報酬 ${(lpRoi * 100).toFixed(1)}%（保證收益僅為二年期定存利率）、勞退月退以規劃年齡平均攤提。</li>`);
+      } else if (career === 'private' || career === 'publicDC') {
+        // ---- 第一層：公保養老年金（無月退者可領）----
+        const eligAge = gepiEligibleAge(pubYears);
+        if (eligAge !== null) {
+          const gepiStart = Math.max(retireAge, eligAge);
+          p1Monthly = baseAtRetire * Math.min(pubYears, LAW.GEPI_MAX_YEARS) * gepiRate;
+          streams.push({ monthly: p1Monthly, start: gepiStart, indexFrom: retireAge });
+          p1Desc = `公保年金 ${fmt(p1Monthly)}(${gepiStart}歲起)`;
+        } else {
+          const lump = baseAtRetire * Math.min(42, pubYears * 1.2);   // 一次養老給付：每年1.2個月，最高42個月
+          lumps.push({ amount: lump, age: retireAge });
+          p1Desc = `公保一次養老給付約 ${wan(lump)} 萬`;
+          careerNotes.push('<li class="text-rose-600"><strong>公保年資未滿15年：</strong>只能請領一次養老給付，無法月領公保年金。</li>');
+        }
+        // ---- 第二層：私校退撫儲金／公教個人專戶 ----
+        const rate = (career === 'private' ? LAW.PRIVATE_FUND_RATE : LAW.PUBLIC_DC_RATE) + selfContrib;
+        let pot = accumulatePot(rate, pubBase * 2, Infinity);
+        const potStart = career === 'private' ? Math.max(retireAge, 60) : Math.max(retireAge, pubStartAge);
+        pot *= Math.pow(1 + lpRoi, potStart - retireAge);
+        if (pubYears >= 15) {
+          p2Monthly = pot > 0 ? pmt(pot, lpRoi / 12, (lifeAge - potStart) * 12) : 0;
+          if (p2Monthly > 0) streams.push({ monthly: p2Monthly, start: potStart, indexFrom: null });
+          p2Desc = `${potStart}歲帳戶約 ${wan(pot)} 萬，月領`;
+        } else {
+          lumps.push({ amount: pot, age: potStart });
+          p2Desc = `年資未滿15年，一次領回約 ${wan(pot)} 萬`;
+        }
+        careerNotes.push(`<li><strong>${career === 'private' ? '私校退撫儲金' : '公教個人專戶'}：</strong>每月以本俸×2 的 ${Math.round(rate * 1000) / 10}% 提撥（含自願增提），以年報酬 ${(lpRoi * 100).toFixed(1)}% 累積，${potStart} 歲起按月領取至 ${lifeAge} 歲。實際提撥分擔比例與月領方式以主管機關規定為準。</li>`);
+        careerNotes.push(`<li class="text-slate-400">假設：公保養老年金 = 退休時本俸 × 年資(最多35年) × ${(gepiRate * 100).toFixed(2)}%，實際以「最後10年平均保俸」計算，給付率依公保法核定。</li>`);
+      } else {
+        // ---- 月退休金／退休俸（確定給付）----
+        const isMil = career === 'military';
+        const minYears = isMil ? 20 : 15;
+        const dbStart = isMil ? retireAge : Math.max(retireAge, pubStartAge);
+        if (pubYears >= minYears) {
+          p2Monthly = baseAtRetire * 2 * pubRate;
+          streams.push({ monthly: p2Monthly, start: dbStart, indexFrom: dbStart });
+          p2Desc = `本俸×2 × ${Math.round(pubRate * 1000) / 10}%（${dbStart}歲起）`;
+          p1Desc = isMil ? '軍保為一次退伍給付，未計入月收入' : '公保已併入所得替代率計算';
+          if (!isMil && retireAge < pubStartAge) careerNotes.push(`<li><strong>空窗期提醒：</strong>${retireAge} 歲退休、月退 ${pubStartAge} 歲才開始領，期間需自備資金；提前起領須依規定減額。</li>`);
+        } else {
+          const lump = baseAtRetire * 2 * 1.5 * pubYears;              // 一次退休金（概估）：本俸×2 × 1.5 × 年資
+          lumps.push({ amount: lump, age: retireAge });
+          p2Desc = `年資未滿${minYears}年，一次退休金約 ${wan(lump)} 萬`;
+          p1Desc = isMil ? '軍保一次退伍給付未計入' : '公保一次養老給付未計入';
+          careerNotes.push(`<li class="text-rose-600"><strong>年資未滿${minYears}年：</strong>無法支領月${isMil ? '退休俸' : '退休金'}，本試算以一次${isMil ? '退伍金' : '退休金'}概估。</li>`);
+        }
+        careerNotes.push(isMil
+          ? `<li class="text-slate-400">假設：軍職退休俸 = 退休時本俸×2 × 起支俸率（滿20年55%，每年+2%，軍官上限90%、士官95%），依物價調整；實際以國防部核定為準。</li>`
+          : `<li class="text-slate-400">假設：月退休金含公保，總額 = 退休時本俸×2 × 所得替代率；依 114 年 12 月修法以 112 年附表上限計（35年 69%），此修法仍待憲法法庭判決，實際以銓敘部／教育部核定為準。18% 優存未計入。</li>`);
       }
       document.getElementById('claimAdjBadge').innerText = laborYears >= 15 ? `(${adjPct >= 0 ? '+' : ''}${adjPct}%)` : '(不適用)';
 
       // ---- 第一層：國保老年年金（65歲起，隨CPI調整）----
       const natA = LAW.NAT_INS_AMT * natYears * 0.0065 + LAW.NAT_A_ADD;
       const natB = LAW.NAT_INS_AMT * natYears * 0.013;
-      const natToday = natYears > 0 ? (laborYears > 0 ? natB : Math.max(natA, natB)) : 0; // 領勞保老年給付者不得選A式
+      const natToday = natYears > 0 ? ((isLabor && laborYears === 0) ? Math.max(natA, natB) : natB) : 0; // 領勞保/公保/軍保老年給付者不得選A式
       const nat65 = natToday * Math.pow(1 + inf, Math.max(0, 65 - age));
-
-      // ---- 第二層：勞退新制個人專戶 ----
-      let pot = lpBal, curSal = salary;
-      for (let y = 0; y < n; y++) {
-        const contrib = Math.min(curSal, LAW.LP_WAGE_CAP) * (LAW.LP_EMPLOYER + selfContrib) * 12;
-        pot = pot * (1 + lpRoi) + contrib * (1 + lpRoi / 2);
-        curSal *= (1 + g);
-      }
-      const lpStart = Math.max(retireAge, 60);
-      pot *= Math.pow(1 + lpRoi, lpStart - retireAge);
-      const lpMonthly = pot > 0 ? pmt(pot, lpRoi / 12, (lifeAge - lpStart) * 12) : 0;
+      if (natToday > 0) streams.push({ monthly: nat65, start: 65, indexFrom: 65 });
 
       // ---- 退休期間逐年現金流（名目）----
       const years = lifeAge - retireAge;
       const netFlow = [];   // 每年需由自備資產支應的淨額（負值代表當年有結餘）
-      const yearInfo = [];
       for (let t = 0; t < years; t++) {
         const a = retireAge + t;
-        const expense = targetMonthly * 12 * Math.pow(1 + inf, t);
+        const expenseYr = targetMonthly * 12 * Math.pow(1 + inf, t);
         let income = 0;
-        if (laborMonthly > 0 && a >= laborStart) income += laborMonthly * 12 * Math.pow(1 + inf, a - Math.max(laborStart, retireAge));
-        if (natToday > 0 && a >= 65) income += natToday * 12 * Math.pow(1 + inf, a - age);
-        if (a >= lpStart) income += lpMonthly * 12;
-        if (laborLump > 0 && a === Math.max(65, retireAge)) income += laborLump;
-        netFlow.push(expense - income);
-        yearInfo.push({ a, expense, income });
+        streams.forEach(st => {
+          if (a >= st.start) income += st.monthly * 12 * (st.indexFrom === null ? 1 : Math.pow(1 + inf, Math.max(0, a - st.indexFrom)));
+        });
+        lumps.forEach(l => { if (a === l.age) income += l.amount; });
+        netFlow.push(expenseYr - income);
       }
       // 反推：退休當下最少需要多少錢，才能在每年期初提領後一路撐到規劃年齡
       let need = 0;
@@ -690,12 +890,10 @@
       const firstGapMonthly = Math.max(0, netFlow[0] / 12);
 
       // ---- 卡片 ----
-      document.getElementById('cardPillar1').innerText = 'NT$ ' + fmt(laborMonthly + nat65);
-      document.getElementById('pillar1Desc').innerText = laborMode === '一次金'
-        ? `勞保一次金 ${wan(laborLump)} 萬 + 國保 ${fmt(nat65)}/月`
-        : `勞保 ${fmt(laborMonthly)}(${laborStart}歲起) + 國保 ${fmt(nat65)}(65歲起)`;
-      document.getElementById('cardPillar2').innerText = 'NT$ ' + fmt(lpMonthly);
-      document.getElementById('pillar2Desc').innerText = `${lpStart}歲專戶約 ${wan(pot)} 萬，月退`;
+      document.getElementById('cardPillar1').innerText = 'NT$ ' + fmt(p1Monthly + nat65);
+      document.getElementById('pillar1Desc').innerText = `${p1Desc}${natToday > 0 ? ` + 國保 ${fmt(nat65)}(65歲起)` : ''}`;
+      document.getElementById('cardPillar2').innerText = 'NT$ ' + fmt(p2Monthly);
+      document.getElementById('pillar2Desc').innerText = p2Desc;
       document.getElementById('cardTargetMonthly').innerText = 'NT$ ' + fmt(targetMonthly);
       document.getElementById('targetDesc').innerText = `約等於今日 ${fmt(targetToday)} 元`;
       document.getElementById('cardTotalGap').innerText = wan(gap) + ' 萬';
@@ -727,14 +925,10 @@
 
       const notes = [
         `<li><strong>退休目標：</strong>目前月支出 ${fmt(expense)} 元 × ${Math.round(repRate * 100)}% ＝ 今日幣值 ${fmt(targetToday)} 元；依通膨 ${(inf * 100).toFixed(1)}% 換算，退休首年月生活費 <strong>${fmt(targetMonthly)} 元</strong>，之後每年繼續隨通膨成長。（退休當時所得替代率約 ${finalSalary > 0 ? Math.round(targetMonthly / finalSalary * 100) : 0}%）</li>`,
-        `<li><strong>退休金流逆算：</strong>扣除勞保、國保、勞退後，退休當年月缺口約 ${fmt(firstGapMonthly)} 元；要撐到 ${lifeAge} 歲，退休時需備妥 <strong>${wan(need)} 萬</strong>（以退休後報酬 ${(postRoi * 100).toFixed(1)}% 折現）。</li>`,
+        `<li><strong>退休金流逆算：</strong>扣除社會保險與職業退休金後，退休當年月缺口約 ${fmt(firstGapMonthly)} 元；要撐到 ${lifeAge} 歲，退休時需備妥 <strong>${wan(need)} 萬</strong>（以退休後報酬 ${(postRoi * 100).toFixed(1)}% 折現）。</li>`,
         `<li><strong>資金來源：</strong>已備 ${wan(saved)} 萬滾到退休約 ${wan(savedFV)} 萬，目前每月投入 ${fmt(monthlyInvest)} 元可累積約 ${wan(investFV)} 萬。${gap > 0 ? `仍缺 <strong class="text-rose-600">${wan(gap)} 萬</strong>，需每月再加存 <strong>${fmt(extraMonthly)} 元</strong>（合計每月需投入 ${fmt(totalMonthlyForNeed)} 元）。` : '<strong class="text-emerald-700">目前投入已足以達標。</strong>'}</li>`
       ];
-      if (laborMode === '一次金') notes.push(`<li class="text-rose-600"><strong>勞保年資未滿15年：</strong>只能請領老年一次金（約 ${wan(laborLump)} 萬），無法月領年金；可考慮延長投保或併計國保年資至15年。</li>`);
-      if (laborMode === '年金(併計國保年資)') notes.push(`<li><strong>併計國保年資：</strong>勞保年資未滿15年，靠國保年資併計後於65歲請領勞保年金（不可提前減額請領）。</li>`);
-      if (retireAge < laborStart && laborMonthly > 0) notes.push(`<li><strong>空窗期提醒：</strong>${retireAge} 歲退休、勞保 ${laborStart} 歲才開始領，期間生活費全靠自備資產。</li>`);
-      if (retireAge < 60) notes.push(`<li><strong>勞退提醒：</strong>勞退新制需年滿60歲才能請領，${retireAge}～60歲間無勞退月退。</li>`);
-      notes.push(`<li class="text-slate-400">假設：勞保投保薪資上限維持 45,800 元、勞退年報酬 ${(lpRoi * 100).toFixed(1)}%（保證收益僅為二年期定存利率）、勞退月退以規劃年齡平均攤提。</li>`);
+      notes.push(...careerNotes);
       document.getElementById('advisorNotesRetire').innerHTML = notes.join('');
 
       globalRetireData = { age, retireAge, lifeAge, inf, postRoi, startBal, netFlow };
@@ -961,7 +1155,13 @@
       age: '您今年的實際年齡，用來計算距離退休還有幾年可以準備。',
       retireAge: '您打算停止工作、開始靠退休金生活的年齡。越早退休，準備時間越短、要花用的年數越長。',
       lifeAge: '退休金要準備到幾歲才夠用。國人平均壽命約 80 歲，女性更長，建議至少規劃到 90 歲，寧可多準備。',
-      salary: '目前稅前每月薪資，用來估算勞保老年年金與勞退帳戶的提繳金額（不是用來估生活費）。',
+      salary: '目前稅前每月薪資，用來估算勞保老年年金與勞退帳戶的提繳金額（不是用來估生活費）。軍公教與私校教職員另以下方「本俸」計算。',
+      career: '選擇您的身分，系統會套用對應的退休制度：勞工為勞保＋勞退；私校教職員為公保＋私校退撫儲金；公立學校教師與公務人員依到職日分為月退（確定給付）或個人專戶制；軍人為軍職退休俸。',
+      pubBase: '薪資單上的「本俸」或「本薪」（不含專業加給、導師費等），軍公教退休金是以本俸×2 為計算基準。',
+      pubYears: '到退休時累計的任職（公保）年資。公教滿15年、軍人滿20年才能月領，未滿只能一次領。',
+      pubRate: '月退休金（含公保）占「本俸×2」的比例。114年12月修法後，以112年附表為上限：15年39%，每多1年加1.5%，35年69%。軍人為滿20年55%，每年加2%。可依銓敘部或教育部試算結果修改。',
+      pubStartAge: '月退休金或個人專戶開始請領的年齡。公務人員目前為65歲，公立中小學教師多為60歲；提早請領須減額，請以主管機關試算為準。',
+      gepiRate: '沒有月退的私校教職員與個人專戶制公教人員，可請領公保養老年金：本俸 × 年資(最多35年) × 給付率，給付率最高1.3%。',
       expense: '您家庭目前每個月實際花費，包含房租/房貸以外的食衣住行、保費、娛樂等，以今天的物價填寫。',
       salGrowth: '預估每年加薪幅度，會影響勞保投保薪資與勞退提繳。一般上班族可抓 1.5%～3%。',
       repRate: '退休後每月花費大約是現在的幾成。小孩獨立、房貸繳完通常會降低，但醫療與旅遊可能增加，一般抓 70%～90%。',
@@ -971,9 +1171,9 @@
       laborYears: '到退休時累計的勞保投保年資。滿 15 年才能按月領年金，未滿只能一次領一筆。可在「勞保局 e 化服務」查詢。',
       natYears: '沒有工作、沒有勞保期間所繳的國民年金年資（例如家管、待業）。65 歲起可另外領國保年金。',
       claimAge: '開始領勞保年金的年齡。法定 65 歲，每提早 1 年少領 4%（最多提早 5 年），每延後 1 年多領 4%（最多延後 5 年），而且是終身的增減。',
-      selfContrib: '您自己每月額外提撥到勞退帳戶的比例（0～6%）。自提金額可從當年所得中扣除，有節稅效果。',
-      lpBal: '您勞退新制個人帳戶目前已累積的金額，可在勞保局網站或 APP 查詢。',
-      lpRoi: '勞動基金運用的預期年報酬。政府只保證不低於二年期定存利率，這裡是假設值。',
+      selfContrib: '您自己每月額外提撥的比例。勞工為勞退自提（0～6%，可從當年所得中扣除）；私校教職員與個人專戶制公教人員為自願增提。',
+      lpBal: '您個人退休帳戶目前已累積的金額：勞工查勞保局勞退專戶，私校教職員查私校退撫儲金管理會，公教個人專戶查退撫基金管理局。',
+      lpRoi: '個人退休帳戶的預期年報酬。勞退與部分儲金方案有最低保證收益（二年期定存利率），私校儲金可自選投資組合，這裡是假設值。',
       saved: '目前已經準備好、專門留給退休用的資產，例如 ETF、基金、儲蓄險解約金等。',
       monthlyInvest: '目前每個月固定投入、專門給退休用的金額（例如定期定額）。',
       ltcStart: '假設從幾歲開始需要長期照顧（例如失能、失智）。',
@@ -1043,10 +1243,11 @@
       });
     }
     initFieldHelp();
+    applyCareerUI();
 
     // ===== 列印報告 =====
     const PRINT_FIELDS = {
-      'tab-retire': ['age','retireAge','lifeAge','salary','expense','salGrowth','repRate','inflation','roi','postRoi','laborYears','natYears','claimAge','selfContrib','lpBal','lpRoi','saved','monthlyInvest'],
+      'tab-retire': ['age','retireAge','lifeAge','salary','expense','salGrowth','repRate','inflation','roi','postRoi','career','pubBase','pubYears','pubRate','pubStartAge','gepiRate','laborYears','natYears','claimAge','selfContrib','lpBal','lpRoi','saved','monthlyInvest'],
       'tab-risk': ['ltcToggleRisk','ltcStart','ltcYears','ltcCostRisk','ltcInsRisk'],
       'tab-tax': ['finAsset','reMarket','reRatio','reLoan','loanLtv','claim1030Toggle','maritalPct','spouseWealth','hasSpouse','kidsCount','minorYears','parentsCount','siblingsCount','disabledCount','lifeIns','lifePremium','giftYears']
     };
@@ -1078,7 +1279,10 @@
       document.getElementById('printClient').innerText = client || '＿＿＿＿＿＿';
       document.getElementById('printDate2').innerText = new Date().toLocaleDateString('zh-TW');
       document.querySelectorAll('.print-assumptions').forEach(box => {
-        const rows = PRINT_FIELDS[box.dataset.section].map(id =>
+        const rows = PRINT_FIELDS[box.dataset.section].filter(id => {
+          const el = document.getElementById(id + '_num') || document.getElementById(id);
+          return !el.closest('.career-field.hidden');
+        }).map(id =>
           `<tr><td>${escapeHtml(fieldLabel(id))}</td><td class="v">${escapeHtml(fieldValue(id))}</td><td>${escapeHtml(FIELD_HELP[id] || '')}</td></tr>`).join('');
         box.innerHTML = `<table class="print-table"><thead><tr><th style="width:26%">項目</th><th style="width:14%">數值</th><th>說明</th></tr></thead><tbody>${rows}</tbody></table>`;
       });
