@@ -17,13 +17,12 @@
       .no-print { display: none !important; }
       .print-only { display: block !important; }
       body { background: white !important; padding: 0 !important; font-size: 12px; }
-      .print-container { border: none !important; box-shadow: none !important; max-width: 100% !important; border-radius: 0 !important; }
-      .tab-section { display: block !important; padding: 0 !important; }
+      .print-container { border: none !important; box-shadow: none !important; max-width: 100% !important; border-radius: 0 !important; overflow: visible !important; }
+      .tab-section { display: block !important; padding: 0 1px !important; }  /* 留 1px，表格左右框線才不會被裁掉 */
       .tab-section > div { margin-bottom: 12px; }
       .tab-section + .tab-section { break-before: page; page-break-before: always; }
-      canvas { display: none !important; }
-      .print-chart { display: block !important; width: 100%; height: auto; }
-      .h-64, .h-72 { height: auto !important; }
+      .chart-box { height: auto !important; }
+      .chart-box canvas { width: 100% !important; height: auto !important; max-width: 100%; }
       .rounded-xl, tr { break-inside: avoid; page-break-inside: avoid; }
       header { padding: 10px 14px !important; }
     }
@@ -40,31 +39,37 @@
   </style>
 </head>
 <body class="bg-slate-100 text-slate-800 p-2 md:p-5 font-sans">
-  <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden print-container">
+  <div class="max-w-[1440px] mx-auto bg-white rounded-2xl shadow-xl overflow-hidden print-container">
 
-    <header class="bg-slate-900 text-white p-4 md:p-5 flex flex-col md:flex-row justify-between items-center gap-3">
-      <div>
+    <header class="bg-slate-900 text-white px-4 py-3 md:px-6 md:py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-3">
+      <div class="min-w-0">
         <div class="flex items-center gap-2">
-          <span class="bg-amber-500 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded">115年版</span>
-          <h1 class="text-lg md:text-2xl font-bold tracking-tight">全方位生涯財務與稅務傳承戰情室</h1>
+          <span class="bg-amber-500 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded whitespace-nowrap">115年版</span>
+          <h1 class="text-lg md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">全方位生涯財務與稅務傳承戰情室</h1>
         </div>
         <p class="text-slate-400 text-xs mt-1">跨制度退休金流 ✕ 逆算模型 ✕ 115年遺贈稅與流動性現金檢核</p>
       </div>
 
-      <div class="no-print flex bg-slate-800 p-1 rounded-xl gap-1">
-        <button onclick="switchTab('retire')" id="btn-retire" class="tab-btn active px-3.5 py-2 rounded-lg text-xs md:text-sm transition">1. 退休金流與逆算</button>
-        <button onclick="switchTab('risk')" id="btn-risk" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">2. 長照與醫療防禦</button>
-        <button onclick="switchTab('tax')" id="btn-tax" class="tab-btn px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">3. 遺贈與房地稅務</button>
-      </div>
-
-      <input id="clientName" type="text" placeholder="客戶姓名（列印用）" class="no-print text-slate-900 text-xs px-2 py-1.5 rounded-lg w-36">
-      <button onclick="window.print()" class="no-print bg-slate-700 hover:bg-slate-600 text-white text-xs md:text-sm font-semibold px-4 py-2 rounded-xl border border-slate-600 transition flex items-center gap-1.5">
-        <span>📄 匯出 PDF 報告</span>
-      </button>
-      <label class="no-print flex items-center gap-1.5 text-xs text-slate-300 cursor-pointer select-none">
-        <input type="checkbox" id="showAllHelp" class="w-4 h-4 accent-amber-500"> 顯示全部欄位說明
-      </label>
+      <nav class="no-print flex bg-slate-800 p-1 rounded-xl gap-1 overflow-x-auto shrink-0">
+        <button onclick="switchTab('retire')" id="btn-retire" class="tab-btn active whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm transition">1. 退休金流與逆算</button>
+        <button onclick="switchTab('risk')" id="btn-risk" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">2. 長照與醫療防禦</button>
+        <button onclick="switchTab('tax')" id="btn-tax" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">3. 遺贈與房地稅務</button>
+      </nav>
     </header>
+
+    <div class="no-print bg-slate-50 border-b border-slate-200 px-4 md:px-6 py-2 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-xs">
+      <label class="flex items-center gap-2 text-slate-600">
+        <span class="font-bold text-slate-700 whitespace-nowrap">👤 客戶姓名</span>
+        <input id="clientName" type="text" placeholder="例：王小明" class="text-slate-900 border border-slate-300 rounded-lg px-2 py-1 w-40 bg-white">
+        <span class="text-slate-400 hidden sm:inline whitespace-nowrap">顯示於列印報告抬頭</span>
+      </label>
+      <div class="flex items-center gap-4">
+        <label class="flex items-center gap-1.5 text-slate-600 cursor-pointer select-none whitespace-nowrap">
+          <input type="checkbox" id="showAllHelp" class="w-4 h-4 accent-amber-500"> 顯示全部欄位說明
+        </label>
+        <button onclick="printReport()" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold px-4 py-1.5 rounded-lg transition whitespace-nowrap">📄 匯出 PDF 報告</button>
+      </div>
+    </div>
 
     <div class="print-only px-4 pt-3 pb-1 text-sm border-b border-slate-300">
       <div class="flex justify-between"><span>客戶：<strong id="printClient">＿＿＿＿＿＿</strong></span><span>規劃人：宋秉諭</span><span>報告日期：<span id="printDate2"></span></span></div>
@@ -79,27 +84,27 @@
         <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
         <div class="print-assumptions" data-section="tab-retire"></div>
       </div>
-      <div class="lg:col-span-5 space-y-4 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
+      <div class="lg:col-span-6 space-y-4 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
         <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">👤 退休目標與收支參數 (可滑動或輸入)</h2>
 
         <div class="grid grid-cols-3 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>目前年齡</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">目前年齡</span>
               <div class="flex items-center gap-1"><input type="number" id="age_num" value="38" min="20" max="65" class="w-12 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>歲</span></div>
             </div>
             <input type="range" id="age" min="20" max="65" value="38" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>預計退休</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">預計退休</span>
               <div class="flex items-center gap-1"><input type="number" id="retireAge_num" value="65" min="50" max="75" class="w-12 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>歲</span></div>
             </div>
             <input type="range" id="retireAge" min="50" max="75" value="65" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>規劃至</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">規劃至</span>
               <div class="flex items-center gap-1"><input type="number" id="lifeAge_num" value="90" min="75" max="105" class="w-12 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>歲</span></div>
             </div>
             <input type="range" id="lifeAge" min="75" max="105" value="90" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
@@ -107,15 +112,15 @@
         </div>
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-          <div class="flex justify-between items-center text-xs font-medium mb-1">
-            <span>目前月薪 (計算勞保與勞退提繳)</span>
+          <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+            <span id="lbl-salary">目前月薪 (計算勞保與勞退提繳)</span>
             <div class="flex items-center gap-1"><input type="number" id="salary_num" value="60000" min="0" max="500000" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5"><span>元</span></div>
           </div>
           <input type="range" id="salary" min="29500" max="250000" step="1000" value="60000" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
         </div>
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-          <div class="flex justify-between items-center text-xs font-medium mb-1">
+          <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
             <span>目前每月生活支出 (今日物價)</span>
             <div class="flex items-center gap-1"><input type="number" id="expense_num" value="45000" min="0" max="500000" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5"><span>元</span></div>
           </div>
@@ -124,15 +129,15 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>年薪成長率</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">年薪成長率</span>
               <div class="flex items-center gap-0.5"><input type="number" id="salGrowth_num" value="2.5" min="0" max="10" step="0.1" class="w-14 text-right font-bold text-emerald-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="salGrowth" min="0" max="8" step="0.1" value="2.5" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>退休支出佔目前支出</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">退休支出佔目前支出</span>
               <div class="flex items-center gap-0.5"><input type="number" id="repRate_num" value="80" min="30" max="120" step="1" class="w-14 text-right font-bold text-emerald-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="repRate" min="30" max="120" step="5" value="80" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
@@ -141,22 +146,22 @@
 
         <div class="grid grid-cols-3 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>通膨率</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">通膨率</span>
               <div class="flex items-center gap-0.5"><input type="number" id="inflation_num" value="2.2" min="0" max="10" step="0.1" class="w-12 text-right font-bold text-amber-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="inflation" min="0" max="6" step="0.1" value="2.2" class="w-full accent-amber-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>退休前報酬</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">退休前報酬</span>
               <div class="flex items-center gap-0.5"><input type="number" id="roi_num" value="6.0" min="0" max="20" step="0.1" class="w-12 text-right font-bold text-indigo-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="roi" min="0" max="12" step="0.5" value="6.0" class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>退休後報酬</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">退休後報酬</span>
               <div class="flex items-center gap-0.5"><input type="number" id="postRoi_num" value="4.0" min="0" max="12" step="0.1" class="w-12 text-right font-bold text-indigo-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="postRoi" min="0" max="8" step="0.5" value="4.0" class="w-full accent-indigo-600 h-1.5 bg-slate-200 rounded-lg">
@@ -169,6 +174,8 @@
             <span>職業別</span>
             <select id="career" class="font-bold text-blue-700 bg-slate-50 border rounded px-1 py-0.5 text-xs">
               <option value="labor">勞工（勞保＋勞退）</option>
+              <option value="doctor">受僱醫師（勞保＋勞退）</option>
+              <option value="owner">企業主／開業醫師／自營（勞退自願提繳）</option>
               <option value="private">私校教職員（公保＋私校退撫儲金）</option>
               <option value="teacherDB">公立學校教師（112/6/30前到職，月退）</option>
               <option value="civilDB">公務人員（112/6/30前到職，月退）</option>
@@ -180,36 +187,36 @@
 
         <div class="career-field pub-only hidden grid grid-cols-2 gap-3">
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>目前本俸／本薪 (月)</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">目前本俸／本薪 (月)</span>
               <div class="flex items-center gap-1"><input type="number" id="pubBase_num" value="50000" min="0" max="200000" step="500" class="w-20 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>元</span></div>
             </div>
             <input type="range" id="pubBase" min="20000" max="120000" step="500" value="50000" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>退休時任職年資</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">退休時任職年資</span>
               <div class="flex items-center gap-1"><input type="number" id="pubYears_num" value="30" min="0" max="45" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>年</span></div>
             </div>
             <input type="range" id="pubYears" min="0" max="45" value="30" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="career-field rate-only hidden bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>退休所得替代率</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">退休所得替代率</span>
               <div class="flex items-center gap-0.5"><input type="number" id="pubRate_num" value="61.5" min="0" max="95" step="0.5" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <p class="text-[10px] text-slate-400" id="pubRateNote">依年資自動帶入，可自行修改</p>
           </div>
           <div class="career-field start-only hidden bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>月退／專戶起領年齡</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">月退／專戶起領年齡</span>
               <div class="flex items-center gap-1"><input type="number" id="pubStartAge_num" value="65" min="50" max="70" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>歲</span></div>
             </div>
             <p class="text-[10px] text-slate-400">依身分自動帶入，可自行修改</p>
           </div>
           <div class="career-field gepi-only hidden bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>公保養老年金給付率 (每年)</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">公保養老年金給付率 (每年)</span>
               <div class="flex items-center gap-0.5"><input type="number" id="gepiRate_num" value="1.3" min="0" max="1.3" step="0.05" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
           </div>
@@ -217,15 +224,15 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div class="career-field labor-only bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>勞保年資 (退休時)</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">勞保年資 (退休時)</span>
               <div class="flex items-center gap-1"><input type="number" id="laborYears_num" value="35" min="0" max="50" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>年</span></div>
             </div>
             <input type="range" id="laborYears" min="0" max="45" value="35" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200 nat-card">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>國保年資</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">國保年資</span>
               <div class="flex items-center gap-1"><input type="number" id="natYears_num" value="0" min="0" max="40" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>年</span></div>
             </div>
             <input type="range" id="natYears" min="0" max="35" value="0" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
@@ -233,7 +240,7 @@
         </div>
 
         <div class="career-field labor-only bg-white p-2.5 rounded-lg border border-slate-200">
-          <div class="flex justify-between items-center text-xs font-medium mb-1">
+          <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
             <span>勞保請領年齡 (65歲基準，每提前/延後1年 ∓4%，最多5年)</span>
             <div class="flex items-center gap-1">
               <input type="number" id="claimAge_num" value="65" min="60" max="70" class="w-14 text-right font-bold text-indigo-600 border rounded px-1 py-0.5">
@@ -245,29 +252,29 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div class="career-field pot-only bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span><span id="lbl-selfContrib">勞退自提率</span></span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap"><span id="lbl-selfContrib">勞退自提率</span></span>
               <div class="flex items-center gap-0.5"><input type="number" id="selfContrib_num" value="0" min="0" max="6" step="1" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="selfContrib" min="0" max="6" step="1" value="0" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="career-field pot-only bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span><span id="lbl-lpBal">勞退專戶現有餘額</span></span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap"><span id="lbl-lpBal">勞退專戶現有餘額</span></span>
               <div class="flex items-center gap-1"><input type="number" id="lpBal_num" value="50" min="0" max="2000" step="5" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
             </div>
             <input type="range" id="lpBal" min="0" max="500" step="5" value="50" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="career-field pot-only bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span><span id="lbl-lpRoi">勞退基金年報酬</span></span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap"><span id="lbl-lpRoi">勞退基金年報酬</span></span>
               <div class="flex items-center gap-0.5"><input type="number" id="lpRoi_num" value="3.5" min="0" max="10" step="0.1" class="w-14 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>%</span></div>
             </div>
             <input type="range" id="lpRoi" min="0" max="8" step="0.5" value="3.5" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>已備退休金/ETF</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">已備退休金/ETF</span>
               <div class="flex items-center gap-1"><input type="number" id="saved_num" value="100" min="0" max="10000" step="10" class="w-16 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
             </div>
             <input type="range" id="saved" min="0" max="1500" step="10" value="100" class="w-full accent-blue-600 h-1.5 bg-slate-200 rounded-lg">
@@ -275,7 +282,7 @@
         </div>
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-          <div class="flex justify-between items-center text-xs font-medium mb-1">
+          <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
             <span>目前每月已在投入的退休投資</span>
             <div class="flex items-center gap-1"><input type="number" id="monthlyInvest_num" value="10000" min="0" max="300000" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5"><span>元</span></div>
           </div>
@@ -284,8 +291,8 @@
         <p class="text-[10px] text-slate-400">*115年參數：勞保最高投保薪資 45,800 元、國保月投保金額 21,103 元(A式加計 4,049 元)、勞退月提繳工資上限 150,000 元；私校退撫儲金提撥率 12%、公教個人專戶提撥率 15%（皆以本俸×2計）；公教月退所得替代率依 114 年 12 月修法以 112 年上限計。</p>
       </div>
 
-      <div class="lg:col-span-7 space-y-5">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="lg:col-span-6 space-y-5">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 2xl:grid-cols-4 gap-3">
           <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl">
             <div class="text-[11px] text-emerald-700 font-medium" id="pillar1Title">第一層：勞保+國保</div>
             <div class="text-base font-bold text-emerald-900 mt-0.5" id="cardPillar1">--</div>
@@ -313,7 +320,7 @@
             <span id="retireChartTitle">退休後資產存續模擬</span>
             <span id="sustainStatusBadge" class="text-xs bg-blue-100 text-blue-800 px-2.5 py-0.5 rounded-full font-bold">--</span>
           </div>
-          <div class="h-64"><canvas id="retireChart"></canvas><img class="print-chart print-only" id="retireChartImg" alt="退休資產軌跡圖"></div>
+          <div class="h-64 chart-box"><canvas id="retireChart"></canvas></div>
           <p class="text-[10px] text-slate-400 mt-1">金額為各年度名目幣值；生活費每年隨通膨成長，勞保/國保年金隨物價調整，勞退月退為固定金額。</p>
         </div>
 
@@ -329,15 +336,18 @@
       <div class="print-only print-block lg:col-span-12">
         <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">二、長照風險壓力測試</h2>
         <p class="text-[11px] text-slate-600 mb-2">假設在指定年齡開始需要長期照顧，比較「健康退休」（藍線）與「發生長照」（紅線）兩種情況下退休資產的變化，用來評估長照險保額或長照準備金是否足夠。</p>
-        <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
+        <div class="text-xs font-bold text-slate-700 mb-1">第一部分退休金摘要（本頁試算基礎）</div>
+        <div class="retire-summary mb-2"></div>
+        <div class="text-xs font-bold text-slate-700 mb-1">長照情境假設與欄位說明</div>
         <div class="print-assumptions" data-section="tab-risk"></div>
       </div>
-      <div class="lg:col-span-5 space-y-4 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
+      <div class="lg:col-span-6 space-y-4 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
         <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">🚨 長照風險壓力測試</h2>
 
-        <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-xs text-amber-900 space-y-1">
-          <div class="font-bold">💡 說明：</div>
-          <p>本分頁沿用「第一分頁」的退休金流與資產，測試若在指定年齡發生長照（聘請看護、耗材），資產會受到什麼衝擊。長照費用以今日物價輸入，系統會依通膨率換算到發生當年。</p>
+        <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-xs text-amber-900 space-y-2">
+          <div class="font-bold">📌 第一頁退休金摘要（自動帶入，不必翻頁對照）</div>
+          <div class="retire-summary"></div>
+          <p class="text-[11px] text-amber-800">本頁以上述退休金流與資產為基礎，測試若在指定年齡發生長照（聘請看護、耗材），資產會受到什麼衝擊。長照費用以今日物價輸入，系統會依通膨率換算到發生當年。</p>
         </div>
 
         <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-3">
@@ -347,30 +357,30 @@
           </div>
           <div class="grid grid-cols-2 gap-3">
             <div>
-              <div class="flex justify-between items-center text-xs font-medium mb-1">
-                <span>發生年齡</span>
+              <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+                <span class="sm:whitespace-nowrap">發生年齡</span>
                 <div class="flex items-center gap-1"><input type="number" id="ltcStart_num" value="75" min="50" max="100" class="w-12 text-right font-bold text-red-600 border rounded px-1 py-0.5"><span>歲</span></div>
               </div>
               <input type="range" id="ltcStart" min="60" max="95" value="75" class="w-full accent-red-600 h-1.5 bg-slate-200 rounded-lg">
             </div>
             <div>
-              <div class="flex justify-between items-center text-xs font-medium mb-1">
-                <span>照護期間</span>
+              <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+                <span class="sm:whitespace-nowrap">照護期間</span>
                 <div class="flex items-center gap-1"><input type="number" id="ltcYears_num" value="10" min="1" max="30" class="w-12 text-right font-bold text-red-600 border rounded px-1 py-0.5"><span>年</span></div>
               </div>
               <input type="range" id="ltcYears" min="1" max="20" value="10" class="w-full accent-red-600 h-1.5 bg-slate-200 rounded-lg">
             </div>
           </div>
           <div>
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>長照每月看護與耗材開銷 (今日物價)</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">長照每月看護與耗材開銷 (今日物價)</span>
               <div class="flex items-center gap-1"><input type="number" id="ltcCostRisk_num" value="45000" min="0" max="200000" step="1000" class="w-20 text-right font-bold text-red-600 border rounded px-1 py-0.5"><span>元/月</span></div>
             </div>
             <input type="range" id="ltcCostRisk" min="0" max="100000" step="5000" value="45000" class="w-full accent-red-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div>
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>🛡️ 商業長照險每月理賠 (固定金額)</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">🛡️ 商業長照險每月理賠 (固定金額)</span>
               <div class="flex items-center gap-1"><input type="number" id="ltcInsRisk_num" value="0" min="0" max="200000" step="1000" class="w-20 text-right font-bold text-emerald-600 border rounded px-1 py-0.5"><span>元/月</span></div>
             </div>
             <input type="range" id="ltcInsRisk" min="0" max="100000" step="5000" value="0" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
@@ -379,13 +389,13 @@
         </div>
       </div>
 
-      <div class="lg:col-span-7 space-y-5">
+      <div class="lg:col-span-6 space-y-5">
         <div class="bg-white p-4 rounded-xl border border-slate-200">
           <div class="text-sm font-bold text-slate-700 mb-2 flex justify-between items-center gap-2">
             <span>長照壓力測試：健康資產 vs. 長照衝擊資產軌跡</span>
             <span id="riskBadge" class="text-xs bg-red-100 text-red-700 px-2.5 py-0.5 rounded-full font-bold">--</span>
           </div>
-          <div class="h-72"><canvas id="riskChart"></canvas><img class="print-chart print-only" id="riskChartImg" alt="長照衝擊資產軌跡圖"></div>
+          <div class="h-72 chart-box"><canvas id="riskChart"></canvas></div>
         </div>
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-1.5">
           <div class="font-bold text-slate-800 text-sm">📋 醫療防禦與保險規劃建議：</div>
@@ -402,11 +412,11 @@
         <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
         <div class="print-assumptions" data-section="tab-tax"></div>
       </div>
-      <div class="lg:col-span-5 space-y-3.5 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
+      <div class="lg:col-span-6 space-y-3.5 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
         <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">🏛️ 115年(2026) 遺產與不動產結構</h2>
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-          <div class="flex justify-between items-center text-xs font-medium mb-1">
+          <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
             <span>金融資產總額 (現金/股票/ETF/債券)</span>
             <div class="flex items-center gap-1"><input type="number" id="finAsset_num" value="3000" min="0" max="50000" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
           </div>
@@ -414,7 +424,7 @@
         </div>
 
         <div class="bg-white p-2.5 rounded-lg border border-slate-200">
-          <div class="flex justify-between items-center text-xs font-medium mb-1">
+          <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
             <span>不動產市價總額 (房屋+土地市價)</span>
             <div class="flex items-center gap-1"><input type="number" id="reMarket_num" value="5000" min="0" max="50000" step="100" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
           </div>
@@ -429,7 +439,7 @@
         </div>
 
         <div class="bg-white p-2.5 rounded-lg border border-amber-300">
-          <div class="flex justify-between items-center text-xs font-medium mb-1">
+          <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
             <span>🏦 不動產現有銀行貸款餘額 (未償債務扣除)</span>
             <div class="flex items-center gap-1"><input type="number" id="reLoan_num" value="1500" min="0" max="30000" step="50" class="w-20 text-right font-bold text-amber-700 border rounded px-1 py-0.5"><span>萬</span></div>
           </div>
@@ -470,7 +480,7 @@
               <input type="number" id="kidsCount_num" value="2" min="0" max="10" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
             </div>
             <div class="flex justify-between items-center border p-1.5 rounded">
-              <span>未成年子女距18歲合計年數(56萬/年)</span>
+              <span>未成年子女距18歲年數(56萬/年)</span>
               <input type="number" id="minorYears_num" value="0" min="0" max="100" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
             </div>
             <div class="flex justify-between items-center border p-1.5 rounded">
@@ -478,7 +488,7 @@
               <input type="number" id="parentsCount_num" value="0" min="0" max="2" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
             </div>
             <div class="flex justify-between items-center border p-1.5 rounded">
-              <span>受扶養兄弟姊妹/祖父母(56萬/人)</span>
+              <span>受扶養手足/祖父母(56萬/人)</span>
               <input type="number" id="siblingsCount_num" value="0" min="0" max="10" class="w-12 text-right font-bold text-blue-700 border rounded px-1">
             </div>
             <div class="flex justify-between items-center border p-1.5 rounded">
@@ -492,22 +502,22 @@
         <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200 space-y-2.5">
           <div class="text-xs font-bold text-emerald-900">🛡️ 人壽保險指定受益人 (最低稅負每申報戶免計 3,740萬)</div>
           <div>
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>身故保險金 (保額)</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">身故保險金 (保額)</span>
               <div class="flex items-center gap-1"><input type="number" id="lifeIns_num" value="1000" min="0" max="20000" step="100" class="w-20 text-right font-bold text-emerald-700 bg-white border border-emerald-300 rounded px-1 py-0.5"><span>萬</span></div>
             </div>
             <input type="range" id="lifeIns" min="0" max="6000" step="100" value="1000" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div>
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>累計已繳保費 (從金融資產移出)</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">累計已繳保費 (從金融資產移出)</span>
               <div class="flex items-center gap-1"><input type="number" id="lifePremium_num" value="600" min="0" max="20000" step="50" class="w-20 text-right font-bold text-emerald-700 bg-white border border-emerald-300 rounded px-1 py-0.5"><span>萬</span></div>
             </div>
             <input type="range" id="lifePremium" min="0" max="6000" step="50" value="600" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
           </div>
           <div>
-            <div class="flex justify-between items-center text-xs font-medium mb-1">
-              <span>生前分年贈與年數 (每位贈與人每年免稅 244萬)</span>
+            <div class="flex justify-between items-center text-xs font-medium mb-1 gap-x-2 flex-wrap sm:flex-nowrap">
+              <span class="sm:whitespace-nowrap">生前分年贈與年數 (每位贈與人每年免稅 244萬)</span>
               <div class="flex items-center gap-1"><input type="number" id="giftYears_num" value="0" min="0" max="30" step="1" class="w-14 text-right font-bold text-emerald-700 bg-white border border-emerald-300 rounded px-1 py-0.5"><span>年</span></div>
             </div>
             <input type="range" id="giftYears" min="0" max="15" step="1" value="0" class="w-full accent-emerald-600 h-1.5 bg-slate-200 rounded-lg">
@@ -517,8 +527,8 @@
         </div>
       </div>
 
-      <div class="lg:col-span-7 space-y-4">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="lg:col-span-6 space-y-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 2xl:grid-cols-4 gap-3">
           <div class="bg-slate-800 text-white p-3.5 rounded-xl">
             <div class="text-[11px] text-slate-300">課稅遺產淨額</div>
             <div class="text-lg font-bold mt-0.5" id="taxNetEstate">--</div>
@@ -678,23 +688,28 @@
     }
     const CAREER_UI = {
       labor:     { p1: '第一層：勞保+國保', p2: '第二層：勞退新制', self: '勞退自提率', bal: '勞退專戶現有餘額', roi: '勞退基金年報酬', start: null },
+      doctor:    { p1: '第一層：勞保+國保', p2: '第二層：勞退新制', self: '勞退自提率', bal: '勞退專戶現有餘額', roi: '勞退基金年報酬', start: null },
+      owner:     { p1: '第一層：勞保+國保', p2: '第二層：勞退自願提繳', self: '勞退自願提繳率', bal: '勞退專戶現有餘額', roi: '勞退基金年報酬', start: null,
+                   salary: '每月薪資／投保薪資 (計算勞保與勞退)' },
       private:   { p1: '第一層：公保+國保', p2: '第二層：私校退撫儲金', self: '儲金自願增提率', bal: '私校退撫儲金現有餘額', roi: '儲金年報酬', start: null },
       teacherDB: { p1: '第一層：公保+國保', p2: '第二層：教師月退休金', start: 60 },
       civilDB:   { p1: '第一層：公保+國保', p2: '第二層：公務人員月退休金', start: 65 },
       publicDC:  { p1: '第一層：公保+國保', p2: '第二層：個人專戶', self: '自願增提率', bal: '個人專戶現有餘額', roi: '個人專戶年報酬', start: 65 },
       military:  { p1: '第一層：軍保+國保', p2: '第二層：軍職退休俸', start: null }
     };
+    const LABOR_CAREERS = ['labor', 'doctor', 'owner'];
     let pubRateDirty = false, pubStartDirty = false;
     function applyCareerUI() {
       const c = document.getElementById('career').value;
       const ui = CAREER_UI[c];
+      const isLaborType = LABOR_CAREERS.includes(c);
       const show = {
-        'labor-only': c === 'labor',
-        'pub-only': c !== 'labor',
+        'labor-only': isLaborType,
+        'pub-only': !isLaborType,
         'rate-only': ['teacherDB', 'civilDB', 'military'].includes(c),
         'start-only': ['teacherDB', 'civilDB', 'publicDC'].includes(c),
         'gepi-only': ['private', 'publicDC'].includes(c),
-        'pot-only': ['labor', 'private', 'publicDC'].includes(c)
+        'pot-only': isLaborType || ['private', 'publicDC'].includes(c)
       };
       document.querySelectorAll('.career-field').forEach(el => {
         const key = Object.keys(show).find(k => el.classList.contains(k));
@@ -702,6 +717,7 @@
       });
       document.getElementById('pillar1Title').innerText = ui.p1;
       document.getElementById('pillar2Title').innerText = ui.p2;
+      document.getElementById('lbl-salary').innerText = ui.salary || '目前月薪 (計算勞保與勞退提繳)';
       if (ui.self) {
         document.getElementById('lbl-selfContrib').innerText = ui.self;
         document.getElementById('lbl-lpBal').innerText = ui.bal;
@@ -744,7 +760,8 @@
       const targetMonthly = targetToday * Math.pow(1 + inf, n);     // 退休首年(名目)
 
       const career = document.getElementById('career').value;
-      const isLabor = career === 'labor';
+      const isLabor = LABOR_CAREERS.includes(career);
+      const isOwner = career === 'owner';
       const pubBase = val('pubBase_num', 0);
       const pubYears = val('pubYears_num', 0);
       const pubRate = val('pubRate_num', 0) / 100;
@@ -789,13 +806,15 @@
         p1Monthly = laborMonthly;
         p1Desc = laborMode === '一次金' ? `勞保一次金 ${wan(laborLump)} 萬` : (laborMode === '無' ? '無勞保年資' : `勞保 ${fmt(laborMonthly)}(${laborStart}歲起)`);
 
-        // ---- 第二層：勞退新制個人專戶 ----
-        let pot = accumulatePot(LAW.LP_EMPLOYER + selfContrib, salary, LAW.LP_WAGE_CAP);
+        // ---- 第二層：勞退新制個人專戶（企業主沒有雇主提繳，只有自願提繳）----
+        let pot = accumulatePot((isOwner ? 0 : LAW.LP_EMPLOYER) + selfContrib, salary, LAW.LP_WAGE_CAP);
         const lpStart = Math.max(retireAge, 60);
         pot *= Math.pow(1 + lpRoi, lpStart - retireAge);
         p2Monthly = pot > 0 ? pmt(pot, lpRoi / 12, (lifeAge - lpStart) * 12) : 0;
         if (p2Monthly > 0) streams.push({ monthly: p2Monthly, start: lpStart, indexFrom: null });
-        p2Desc = `${lpStart}歲專戶約 ${wan(pot)} 萬，月退`;
+        p2Desc = pot > 0 ? `${lpStart}歲專戶約 ${wan(pot)} 萬，月退` : (isOwner ? '未自願提繳勞退' : '無勞退專戶');
+        if (career === 'doctor') careerNotes.push(`<li><strong>受僱醫師：</strong>受僱醫師已納入勞基法，雇主每月提繳 6%，但提繳工資上限 ${fmt(LAW.LP_WAGE_CAP)} 元、勞保投保薪資上限 ${fmt(LAW.LABOR_INS_CAP)} 元，月薪越高、勞保與勞退能替代的比例越低，退休生活主要仰賴第三層自備資產。${salary > LAW.LP_WAGE_CAP ? `目前月薪 ${fmt(salary)} 元已超過勞退上限，超過部分沒有提繳。` : ''}開業或合夥醫師請改選「企業主／開業醫師」。</li>`);
+        if (isOwner) careerNotes.push(`<li><strong>企業主／開業醫師：</strong>沒有雇主替您提繳 6%，勞退只能「自願提繳」（0～6%，提繳工資上限 ${fmt(LAW.LP_WAGE_CAP)} 元，可自當年度綜合所得中扣除）；勞保可經由公司（實際從事工作之雇主）或職業工會加保，未加保者勞保年資請填 0。${selfContrib === 0 ? '<strong class="text-rose-600">目前自願提繳率為 0%，第二層沒有累積。</strong>' : ''}退休金幾乎都要靠第三層自備，也要一併規劃事業交棒或出售的時程。</li>`);
         if (laborMode === '一次金') careerNotes.push(`<li class="text-rose-600"><strong>勞保年資未滿15年：</strong>只能請領老年一次金（約 ${wan(laborLump)} 萬），無法月領年金；可考慮延長投保或併計國保年資至15年。</li>`);
         if (laborMode === '年金(併計國保年資)') careerNotes.push('<li><strong>併計國保年資：</strong>勞保年資未滿15年，靠國保年資併計後於65歲請領勞保年金（不可提前減額請領）。</li>');
         if (retireAge < laborStart && laborMonthly > 0) careerNotes.push(`<li><strong>空窗期提醒：</strong>${retireAge} 歲退休、勞保 ${laborStart} 歲才開始領，期間生活費全靠自備資產。</li>`);
@@ -931,7 +950,14 @@
       notes.push(...careerNotes);
       document.getElementById('advisorNotesRetire').innerHTML = notes.join('');
 
-      globalRetireData = { age, retireAge, lifeAge, inf, postRoi, startBal, netFlow };
+      const careerSel = document.getElementById('career');
+      globalRetireData = {
+        age, retireAge, lifeAge, inf, postRoi, startBal, netFlow, need, gap, extraMonthly, targetMonthly, exhaustedAge,
+        careerLabel: careerSel.options[careerSel.selectedIndex].text,
+        p1Title: CAREER_UI[career].p1, p1Total: p1Monthly + nat65, p1Desc: document.getElementById('pillar1Desc').innerText,
+        p2Title: CAREER_UI[career].p2, p2Monthly, p2Desc
+      };
+      renderRetireSummary();
 
       const ctx = document.getElementById('retireChart').getContext('2d');
       if (retireChartInstance) retireChartInstance.destroy();
@@ -943,6 +969,24 @@
         ] },
         options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { callback: v => (v / 10000).toLocaleString() + '萬' } } } }
       });
+    }
+
+    // 第二頁開頭的「第一頁退休金摘要」：畫面與列印各一份
+    function renderRetireSummary() {
+      const d = globalRetireData;
+      const rows = [
+        ['職業別', d.careerLabel],
+        ['退休年齡／規劃至', `${d.retireAge} 歲／${d.lifeAge} 歲`],
+        ['退休首年目標月生活費', `NT$ ${fmt(d.targetMonthly)}`],
+        [d.p1Title.replace('第一層：', '第一層 '), `NT$ ${fmt(d.p1Total)}／月<span class="text-slate-500">（${escapeHtml(d.p1Desc)}）</span>`],
+        [d.p2Title.replace('第二層：', '第二層 '), `NT$ ${fmt(d.p2Monthly)}／月<span class="text-slate-500">（${escapeHtml(d.p2Desc)}）</span>`],
+        ['退休時可動用資產', `${wan(d.startBal)} 萬（需備 ${wan(d.need)} 萬）`],
+        ['第三層缺口', d.gap > 0 ? `<strong class="text-rose-700">${wan(d.gap)} 萬</strong>（需每月再加存 ${fmt(d.extraMonthly)} 元）` : '<strong class="text-emerald-700">無缺口</strong>'],
+        ['未發生長照時', d.exhaustedAge !== null ? `<strong class="text-rose-700">資金在 ${d.exhaustedAge} 歲見底</strong>` : `<strong class="text-emerald-700">可支撐至 ${d.lifeAge} 歲</strong>`]
+      ];
+      const html = `<table class="print-table bg-white"><tbody>${rows.map(([k, v]) =>
+        `<tr><th style="width:38%">${escapeHtml(k)}</th><td>${v}</td></tr>`).join('')}</tbody></table>`;
+      document.querySelectorAll('.retire-summary').forEach(el => el.innerHTML = html);
     }
 
     // 第二頁：長照風險壓力測試
@@ -1155,8 +1199,8 @@
       age: '您今年的實際年齡，用來計算距離退休還有幾年可以準備。',
       retireAge: '您打算停止工作、開始靠退休金生活的年齡。越早退休，準備時間越短、要花用的年數越長。',
       lifeAge: '退休金要準備到幾歲才夠用。國人平均壽命約 80 歲，女性更長，建議至少規劃到 90 歲，寧可多準備。',
-      salary: '目前稅前每月薪資，用來估算勞保老年年金與勞退帳戶的提繳金額（不是用來估生活費）。軍公教與私校教職員另以下方「本俸」計算。',
-      career: '選擇您的身分，系統會套用對應的退休制度：勞工為勞保＋勞退；私校教職員為公保＋私校退撫儲金；公立學校教師與公務人員依到職日分為月退（確定給付）或個人專戶制；軍人為軍職退休俸。',
+      salary: '目前稅前每月薪資，用來估算勞保老年年金與勞退帳戶的提繳金額（不是用來估生活費）。企業主與開業醫師請填自己的投保薪資或提繳工資。軍公教與私校教職員另以下方「本俸」計算。',
+      career: '選擇您的身分，系統會套用對應的退休制度：勞工與受僱醫師為勞保＋勞退（雇主提繳6%）；企業主、開業醫師與自營者沒有雇主提繳，勞退只能自願提繳；私校教職員為公保＋私校退撫儲金；公立學校教師與公務人員依到職日分為月退（確定給付）或個人專戶制；軍人為軍職退休俸。',
       pubBase: '薪資單上的「本俸」或「本薪」（不含專業加給、導師費等），軍公教退休金是以本俸×2 為計算基準。',
       pubYears: '到退休時累計的任職（公保）年資。公教滿15年、軍人滿20年才能月領，未滿只能一次領。',
       pubRate: '月退休金（含公保）占「本俸×2」的比例。114年12月修法後，以112年附表為上限：15年39%，每多1年加1.5%，35年69%。軍人為滿20年55%，每年加2%。可依銓敘部或教育部試算結果修改。',
@@ -1171,7 +1215,7 @@
       laborYears: '到退休時累計的勞保投保年資。滿 15 年才能按月領年金，未滿只能一次領一筆。可在「勞保局 e 化服務」查詢。',
       natYears: '沒有工作、沒有勞保期間所繳的國民年金年資（例如家管、待業）。65 歲起可另外領國保年金。',
       claimAge: '開始領勞保年金的年齡。法定 65 歲，每提早 1 年少領 4%（最多提早 5 年），每延後 1 年多領 4%（最多延後 5 年），而且是終身的增減。',
-      selfContrib: '您自己每月額外提撥的比例。勞工為勞退自提（0～6%，可從當年所得中扣除）；私校教職員與個人專戶制公教人員為自願增提。',
+      selfContrib: '您自己每月額外提撥的比例。勞工與受僱醫師為勞退自提（0～6%，可從當年所得中扣除）；企業主、開業醫師為勞退自願提繳（0～6%，這是唯一的勞退來源）；私校教職員與個人專戶制公教人員為自願增提。',
       lpBal: '您個人退休帳戶目前已累積的金額：勞工查勞保局勞退專戶，私校教職員查私校退撫儲金管理會，公教個人專戶查退撫基金管理局。',
       lpRoi: '個人退休帳戶的預期年報酬。勞退與部分儲金方案有最低保證收益（二年期定存利率），私校儲金可自選投資組合，這裡是假設值。',
       saved: '目前已經準備好、專門留給退休用的資產，例如 ETF、基金、儲蓄險解約金等。',
@@ -1275,6 +1319,7 @@
     let printChartsBackup = null;
     let savedAnimation = null;
     function preparePrint() {
+      if (printChartsBackup) return;   // 按鈕已先準備好，beforeprint 不重做
       const client = document.getElementById('clientName').value.trim();
       document.getElementById('printClient').innerText = client || '＿＿＿＿＿＿';
       document.getElementById('printDate2').innerText = new Date().toLocaleDateString('zh-TW');
@@ -1293,14 +1338,23 @@
       savedAnimation = Chart.defaults.animation;
       Chart.defaults.animation = false;
       calcRetire(); calcRisk(); calcTax();
-      document.getElementById('retireChartImg').src = retireChartInstance.toBase64Image();
-      document.getElementById('riskChartImg').src = riskChartInstance.toBase64Image();
+      // A4 可列印寬度約 700px；固定尺寸重畫，避免列印版面寬度與畫面不同時圖表空白
+      retireChartInstance.resize(700, 280);
+      riskChartInstance.resize(700, 300);
     }
     function restoreAfterPrint() {
       if (!printChartsBackup) return;
       Chart.defaults.animation = savedAnimation;
       switchTab(printChartsBackup);
       printChartsBackup = null;
+    }
+    // 按鈕列印：先畫好三頁與圖表，等瀏覽器繪製完成再開列印視窗（Safari/iPad 不一定觸發 beforeprint）
+    function printReport() {
+      preparePrint();
+      requestAnimationFrame(() => setTimeout(() => {
+        window.print();
+        if (!('onafterprint' in window)) restoreAfterPrint();
+      }, 150));
     }
     window.addEventListener('beforeprint', preparePrint);
     window.addEventListener('afterprint', restoreAfterPrint);
