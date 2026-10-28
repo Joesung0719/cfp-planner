@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="財務規劃戰情室">
-  <title>全方位生涯財務與稅務傳承戰情室</title>
+  <meta name="apple-mobile-web-app-title" content="退休傳承規劃">
+  <title>全方位退休與傳承規劃試算</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
@@ -45,14 +45,14 @@
       <div class="min-w-0">
         <div class="flex items-center gap-2">
           <span class="bg-amber-500 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded whitespace-nowrap">115年版</span>
-          <h1 class="text-lg md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">全方位生涯財務與稅務傳承戰情室</h1>
+          <h1 class="text-lg md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">全方位退休與傳承規劃試算</h1>
         </div>
         <p class="text-slate-400 text-xs mt-1">跨制度退休金流 ✕ 逆算模型 ✕ 115年遺贈稅與流動性現金檢核</p>
       </div>
 
       <nav class="no-print flex bg-slate-800 p-1 rounded-xl gap-1 overflow-x-auto shrink-0">
         <button onclick="switchTab('retire')" id="btn-retire" class="tab-btn active whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm transition">1. 退休金流與逆算</button>
-        <button onclick="switchTab('risk')" id="btn-risk" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">2. 長照與醫療防禦</button>
+        <button onclick="switchTab('risk')" id="btn-risk" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">2. 長照與醫療保障</button>
         <button onclick="switchTab('tax')" id="btn-tax" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">3. 遺贈與房地稅務</button>
       </nav>
     </header>
@@ -331,7 +331,7 @@
       </div>
     </div>
 
-    <!-- ==================== 模組 2：長照與醫療防禦 ==================== -->
+    <!-- ==================== 模組 2：長照與醫療保障 ==================== -->
     <div id="tab-risk" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="print-only print-block lg:col-span-12">
         <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">二、長照風險壓力測試</h2>
@@ -398,7 +398,7 @@
           <div class="h-72 chart-box"><canvas id="riskChart"></canvas></div>
         </div>
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-1.5">
-          <div class="font-bold text-slate-800 text-sm">📋 醫療防禦與保險規劃建議：</div>
+          <div class="font-bold text-slate-800 text-sm">📋 醫療保障與保險規劃建議：</div>
           <ul class="text-slate-600 space-y-1.5 list-disc pl-4" id="advisorNotesRisk"></ul>
         </div>
       </div>
