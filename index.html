@@ -26,6 +26,8 @@
       .chart-box canvas { width: 100% !important; height: auto !important; max-width: 100%; }
       .rounded-xl, tr { break-inside: avoid; page-break-inside: avoid; }
       header { padding: 10px 14px !important; }
+      .re-block { display: block !important; break-before: page; page-break-before: always; }
+      .re-block > div { margin-bottom: 12px; }
     }
     .print-table { width: 100%; border-collapse: collapse; font-size: 11px; }
     .print-table th, .print-table td { border: 1px solid #cbd5e1; padding: 4px 6px; text-align: left; vertical-align: top; }
@@ -87,7 +89,7 @@
 
     <div class="print-only px-4 pt-3 pb-1 text-sm border-b border-slate-300">
       <div class="flex justify-between"><span>客戶：<strong id="printClient">＿＿＿＿＿＿</strong></span><span>規劃人：宋秉諭</span><span>報告日期：<span id="printDate2"></span></span></div>
-      <p class="text-[11px] text-slate-500 mt-1">本報告共四部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、員工股票與股利稅務。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
+      <p class="text-[11px] text-slate-500 mt-1">本報告共五部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
     </div>
 
     <!-- ==================== 列印用：一頁摘要 ==================== -->
@@ -689,12 +691,151 @@
           <div id="taxAdvisorText" class="text-amber-900 space-y-1.5 leading-relaxed"></div>
         </div>
       </div>
+
+      <!-- ===== 房地合一稅 2.0：出售試算與傳承方式比較 ===== -->
+      <div class="lg:col-span-12 grid grid-cols-1 lg:grid-cols-12 gap-6 re-block">
+        <div class="print-only print-block lg:col-span-12">
+          <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">四、房地合一稅與不動產傳承方式比較</h2>
+          <p class="text-[11px] text-slate-600 mb-2">依所得稅法房地合一稅 2.0 規定試算現在出售的稅額與稅後淨額，並比較「生前出售留現金」「生前贈與」「留待繼承」三種方式，家人合計要負擔的稅與子女日後出售時實際拿到的金額。</p>
+          <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
+          <div class="print-assumptions" data-section="tab-tax-re"></div>
+        </div>
+
+        <div class="lg:col-span-5 space-y-3 no-print bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">🏠 房地合一稅 2.0：單一物件出售試算</h2>
+
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1.5">
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">取得成本 (買進價格)</span>
+              <div class="flex items-center gap-1"><input type="number" id="reCost_num" value="1500" min="0" max="100000" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+            </div>
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">預估售價</span>
+              <div class="flex items-center gap-1"><input type="number" id="rePrice_num" value="3000" min="0" max="100000" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+            </div>
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">取得與出售費用</span>
+              <div class="flex items-center gap-1"><input type="number" id="reFee_num" value="90" min="0" max="5000" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+            </div>
+            <div class="flex justify-between items-center text-[11px] text-slate-600 gap-x-2">
+              <span class="whitespace-nowrap">沒有費用單據，按售價 3% 計 (上限 30 萬)</span>
+              <input type="checkbox" id="reFeeAuto" class="w-4 h-4 accent-blue-600 cursor-pointer">
+            </div>
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">土地漲價總數額</span>
+              <div class="flex items-center gap-1"><input type="number" id="reLandGain_num" value="200" min="0" max="50000" step="10" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+            </div>
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">預估土地增值稅</span>
+              <div class="flex items-center gap-1"><input type="number" id="reLandTax_num" value="40" min="0" max="10000" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+            </div>
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">持有期間</span>
+              <div class="flex items-center gap-1"><input type="number" id="reYears_num" value="8" min="0" max="80" step="0.5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>年</span></div>
+            </div>
+          </div>
+
+          <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1.5">
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">出售人身分</span>
+              <select id="reResident" class="font-bold text-blue-700 bg-slate-50 border rounded px-1 py-0.5 text-xs"><option value="1">境內居住者</option><option value="0">非境內居住者</option></select>
+            </div>
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">符合自住房地優惠</span>
+              <input type="checkbox" id="reSelfUse" class="w-4 h-4 accent-emerald-600 cursor-pointer">
+            </div>
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">非自願出售／合建／都更危老</span>
+              <input type="checkbox" id="reExcept" class="w-4 h-4 accent-blue-600 cursor-pointer">
+            </div>
+            <div class="flex justify-between items-center text-xs font-medium gap-x-2">
+              <span class="whitespace-nowrap">104年底以前取得 (舊制)</span>
+              <input type="checkbox" id="rePre2016" class="w-4 h-4 accent-amber-600 cursor-pointer">
+            </div>
+            <p class="text-[10px] text-slate-500" id="reRuleNote"></p>
+          </div>
+
+          <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-200 space-y-1.5">
+            <div class="text-xs font-bold text-indigo-900">👪 傳承方式比較的條件</div>
+            <div class="flex justify-between items-center text-xs gap-x-2">
+              <span class="text-indigo-800 whitespace-nowrap">本物件課稅現值</span>
+              <div class="flex items-center gap-1"><input type="number" id="reAssess_num" value="900" min="0" max="50000" step="10" class="w-20 text-right font-bold text-indigo-700 bg-white border border-indigo-300 rounded px-1 py-0.5"><span>萬</span></div>
+            </div>
+            <div class="flex justify-between items-center text-xs gap-x-2">
+              <span class="text-indigo-800 whitespace-nowrap">子女取得後再持有</span>
+              <div class="flex items-center gap-1"><input type="number" id="reHeirYears_num" value="3" min="0" max="60" step="0.5" class="w-20 text-right font-bold text-indigo-700 bg-white border border-indigo-300 rounded px-1 py-0.5"><span>年</span></div>
+            </div>
+            <div class="flex justify-between items-center text-xs gap-x-2">
+              <span class="text-indigo-800 whitespace-nowrap">期間物價指數累計漲幅</span>
+              <div class="flex items-center gap-1"><input type="number" id="reCpi_num" value="8" min="0" max="200" step="1" class="w-20 text-right font-bold text-indigo-700 bg-white border border-indigo-300 rounded px-1 py-0.5"><span>%</span></div>
+            </div>
+            <div class="flex justify-between items-center text-xs gap-x-2">
+              <span class="text-indigo-800 whitespace-nowrap">子女出售時符合自住優惠</span>
+              <input type="checkbox" id="reHeirSelfUse" class="w-4 h-4 accent-indigo-600 cursor-pointer">
+            </div>
+            <p class="text-[10px] text-indigo-600">*假設此物件已包含在上方「不動產市價總額」中，子女日後以同一售價（今日價格）出售，費用與現在相同。</p>
+          </div>
+        </div>
+
+        <div class="lg:col-span-7 space-y-4">
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 2xl:grid-cols-4 gap-3">
+            <div class="bg-slate-800 text-white p-3.5 rounded-xl">
+              <div class="text-[11px] text-slate-300">房地合一課稅所得</div>
+              <div class="text-lg font-bold mt-0.5" id="reIncome">--</div>
+              <div class="text-[10px] text-slate-400" id="reIncomeInfo">售價−成本−費用−土地漲價</div>
+            </div>
+            <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-xl">
+              <div class="text-[11px] text-rose-700 font-bold">應納房地合一稅</div>
+              <div class="text-lg font-extrabold text-rose-900 mt-0.5" id="reTax">--</div>
+              <div class="text-[10px] text-rose-600" id="reRateInfo">適用稅率 --</div>
+            </div>
+            <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl">
+              <div class="text-[11px] text-amber-800 font-bold">土地增值稅＋費用</div>
+              <div class="text-lg font-extrabold text-amber-900 mt-0.5" id="reOtherCost">--</div>
+              <div class="text-[10px] text-amber-700" id="reOtherInfo">另由地方稅務局核定</div>
+            </div>
+            <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl">
+              <div class="text-[11px] text-emerald-700 font-bold">稅後淨額</div>
+              <div class="text-lg font-extrabold text-emerald-900 mt-0.5" id="reNet">--</div>
+              <div class="text-[10px] text-emerald-600" id="reNetInfo">售價扣除稅費 (未扣房貸)</div>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
+            <div class="bg-slate-800 text-white px-4 py-2.5 text-xs font-bold flex justify-between items-center gap-2">
+              <span>👪 不動產傳承方式比較（本物件）</span>
+              <span class="text-[11px] text-slate-300 whitespace-nowrap">單位：萬元</span>
+            </div>
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-100 text-slate-700 border-b">
+                <tr><th class="p-2.5">項目</th><th class="p-2.5 text-right">生前出售<br>留現金</th><th class="p-2.5 text-right">生前贈與<br>子女</th><th class="p-2.5 text-right">留待<br>繼承</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200" id="reCompareBody"></tbody>
+            </table>
+            <p class="text-[10px] text-slate-500 px-3 py-2 border-t" id="reCompareNote"></p>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-xs space-y-1.5">
+            <div class="font-bold text-amber-900 text-sm">💡 房地合一稅與傳承分析：</div>
+            <div id="reAdvisorText" class="text-amber-900 space-y-1.5 leading-relaxed"></div>
+          </div>
+
+          <div class="text-[10px] text-slate-500 leading-relaxed">
+            法規依據：所得稅法第4條之4、第14條之4至第14條之6；遺產及贈與稅法第19條、第22條；土地稅法第28條。資料來源：
+            <a class="underline" href="https://download.tax.nat.gov.tw/irn/IRN2_QA.pdf" target="_blank" rel="noopener">財政部 房地合一稅 2.0 問答</a>、
+            <a class="underline" href="https://www.mof.gov.tw/singlehtml/384fb3077bb349ea973e7fc6f13b6974?cntId=759e824d6d4044c5ad452a30617f17d8" target="_blank" rel="noopener">財政部 繼承房地併計持有期間</a>、
+            <a class="underline" href="https://www.ntbk.gov.tw/singlehtml/829dd7b01c934d00ace92e154641c37e?cntId=e197118b114e43aa8555f54eaa199264" target="_blank" rel="noopener">高雄國稅局 繼承房地新舊制</a>、
+            <a class="underline" href="https://www.mof.gov.tw/singlehtml/384fb3077bb349ea973e7fc6f13b6974?cntId=79400945835542af9a8d5d42a3001fdb" target="_blank" rel="noopener">財政部 遺贈稅課稅級距</a>、
+            <a class="underline" href="https://www.mof.gov.tw/singlehtml/384fb3077bb349ea973e7fc6f13b6974?cntId=e4170c62974c4c7c9fa78c24c9fcb130" target="_blank" rel="noopener">財政部 115年贈與免稅額</a>。
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ==================== 模組 4：員工股票與股利稅務 ==================== -->
     <div id="tab-stock" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="print-only print-block lg:col-span-12">
-        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">四、員工股票與股利稅務</h2>
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">五、員工股票與股利稅務</h2>
         <p class="text-[11px] text-slate-600 mb-2">試算公司配發或員工認購股票（員工酬勞配股、認股權、限制型股票、現金增資認購、庫藏股、外國母公司股票）在不同課稅時點的稅負與稅後淨額，並比較股利合併計稅與分開計稅、二代健保補充保費、證券交易稅與個人最低稅負。</p>
         <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
         <div class="print-assumptions" data-section="tab-stock"></div>
@@ -932,7 +1073,15 @@
       MIL_BASE_RATE: 55, MIL_STEP: 2, MIL_CAP: 90, // 軍職退休俸：滿20年55%，每年+2%，軍官上限90%
       EST_EXEMPT: 1333, EST_FUNERAL: 138, EST_SPOUSE: 553, EST_KID: 56, EST_PARENT: 138, EST_DISABLED: 693, EST_SIBLING: 56,
       GIFT_EXEMPT: 244,
+      GIFT_BRACKETS: [[2811, 0.10], [5621, 0.15], [Infinity, 0.20]], // 贈與稅課稅級距(萬)，114/1/1起適用，115年未再調整
       AMT_INS_EXEMPT: 3740,
+      // 房地合一稅 2.0（所得稅法 §4-4、§14-4～14-6；110/7/1 起交易適用）
+      // 來源：財政部 IRN2 問答 https://download.tax.nat.gov.tw/irn/IRN2_QA.pdf
+      RE_RESIDENT: [[2, 45], [5, 35], [10, 20], [Infinity, 15]], // 境內居住者：[持有年數上限(含), 稅率%]
+      RE_NONRESIDENT: [[2, 45], [Infinity, 35]],                // 非境內居住者
+      RE_EXCEPT_RATE: 20, RE_EXCEPT_YEARS: 5,   // 非自願因素、自有土地合建、都更危老：5年以下仍 20%
+      RE_SELF_EXEMPT: 400, RE_SELF_RATE: 10, RE_SELF_YEARS: 6, // 自住房地：設籍並居住連續滿6年，400萬免稅、超過部分10%，6年內限1次
+      RE_FEE_RATE: 0.03, RE_FEE_CAP: 30,        // 未提示費用憑證：按成交價 3% 計，上限 30 萬
       // --- 股票與股利（單位：元）---
       // 115年度綜所稅級距（財政部 114.11.27 公告）：[級距上限, 稅率]
       PIT_BRACKETS: [[610000, 0.05], [1380000, 0.12], [2770000, 0.20], [5190000, 0.30], [Infinity, 0.40]],
@@ -989,6 +1138,10 @@
     ['reRatio_num','loanLtv_num','spouseWealth_num','maritalPct_num','kidsCount_num','minorYears_num','parentsCount_num','siblingsCount_num','disabledCount_num']
       .forEach(id => document.getElementById(id).addEventListener('input', calcTax));
     ['claim1030Toggle','hasSpouse'].forEach(id => document.getElementById(id).addEventListener('change', calcTax));
+    ['reCost_num','rePrice_num','reFee_num','reLandGain_num','reLandTax_num','reYears_num','reAssess_num','reHeirYears_num','reCpi_num']
+      .forEach(id => document.getElementById(id).addEventListener('input', calcTax));
+    ['reFeeAuto','reResident','reSelfUse','reExcept','rePre2016','reHeirSelfUse']
+      .forEach(id => document.getElementById(id).addEventListener('change', calcTax));
 
     ['skOtherNet_num','skSaleNet_num','skInsSal_num','skOtherBonus_num','skShares_num','skStrike_num','skFmv_num','skSell_num',
      'dvShares_num','dvCash_num','dvStock_num','dvTimes_num','osGain_num','osDiv_num','osTaxPaid_num']
@@ -1563,6 +1716,7 @@
         ? `市價 ${reMarket.toLocaleString()} 萬 × ${Math.round(loanLtv * 100)}% − 原貸款 ${reLoan.toLocaleString()} 萬，約可再貸 <strong>${loanable.toLocaleString()} 萬</strong>，${loanEnough ? '足以' : '<strong class="text-rose-600">不足以</strong>'}支應稅款 ${plannedTax} 萬。借 ${plannedTax} 萬（年利率2.5%、20年）每月約 <strong>${monthlyPayment.toLocaleString()} 元</strong> 本息。`
         : '無須申辦繳稅融資。';
       globalTaxData = { plannedTax, plannedNet, taxRaw, savedTotal, isCashSufficient, cashAvail, loanable, loanEnough, lifeFace };
+      globalTaxData.re = calcRealEstate(plannedGross - totalDeductions);   // 未截斷為0的淨額，扣除額有剩時可吸收此物件
       const rate2 = document.getElementById('pkRow2Rate');
       rate2.innerText = plannedTax === 0 ? '—' : (loanEnough ? '✅ 新制可行，需審核' : '⚠️ 額度不足');
 
@@ -1780,6 +1934,124 @@
       globalStockData = { typeName: T.name, income, taxA, best, div, useCombined, divTaxSaved: Math.abs(combinedAdd - separateAdd), amtDue: amt.due };
     }
 
+    // ===== 房地合一稅 2.0（單位：萬元）=====
+    // 依持有年數與身分取得稅率；years 為「持有期間」，剛好滿2年仍屬「2年以內」
+    function reTaxRate(years, resident, except) {
+      const table = resident ? LAW.RE_RESIDENT : LAW.RE_NONRESIDENT;
+      let rate = table.find(([cap]) => years <= cap)[1];
+      if (resident && except && years <= LAW.RE_EXCEPT_YEARS) rate = Math.min(rate, LAW.RE_EXCEPT_RATE);
+      return rate;
+    }
+    // 計算一次出售的房地合一稅；回傳 { income, tax, rateText, oldRegime }
+    function reSaleTax({ price, cost, fee, landGain, years, resident, except, selfUse, oldRegime }) {
+      const income = +(price - cost - fee - landGain).toFixed(1);
+      const selfOk = selfUse && resident && years >= LAW.RE_SELF_YEARS;
+      if (oldRegime && !selfOk) return { income, tax: null, rateText: '舊制（僅房屋所得併入綜所稅）', oldRegime: true };
+      if (income <= 0) return { income, tax: 0, rateText: '無所得（虧損）', selfOk };
+      if (selfOk) {
+        const taxable = Math.max(0, income - LAW.RE_SELF_EXEMPT);
+        return { income, tax: +(taxable * LAW.RE_SELF_RATE / 100).toFixed(1), rateText: `自住：${LAW.RE_SELF_EXEMPT}萬免稅、超過部分${LAW.RE_SELF_RATE}%`, selfOk };
+      }
+      const rate = reTaxRate(years, resident, except);
+      return { income, tax: +(income * rate / 100).toFixed(1), rateText: `${rate}%（持有${years}年）`, selfOk };
+    }
+    function computeGiftTax(netWan) {
+      let tax = 0, lower = 0;
+      for (const [cap, rate] of LAW.GIFT_BRACKETS) {
+        if (netWan <= lower) break;
+        tax += (Math.min(netWan, cap) - lower) * rate;
+        lower = cap;
+      }
+      return +tax.toFixed(1);
+    }
+
+    function calcRealEstate(netBeforeClamp) {
+      const price = val('rePrice_num', 0), cost = val('reCost_num', 0);
+      const feeAuto = document.getElementById('reFeeAuto').checked;
+      const fee = feeAuto ? Math.min(price * LAW.RE_FEE_RATE, LAW.RE_FEE_CAP) : val('reFee_num', 0);
+      const landGain = val('reLandGain_num', 0), landTax = val('reLandTax_num', 0);
+      const years = Math.max(0, val('reYears_num', 0));
+      const resident = num('reResident') === 1;
+      const selfUse = document.getElementById('reSelfUse').checked;
+      const except = document.getElementById('reExcept').checked;
+      const oldRegime = document.getElementById('rePre2016').checked;
+      const assess = val('reAssess_num', 0), heirYears = Math.max(0, val('reHeirYears_num', 0));
+      const cpi = val('reCpi_num', 0) / 100;
+      const heirSelf = document.getElementById('reHeirSelfUse').checked;
+      const w = n => n === null ? '—' : (+n.toFixed(1)).toLocaleString();
+      document.getElementById('reFee_num').disabled = feeAuto;
+
+      // 1) 現在出售
+      const now = reSaleTax({ price, cost, fee, landGain, years, resident, except, selfUse, oldRegime });
+      const nowTax = now.tax || 0;
+      const netCash = price - fee - nowTax - landTax;
+      document.getElementById('reIncome').innerText = w(now.income) + ' 萬';
+      document.getElementById('reIncomeInfo').innerText = `${w(price)}−${w(cost)}−費用${w(fee)}−土地漲價${w(landGain)}`;
+      document.getElementById('reTax').innerText = now.tax === null ? '依舊制另計' : 'NT$ ' + w(now.tax) + ' 萬';
+      document.getElementById('reRateInfo').innerText = now.rateText;
+      document.getElementById('reOtherCost').innerText = w(landTax + fee) + ' 萬';
+      document.getElementById('reOtherInfo').innerText = `土地增值稅 ${w(landTax)}＋費用 ${w(fee)} 萬`;
+      document.getElementById('reNet').innerText = w(netCash) + ' 萬';
+      document.getElementById('reNetInfo').innerText = now.tax === null ? '未扣舊制房屋所得稅與房貸' : '售價扣除稅費（未扣房貸）';
+
+      const notes = [];
+      if (selfUse && !resident) notes.push('自住優惠限境內居住者。');
+      if (selfUse && resident && years < LAW.RE_SELF_YEARS) notes.push(`自住優惠須設籍並居住連續滿 ${LAW.RE_SELF_YEARS} 年，目前持有 ${years} 年，未套用。`);
+      if (except && !resident) notes.push('非自願出售等例外 20% 僅適用境內居住者。');
+      if (except && resident && years > LAW.RE_EXCEPT_YEARS) notes.push(`持有超過 ${LAW.RE_EXCEPT_YEARS} 年，例外規定不影響稅率。`);
+      if (oldRegime) notes.push('104年12月31日以前取得：適用舊制，只有房屋部分的財產交易所得併入綜合所得稅；符合自住條件時可選擇新制。');
+      document.getElementById('reRuleNote').innerText = notes.join(' ');
+
+      // 2) 傳承比較：base = 不含此物件的課稅遺產淨額（可為負，代表免稅額與扣除額還有剩）
+      const base = netBeforeClamp - assess;
+      const estTax = x => compute2026EstateTax(Math.max(0, base + x)).tax;
+      const baseTax = estTax(0);
+      const heirCost = assess * (1 + cpi);
+      // A. 生前出售留現金：淨現金併入遺產（以現金全額課稅）
+      const estA = +(estTax(Math.max(0, netCash)) - baseTax).toFixed(1);
+      // B. 生前贈與：以課稅現值課贈與稅（假設當年免稅額全數用於此物件），受贈人繳土增稅，持有期間重新起算
+      const giftTax = computeGiftTax(Math.max(0, assess - LAW.GIFT_EXEMPT));
+      const heirB = reSaleTax({ price, cost: heirCost, fee, landGain: 0, years: heirYears, resident, except: false, selfUse: heirSelf, oldRegime: false });
+      // C. 繼承：遺產稅以課稅現值計、免徵土增稅；持有期間併計被繼承人；被繼承人104年底前取得者，子女出售適用舊制
+      const estC = +(estTax(assess) - baseTax).toFixed(1);
+      const heirC = reSaleTax({ price, cost: heirCost, fee, landGain: 0, years: years + heirYears, resident, except: false, selfUse: heirSelf, oldRegime });
+
+      const totA = nowTax + landTax + estA;
+      const totB = giftTax + landTax + (heirB.tax || 0);
+      const totC = estC + (heirC.tax || 0);
+      const getA = netCash - estA;
+      const getB = price - fee - giftTax - landTax - (heirB.tax || 0);
+      const getC = price - fee - estC - (heirC.tax || 0);
+      const best = Math.max(getA, getB, getC);
+      const cell = (v, strong) => `<td class="p-2.5 text-right ${strong ? 'font-bold' : ''}">${v}</td>`;
+      const rows = [
+        ['房地合一稅（本人現在出售）', w(now.tax), '—', '—'],
+        ['土地增值稅', w(landTax), w(landTax) + '<br><span class="text-[10px] text-slate-500">受贈人繳</span>', '0<br><span class="text-[10px] text-slate-500">繼承免徵</span>'],
+        ['贈與稅', '—', w(giftTax), '—'],
+        ['因此物件增加的遺產稅', w(estA) + '<br><span class="text-[10px] text-slate-500">現金全額課稅</span>', '0<br><span class="text-[10px] text-slate-500">需2年前完成</span>', w(estC) + '<br><span class="text-[10px] text-slate-500">以課稅現值計</span>'],
+        ['子女出售時房地合一稅', '—', `${w(heirB.tax)}<br><span class="text-[10px] text-slate-500">${heirB.rateText}</span>`, `${w(heirC.tax)}<br><span class="text-[10px] text-slate-500">${heirC.rateText}</span>`]
+      ];
+      document.getElementById('reCompareBody').innerHTML = rows.map(([a, ...v]) => `<tr><td class="p-2.5">${a}</td>${v.map(x => cell(x)).join('')}</tr>`).join('')
+        + `<tr class="bg-rose-50/60"><td class="p-2.5 font-bold text-rose-800">家人合計負擔稅額</td>${[totA, totB, totC].map(x => cell(w(x), true)).join('')}</tr>`
+        + `<tr class="bg-emerald-50/60"><td class="p-2.5 font-bold text-emerald-800">子女最後實拿</td>${[getA, getB, getC].map(x => `<td class="p-2.5 text-right font-extrabold ${x === best ? 'text-emerald-700' : ''}">${w(x)}${x === best ? ' ⭐' : ''}</td>`).join('')}</tr>`;
+
+      document.getElementById('reCompareNote').innerText = '贈與稅假設當年度 244 萬免稅額全數用於此物件；遺產稅為加入此物件後增加的稅額（以上方規劃後的課稅遺產淨額為基礎）。'
+        + (now.tax === null || heirC.tax === null ? '「—」標示舊制的部分，房屋交易所得須併入綜合所得稅，未計入合計與實拿金額。' : '');
+      const label = { A: '生前出售留現金', B: '生前贈與', C: '留待繼承' };
+      const bestKey = best === getC ? 'C' : best === getB ? 'B' : 'A';
+      const adv = [];
+      adv.push(`<p>1. <strong>現在出售：</strong>課稅所得 ${w(now.income)} 萬，${now.tax === null ? '屬舊制，房屋部分所得需併入綜合所得稅另行計算' : `適用 ${now.rateText}，應納房地合一稅 <strong>${w(now.tax)} 萬</strong>`}，扣除土地增值稅與費用後約可拿回 <strong>${w(netCash)} 萬</strong>（未扣房貸）。申報期限為完成所有權移轉登記次日起 30 日內，虧損或免稅也要申報。</p>`);
+      if (!now.selfOk && resident && !oldRegime && now.income > 0) {
+        const nextCap = LAW.RE_RESIDENT.find(([cap]) => years <= cap)[0];
+        if (Number.isFinite(nextCap)) adv.push(`<p>2. <strong>持有期間：</strong>再多持有到超過 ${nextCap} 年，稅率可降為 ${reTaxRate(nextCap + 0.1, true, false)}%。${years < LAW.RE_SELF_YEARS ? `若本人、配偶或未成年子女設籍並實際居住滿 ${LAW.RE_SELF_YEARS} 年、期間沒有出租或營業，可適用自住優惠（400 萬免稅，超過部分 10%）。` : ''}</p>`);
+      }
+      adv.push(`<p>3. <strong>傳承方式：</strong>依目前輸入，<strong>${label[bestKey]}</strong> 讓子女實拿最多（${w(best)} 萬）。留現金會以現金全額計入遺產；不動產留待繼承時遺產稅以課稅現值計算，且免徵土地增值稅、持有期間可併計${oldRegime ? '，被繼承人 104 年底前取得者子女出售時適用舊制' : ''}。生前贈與的子女持有期間從受贈日重新起算，依輸入再持有 ${heirYears} 年出售，適用 ${heirB.rateText}。${val('giftYears_num', 0) > 0 ? '上方已規劃每年用掉 244 萬贈與免稅額，若同一年再贈與房地，贈與稅會比本表高。' : ''}</p>`);
+      adv.push('<p>4. <strong>其他提醒：</strong>贈與房屋另需繳契稅（房屋評定現值 6%）；過世前 2 年內贈與子女的財產仍會併入遺產；二親等間買賣若無法證明確實付款，會被視為贈與。配偶間贈與的持有期間可併計，但不在本表比較範圍。</p>');
+      document.getElementById('reAdvisorText').innerHTML = adv.map((x, i) => x.replace(/^<p>\d+\./, `<p>${i + 1}.`)).join('');
+
+      return { nowTax: now.tax, netCash, oldRegime: now.tax === null, best: label[bestKey], getA, getB, getC };
+    }
+
     // ===== 欄位說明（給保戶看的白話解釋）=====
     const FIELD_HELP = {
       age: '您今年的實際年齡，用來計算距離退休還有幾年可以準備。',
@@ -1854,6 +2126,21 @@
       osGain: '全戶出售美股、海外 ETF、海外基金等的已實現價差（賠錢可填負數）。',
       osDiv: '全戶的海外股利、利息、海外薪資等其他海外所得。全戶海外所得合計達 100 萬元，才需要全數計入最低稅負的基本所得額。',
       osTaxPaid: '海外所得已在國外繳的所得稅（例如美股股利被預扣的 30%），可在限額內扣抵最低稅負。',
+      reCost: '當初買進這間房地的價格（含土地與房屋）。繼承或受贈取得的，以當時的房屋評定現值＋公告土地現值，依物價指數調整後計算。',
+      rePrice: '預估現在可以賣到的價格。',
+      reFee: '買進與賣出時可列舉的費用，例如仲介費、代書費、契稅、印花稅、裝修改良支出等，需有單據。',
+      reFeeAuto: '沒有保留費用單據時，國稅局按售價的 3% 計算費用，最多 30 萬元。',
+      reLandGain: '依土地稅法計算的土地漲價總數額（出售時土地增值稅單上可以看到），可以從房地合一所得中扣除，避免重複課稅。',
+      reLandTax: '出售或贈與時要繳的土地增值稅，金額可向地方稅務局試算。繼承移轉的土地免徵土地增值稅。',
+      reYears: '從取得到出售的期間。持有2年以內45%、2～5年35%、5～10年20%、超過10年15%（境內居住者）。繼承取得的可以併計被繼承人持有的期間。',
+      reResident: '一年內在台灣住滿183天，或在台灣有住所並經常居住，為境內居住者。非境內居住者持有2年以內45%、超過2年35%。',
+      reSelfUse: '本人、配偶或未成年子女在這間房屋設籍並實際居住連續滿6年，交易前6年沒有出租、營業或執行業務使用，且6年內沒有用過這項優惠：所得400萬以下免稅，超過部分10%。',
+      reExcept: '因調職、非自願離職等非自願因素，或以自有土地與建商合建、參與都更危老重建，在5年內出售者，稅率維持20%。',
+      rePre2016: '104年12月31日以前取得的房地適用舊制，只有房屋部分的交易所得併入綜合所得稅，土地部分只繳土地增值稅。',
+      reAssess: '這間房地的「房屋評定現值＋公告土地現值」，用來計算贈與稅、遺產稅，以及子女日後出售時的取得成本。',
+      reHeirYears: '子女受贈或繼承後，打算再持有幾年才出售。',
+      reCpi: '從受贈或繼承到子女出售期間，消費者物價指數累計上漲多少。子女的取得成本會依此調高。',
+      reHeirSelfUse: '子女出售時是否符合自住房地優惠（設籍並居住連續滿6年等條件）。',
       loanLtv: '子女繼承房地後，銀行願意以市價的幾成借錢給子女繳遺產稅。一般住宅約 6～7 成，實際依銀行審核與央行規定。'
     };
 
@@ -1908,7 +2195,8 @@
       'tab-retire': ['age','retireAge','lifeAge','salary','expense','salGrowth','repRate','inflation','roi','postRoi','career','pubBase','pubYears','pubRate','pubStartAge','gepiRate','laborYears','natYears','claimAge','selfContrib','lpBal','lpRoi','saved','monthlyInvest','coupleToggle','spouseAge','spouseClaimAge','spousePension','spouseSaved','spouseInvest'],
       'tab-risk': ['ltcToggleRisk','ltcStart','ltcYears','ltcCostRisk','ltcInsRisk','ltcStopInvest'],
       'tab-tax': ['finAsset','reMarket','reRatio','reLoan','loanLtv','claim1030Toggle','maritalPct','spouseWealth','hasSpouse','kidsCount','minorYears','parentsCount','siblingsCount','disabledCount','lifeIns','lifePremium','giftYears'],
-      'tab-stock': ['skOtherNet','skSaleNet','skInsSal','skOtherBonus','skType','skMarket','skShares','skStrike','skFmv','skSell','skYear','skHeld2','skNhiBonus','dvShares','dvCash','dvStock','dvTimes','osGain','osDiv','osTaxPaid']
+      'tab-stock': ['skOtherNet','skSaleNet','skInsSal','skOtherBonus','skType','skMarket','skShares','skStrike','skFmv','skSell','skYear','skHeld2','skNhiBonus','dvShares','dvCash','dvStock','dvTimes','osGain','osDiv','osTaxPaid'],
+      'tab-tax-re': ['reCost','rePrice','reFee','reFeeAuto','reLandGain','reLandTax','reYears','reResident','reSelfUse','reExcept','rePre2016','reAssess','reHeirYears','reCpi','reHeirSelfUse']
     };
     const escapeHtml = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -1987,10 +2275,12 @@
       const taxBox = box('三、遺產稅與傳承', '#047857', [
         ['應納遺產稅', `${t.plannedTax.toLocaleString()} 萬`],
         ['規劃後節省', `${t.savedTotal.toLocaleString()} 萬`],
-        ['可用現金＋保險金', `${t.cashAvail.toLocaleString()} 萬`]
+        ['可用現金＋保險金', `${t.cashAvail.toLocaleString()} 萬`],
+        ['房地合一稅（現在出售）', t.re.oldRegime ? '舊制另計' : `${(+t.re.nowTax.toFixed(1)).toLocaleString()} 萬`],
+        ['不動產傳承方式', `${t.re.best}最有利`]
       ], t.plannedTax === 0 ? '目前無應納遺產稅' : (t.isCashSufficient ? '繳稅現金充足' : `繳稅現金不足 ${(t.plannedTax - t.cashAvail).toFixed(1)} 萬`));
 
-      const stockBox = box('四、員工股票與股利', '#b45309', [
+      const stockBox = box('五、員工股票與股利', '#b45309', [
         ['取得方式', s.typeName],
         ['員工股票應稅所得', `${fmt(s.income)} 元`],
         ['取得年度增加所得稅', `${fmt(s.taxA)} 元`],
