@@ -1,16 +1,13 @@
-# 客戶試用版發佈流程。
-# 只在「發佈 trial-* 標籤的 Release」或手動執行時才會跑；一般合併到 main 不會更新試用版。
-# 另需在 repo 設定 Settings → Pages → Source 選「GitHub Actions」才會真正公開（尚未啟用）。
-name: Deploy trial version
+# 同一個 Pages 站台發佈兩個版本：
+#   /          正式版 = main 的 index.html（每次合併到 main 自動更新）
+#   /trial/    客戶試用版 = trial/pinned-ref.txt 指定的 commit 或標籤（固定版本，改這個檔才會更新）
+# Settings → Pages → Source 需為「GitHub Actions」。
+name: Deploy site (formal + trial)
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
   workflow_dispatch:
-    inputs:
-      ref:
-        description: 要發佈的標籤（例如 trial-0.1）
-        required: true
 
 permissions:
   contents: read
@@ -18,12 +15,11 @@ permissions:
   id-token: write
 
 concurrency:
-  group: trial-pages
+  group: pages
   cancel-in-progress: false
 
 jobs:
   deploy:
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'trial-')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -31,11 +27,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name || inputs.ref }}
-      - run: python3 trial/build.py --release
+          ref: main
+          path: main-src
+      - name: Read pinned trial ref
+        id: pin
+        run: echo "ref=$(tr -d '[:space:]' < main-src/trial/pinned-ref.txt)" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pin.outputs.ref }}
+          path: trial-src
+      - name: Assemble site
+        run: |
+          mkdir -p site/trial
+          cp main-src/index.html site/index.html
+          (cd trial-src && python3 trial/build.py --release)
+          cp trial-src/dist/index.html site/trial/index.html
+          touch site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: site
       - id: deployment
         uses: actions/deploy-pages@v4

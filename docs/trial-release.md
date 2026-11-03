@@ -13,11 +13,13 @@
 
 頁面沒有任何 `fetch`、`XMLHttpRequest` 或表單送出；輸入只存在使用者自己的瀏覽器。唯一的對外請求是載入 Tailwind 與 Chart.js 兩個公開函式庫（CDN），不含使用者輸入。
 
-## 發佈步驟（需 Joe 核准後才做）
+## 發佈方式
 
-1. （選用）在 `trial/config.json` 填入 `feedbackFormUrl` 與 `lineUrl`（須 https）；留空則橫幅不顯示回報連結，客戶直接回覆規劃人。
-2. 在 GitHub：Settings → Pages → Source 選「GitHub Actions」。
-3. 建立 Release，標籤為 `trial-0.1`（之後 `trial-0.2`…）。工作流程會用該標籤的程式碼建置並發佈，所以試用版固定在該版本，工作版繼續改也不會影響。
-4. 網址通常是 `https://joesung0719.github.io/cfp-planner/`。
+同一個 Pages 站台有兩個版本（GitHub 一個 repo 只能一個站台）：
+
+- `/cfp-planner/` 正式版：main 的 `index.html`，合併到 main 就自動更新。
+- `/cfp-planner/trial/` 試用版：固定在 `trial/pinned-ref.txt` 記的 commit。要更新試用版，把該檔改成新的 commit 或標籤並合併到 main。
+
+Settings → Pages → Source 必須是「GitHub Actions」。試用版可在 `trial/config.json` 選填表單與 LINE 連結（須 https），留空則橫幅不顯示。
 
 本機預覽：`python3 trial/build.py --preview`，再開 `dist/index.html`。
