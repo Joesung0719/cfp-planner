@@ -46,22 +46,23 @@
 <body class="bg-slate-100 text-slate-800 p-2 md:p-5 font-sans">
   <div class="max-w-[1440px] mx-auto bg-white rounded-2xl shadow-xl overflow-hidden print-container">
 
-    <header class="bg-slate-900 text-white px-4 py-3 md:px-6 md:py-4 flex flex-col lg:flex-row justify-between lg:items-center gap-3">
+    <header class="bg-slate-900 text-white px-4 py-3 md:px-6 md:py-4 flex flex-col gap-3">
       <div class="min-w-0">
         <div class="flex items-center gap-2">
           <span class="bg-amber-500 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded whitespace-nowrap">115年版</span>
           <h1 class="text-lg md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">全方位退休與傳承規劃試算</h1>
         </div>
-        <p class="text-slate-400 text-xs mt-1">跨制度退休金流 ✕ 逆算模型 ✕ 115年遺贈稅與流動性 ✕ 員工股票 ✕ 股權、信託與境外資產</p>
+        <p class="text-slate-400 text-xs mt-1">跨制度退休金流 ✕ 逆算模型 ✕ 115年遺贈稅與流動性 ✕ 員工股票 ✕ 股權、信託與境外資產 ✕ 家庭財務健診</p>
       </div>
 
-      <nav class="no-print flex bg-slate-800 p-1 rounded-xl gap-1 overflow-x-auto shrink-0">
+      <nav class="no-print flex self-start max-w-full bg-slate-800 p-1 rounded-xl gap-1 overflow-x-auto">
         <button onclick="switchTab('retire')" id="btn-retire" class="tab-btn active whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm transition">1. 退休金流與逆算</button>
         <button onclick="switchTab('risk')" id="btn-risk" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">2. 長照與醫療保障</button>
         <button onclick="switchTab('tax')" id="btn-tax" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">3. 遺贈與房地稅務</button>
         <button onclick="switchTab('stock')" id="btn-stock" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">4. 員工股票與股利</button>
         <button onclick="switchTab('check')" id="btn-check" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">5. 傳承完整度檢查</button>
         <button onclick="switchTab('family')" id="btn-family" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">6. 股權·信託·境外</button>
+        <button onclick="switchTab('cash')" id="btn-cash" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">7. 家庭財務健診</button>
       </nav>
     </header>
 
@@ -91,7 +92,7 @@
 
     <div class="print-only px-4 pt-3 pb-1 text-sm border-b border-slate-300">
       <div class="flex justify-between"><span>客戶：<strong id="printClient">＿＿＿＿＿＿</strong></span><span>規劃人：宋秉諭</span><span>報告日期：<span id="printDate2"></span></span></div>
-      <p class="text-[11px] text-slate-500 mt-1">本報告共七部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務；六、傳承完整度檢查；七、家族企業股權、信託與境外資產。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
+      <p class="text-[11px] text-slate-500 mt-1">本報告共八部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務；六、傳承完整度檢查；七、家族企業股權、信託與境外資產；八、家庭財務健診。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
     </div>
 
     <!-- ==================== 列印用：一頁摘要 ==================== -->
@@ -1203,6 +1204,105 @@
       </div>
     </div>
 
+    <!-- ==================== 模組 7：家庭財務健診 ==================== -->
+    <div id="tab-cash" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="print-only print-block lg:col-span-12">
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">八、家庭財務健診</h2>
+        <p class="text-[11px] text-slate-600 mb-2">整理家庭的收支表與資產負債表，計算緊急預備金、儲蓄率、負債比率、流動比率、還款負擔與保費負擔，並依結果提出調整方向。</p>
+        <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
+        <div class="print-assumptions" data-section="tab-cash"></div>
+      </div>
+      <div class="lg:col-span-5 space-y-3.5 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-2 gap-2">
+          <h2 class="text-sm font-bold text-slate-800 whitespace-nowrap">🩺 家庭收支與資產負債</h2>
+          <button type="button" onclick="importCashFlow()" class="tool-btn text-[11px]" title="把第1頁的月薪、生活費，以及第3頁的不動產市價、房貸帶進來">↻ 從第1、3頁帶入</button>
+        </div>
+        <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1.5">
+          <div class="text-xs font-bold text-emerald-800">💰 收入（全家）</div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">本人每月薪資</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_salary_num" value="60000" min="0" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>元</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">配偶每月薪資</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_spSalary_num" value="45000" min="0" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>元</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">年終、獎金、分紅（全年）</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_bonus_num" value="20" min="0" step="1" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">租金、利息、股利（全年）</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_otherInc_num" value="2" min="0" step="1" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+        </div>
+        <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1.5">
+          <div class="text-xs font-bold text-rose-800">🧾 支出（全家）</div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">每月生活支出</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_living_num" value="50000" min="0" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>元</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">每月房租</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_rent_num" value="0" min="0" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>元</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">每月房貸、車貸、信貸還款</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_loanPay_num" value="28000" min="0" step="1000" class="w-24 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>元</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">全家保費（全年）</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_premium_num" value="10" min="0" step="1" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">其他年度支出（全年）</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_yearly_num" value="12" min="0" step="1" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+        </div>
+        <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1.5">
+          <div class="text-xs font-bold text-blue-800">🏦 資產（目前市價）</div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">現金、活期存款</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_cash_num" value="40" min="0" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">定存、貨幣型或短期債券基金</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_deposit_num" value="30" min="0" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">股票、基金、ETF</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_invest_num" value="80" min="0" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">保單價值準備金</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_cashValue_num" value="20" min="0" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">不動產（自住＋其他）</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_realEstate_num" value="1800" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">其他資產（車、勞退自提等）</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_otherAsset_num" value="0" min="0" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+        </div>
+        <div class="bg-white p-2.5 rounded-lg border border-slate-200 space-y-1.5">
+          <div class="text-xs font-bold text-amber-800">📉 負債（目前餘額）</div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">一年內要還的負債</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_shortDebt_num" value="0" min="0" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">房貸餘額</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_mortgage_num" value="800" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">其他長期負債（車貸、學貸）</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="cf_otherDebt_num" value="0" min="0" step="5" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div></div>
+        </div>
+        <p class="text-[10px] text-slate-500">*月薪填實領前的月薪即可，不必扣勞健保。收入與支出以全家計算；只看個人時把配偶欄位填 0。</p>
+      </div>
+
+      <div class="lg:col-span-7 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-slate-800 text-white p-3.5 rounded-xl">
+            <div class="text-[11px] text-slate-300">每月結餘</div>
+            <div class="text-2xl font-extrabold mt-0.5" id="cfSurplus">--</div>
+            <div class="text-[10px] text-slate-400" id="cfSurplusSub">--</div>
+          </div>
+          <div class="bg-blue-50 border border-blue-200 p-3.5 rounded-xl">
+            <div class="text-[11px] text-blue-700 font-bold">淨資產</div>
+            <div class="text-2xl font-extrabold text-blue-900 mt-0.5" id="cfNetWorth">--</div>
+            <div class="text-[10px] text-blue-600" id="cfNetWorthSub">--</div>
+          </div>
+          <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-xl">
+            <div class="text-[11px] text-rose-700 font-bold">需要調整的指標</div>
+            <div class="text-2xl font-extrabold text-rose-900 mt-0.5" id="cfBadCount">--</div>
+            <div class="text-[10px] text-rose-600">項，共 6 項指標</div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
+          <div class="bg-slate-800 text-white px-4 py-2.5 text-xs font-bold">📊 財務指標</div>
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-100 text-slate-700 border-b"><tr><th class="p-2 whitespace-nowrap">指標</th><th class="p-2">計算方式</th><th class="p-2 whitespace-nowrap">參考標準</th><th class="p-2 text-right whitespace-nowrap">實際</th><th class="p-2 whitespace-nowrap">評估</th></tr></thead>
+            <tbody id="cfRatioBody" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
+            <div class="bg-emerald-700 text-white px-4 py-2 text-xs font-bold">收支表（全年）</div>
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-100 text-slate-700 border-b"><tr><th class="p-2">項目</th><th class="p-2 text-right whitespace-nowrap">金額(萬)</th><th class="p-2 text-right">占收入</th></tr></thead>
+              <tbody id="cfIncomeBody" class="divide-y divide-slate-200"></tbody>
+            </table>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
+            <div class="bg-blue-800 text-white px-4 py-2 text-xs font-bold">資產負債表</div>
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-100 text-slate-700 border-b"><tr><th class="p-2">項目</th><th class="p-2 text-right whitespace-nowrap">金額(萬)</th><th class="p-2 text-right">占資產</th></tr></thead>
+              <tbody id="cfBalanceBody" class="divide-y divide-slate-200"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-xs space-y-1.5">
+          <div class="font-bold text-amber-900 text-sm">💡 調整建議</div>
+          <ol id="cfAdvice" class="list-decimal pl-5 text-amber-900 space-y-1 leading-relaxed"></ol>
+        </div>
+
+        <p class="text-[10px] text-slate-500 leading-relaxed">參考標準為一般理財規劃常用的經驗值，用來找出優先處理的項目，不是硬性規定；收入不穩定、家中只有一份收入或有需照顧的家人時，緊急預備金宜提高。</p>
+      </div>
+    </div>
+
     <footer class="bg-slate-50 border-t border-slate-200 px-6 py-3 flex flex-col md:flex-row gap-1 justify-between text-xs text-slate-500">
       <span>規劃人：宋秉諭 ｜ 生涯財務模擬與 115 年稅務傳承試算</span>
       <span>本試算僅供規劃參考，不構成投資、法律或稅務建議；實際稅額以國稅局核定為準 ｜ 諮詢日期：<span id="printDate"></span></span>
@@ -1319,13 +1419,14 @@
       document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.add('text-slate-300'); });
       document.getElementById('btn-' + tab).classList.add('active');
       document.getElementById('btn-' + tab).classList.remove('text-slate-300');
-      ['retire', 'risk', 'tax', 'stock', 'check', 'family'].forEach(t => document.getElementById('tab-' + t).classList.toggle('hidden', t !== tab));
+      ['retire', 'risk', 'tax', 'stock', 'check', 'family', 'cash'].forEach(t => document.getElementById('tab-' + t).classList.toggle('hidden', t !== tab));
       if (tab === 'retire') calcRetire();
       else if (tab === 'risk') { calcRetire(); calcRisk(); }
       else if (tab === 'tax') calcTax();
       else if (tab === 'stock') calcStock();
       else if (tab === 'check') { calcTax(); calcFamily(); calcCheck(); }
       else if (tab === 'family') { calcTax(); calcFamily(); }
+      else if (tab === 'cash') { calcRetire(); calcCash(); }
     }
 
     // 年金化：本金 pv、月利率 r、期數 n 的每月給付
@@ -1334,7 +1435,7 @@
     function sinkingPmt(fv, r, n) { return r > 0 ? fv * r / (Math.pow(1 + r, n) - 1) : fv / n; }
     function fvAnnuity(p, r, n) { return r > 0 ? p * (Math.pow(1 + r, n) - 1) / r : p * n; }
 
-    let globalRetireData = {}, globalRiskData = {}, globalTaxData = {}, globalStockData = {}, globalCheckData = {}, globalFamilyData = {};
+    let globalRetireData = {}, globalRiskData = {}, globalTaxData = {}, globalStockData = {}, globalCheckData = {}, globalFamilyData = {}, globalCashData = {};
 
     // 公教月退所得替代率上限（114/12 修法後以 112 年附表認定）：15年39%，每年+1.5%，35年69%，之後每年+0.5%至40年
     function dbReplacementRate(years) {
@@ -2315,6 +2416,24 @@
 
     // ===== 第5、6頁的欄位說明 =====
     Object.assign(FIELD_HELP, {
+      cf_salary: '本人每月固定薪資（稅前），不含年終與獎金。',
+      cf_spSalary: '配偶每月固定薪資（稅前）。只看個人時填 0。',
+      cf_bonus: '一年領到的年終、績效獎金、分紅、員工股票變現等合計。',
+      cf_otherInc: '一年收到的房租、存款利息、債券利息、股利等合計。',
+      cf_living: '全家每月的飲食、交通、水電、電信、教育、娛樂、孝親費等日常開銷，不含房租、貸款與保費。',
+      cf_rent: '租屋族每月房租；有自有住宅填 0。',
+      cf_loanPay: '每月實際繳給銀行的房貸、車貸、信貸本金加利息。',
+      cf_premium: '全家所有保單一年的保費合計，月繳請乘以 12。',
+      cf_yearly: '一年一次或不定期的支出：所得稅、房屋稅、地價稅、學費、出國旅遊、車輛保養等。',
+      cf_cash: '隨時可以動用的現金與活期存款（含外幣活存）。',
+      cf_deposit: '定存，以及貨幣型、短期債券型基金等幾天內可變現、價格波動小的資產。這一項和上一項合稱「流動資產」，用來計算緊急預備金。',
+      cf_invest: '股票、基金、ETF、債券等以目前市值計算的投資。價格會波動，不列入緊急預備金。',
+      cf_cashValue: '有現金價值的保單，以目前保單價值準備金或解約金填寫。',
+      cf_realEstate: '自住與其他房地產的市價合計。',
+      cf_otherAsset: '汽車、勞退個人專戶自提部分、借給別人的錢等。',
+      cf_shortDebt: '一年內要還清的負債：信用卡循環、信貸、親友借款等。',
+      cf_mortgage: '房貸目前尚未還清的本金。',
+      cf_otherDebt: '車貸、學貸等一年後才還完的其他負債餘額。',
       inv_cash: '活存、定存、外幣存款等。過世後帳戶會凍結，115年修法後需繼承人過半數且應繼分過半數同意，才能動用來繳遺產稅。',
       inv_listed: '台股、基金、ETF、債券等，以目前市值填寫。',
       inv_re: '名下房屋與土地的市價合計。',
@@ -2661,6 +2780,125 @@
       .forEach(el => el.addEventListener(el.type === 'checkbox' || el.tagName === 'SELECT' ? 'change' : 'input', calcCheck));
     document.getElementById('tr_rate_num').value = LAW.POST_1Y_RATE;
 
+    // ===== 模組 7：家庭財務健診 =====
+    // 參考標準：一般理財規劃經驗值（緊急預備金 6 個月、負債比率 30%、流動比率 100%、還款負擔 1/3、保費占年收入 10%）
+    const CF = { EMERG_MONTHS: 6, EMERG_MIN: 3, DEBT_OK: 30, DEBT_HIGH: 50, CURRENT_OK: 100, DSR_OK: 1 / 3, PREM_OK: 0.10, SAVE_OK: 0.20, SAVE_LOW: 0.10 };
+    function calcCash() {
+      const m = id => Math.max(0, val(id + '_num', 0));
+      // 收支（全年，元）
+      const salary = m('cf_salary') * 12, spSalary = m('cf_spSalary') * 12;
+      const bonus = m('cf_bonus') * 10000, otherInc = m('cf_otherInc') * 10000;
+      const income = salary + spSalary + bonus + otherInc;
+      const living = m('cf_living') * 12, rent = m('cf_rent') * 12, loanPay = m('cf_loanPay') * 12;
+      const premium = m('cf_premium') * 10000, yearly = m('cf_yearly') * 10000;
+      const expense = living + rent + loanPay + premium + yearly;
+      const surplus = income - expense;
+      const monthlyExp = expense / 12, monthlyInc = income / 12;
+      // 資產負債（萬）
+      const cash = m('cf_cash'), deposit = m('cf_deposit'), invest = m('cf_invest'), cashValue = m('cf_cashValue');
+      const realEstate = m('cf_realEstate'), otherAsset = m('cf_otherAsset');
+      const shortDebt = m('cf_shortDebt'), mortgage = m('cf_mortgage'), otherDebt = m('cf_otherDebt');
+      const liquid = cash + deposit;
+      const assets = liquid + invest + cashValue + realEstate + otherAsset;
+      const debts = shortDebt + mortgage + otherDebt;
+      const netWorth = assets - debts;
+
+      // 指標
+      // 指標先四捨五入到畫面顯示的位數再判斷，避免顯示 30% 卻評為「留意」
+      const round = (x, d) => Number.isFinite(x) ? Math.round(x * 10 ** d) / 10 ** d : x;
+      const emerg = monthlyExp > 0 ? round(liquid * 10000 / monthlyExp, 1) : Infinity;
+      const saveRate = income > 0 ? round(surplus / income, 2) : 0;
+      const debtRatio = assets > 0 ? round(debts / assets * 100, 0) : (debts > 0 ? Infinity : 0);
+      const currentRatio = shortDebt > 0 ? round(liquid / shortDebt * 100, 0) : Infinity;
+      const dsr = monthlyInc > 0 ? round((m('cf_loanPay') + m('cf_rent')) / monthlyInc, 2) : 0;   // 房貸或房租＋其他貸款
+      const premRate = income > 0 ? round(premium / income, 2) : 0;
+      const pct = x => Number.isFinite(x) ? Math.round(x * 100) + '%' : '—';
+      const GOOD = ['良好', 'text-emerald-700'], WARN = ['留意', 'text-amber-700'], BAD = ['需調整', 'text-rose-700 font-bold'];
+      const ratios = [
+        { name: '緊急預備金', how: '（現金、活存＋定存、短期債券基金）÷ 每月支出', std: `${CF.EMERG_MONTHS} 個月以上`,
+          val: Number.isFinite(emerg) ? `${emerg.toFixed(1)} 個月` : '無支出',
+          st: emerg >= CF.EMERG_MONTHS ? GOOD : emerg >= CF.EMERG_MIN ? WARN : BAD },
+        { name: '儲蓄率', how: '（年收入 − 年支出）÷ 年收入', std: `${CF.SAVE_OK * 100}% 以上`, val: income > 0 ? pct(saveRate) : '—',
+          st: saveRate >= CF.SAVE_OK ? GOOD : saveRate >= CF.SAVE_LOW ? WARN : BAD },
+        { name: '負債比率', how: '總負債 ÷ 總資產', std: `${CF.DEBT_OK}% 以下`, val: Number.isFinite(debtRatio) ? Math.round(debtRatio) + '%' : '—',
+          st: debtRatio <= CF.DEBT_OK ? GOOD : debtRatio <= CF.DEBT_HIGH ? WARN : BAD },
+        { name: '流動比率', how: '流動資產 ÷ 一年內要還的負債', std: `${CF.CURRENT_OK}% 以上`, val: Number.isFinite(currentRatio) ? Math.round(currentRatio) + '%' : '無短期負債',
+          st: currentRatio >= CF.CURRENT_OK ? GOOD : BAD },
+        { name: '居住與還款負擔', how: '每月（房租＋房貸、車貸、信貸還款）÷ 每月收入', std: '1/3（33%）以下', val: monthlyInc > 0 ? pct(dsr) : '—',
+          st: dsr <= CF.DSR_OK ? GOOD : BAD },
+        { name: '保費負擔', how: '全家年繳保費 ÷ 年收入', std: `${CF.PREM_OK * 100}% 以下`, val: income > 0 ? pct(premRate) : '—',
+          st: premRate <= CF.PREM_OK ? GOOD : BAD }
+      ];
+      const badCount = ratios.filter(r => r.st !== GOOD).length;
+
+      // 建議
+      const adv = [];
+      const needEmerg = Math.max(0, CF.EMERG_MONTHS * monthlyExp / 10000 - liquid);
+      if (surplus < 0) {
+        const items = [['生活支出', living], ['房租', rent], ['貸款還款', loanPay], ['保費', premium], ['其他年度支出', yearly]].filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]);
+        adv.push(`<strong>收支赤字：</strong>每年入不敷出 ${wan(-surplus)} 萬（每月約 ${fmt(-surplus / 12)} 元）。最大的三項支出是${items.slice(0, 3).map(x => `${x[0]} ${wan(x[1])} 萬`).join('、')}，先從這幾項找可以減少或延後的部分，否則存款會逐年減少。`);
+      } else if (saveRate < CF.SAVE_OK && income > 0) {
+        adv.push(`<strong>儲蓄率偏低：</strong>目前 ${pct(saveRate)}，要達到 ${CF.SAVE_OK * 100}% 每月需再多存約 ${fmt((CF.SAVE_OK * income - surplus) / 12)} 元。可以在發薪日先自動轉存，再用剩下的錢生活。`);
+      }
+      if (emerg < CF.EMERG_MONTHS) adv.push(`<strong>緊急預備金不足：</strong>目前約 ${Number.isFinite(emerg) ? emerg.toFixed(1) : '--'} 個月，${CF.EMERG_MONTHS} 個月需 ${wan(CF.EMERG_MONTHS * monthlyExp)} 萬，還差約 ${fmt(needEmerg)} 萬。補足前先別增加股票或基金等波動較大的投資。`);
+      else if (emerg > 24 && invest + cashValue < liquid) adv.push(`<strong>現金偏多：</strong>現金與定存約可支應 ${emerg.toFixed(0)} 個月，保留 ${CF.EMERG_MONTHS} 個月（約 ${wan(CF.EMERG_MONTHS * monthlyExp)} 萬）後，其餘可依退休目標規劃長期投資。`);
+      if (Number.isFinite(currentRatio) && currentRatio < CF.CURRENT_OK) adv.push(`<strong>短期負債高於流動資產：</strong>一年內要還 ${fmt(shortDebt)} 萬，現金與定存只有 ${fmt(liquid)} 萬。先和債權人協調延長期限，或以較低利率的長期貸款轉貸，避免被迫賣出投資。`);
+      if (debtRatio > CF.DEBT_OK) adv.push(`<strong>負債比率 ${Number.isFinite(debtRatio) ? Math.round(debtRatio) + '%' : '偏高'}：</strong>${debtRatio > CF.DEBT_HIGH ? '負債已超過資產的一半，' : ''}優先償還利率最高的負債（信貸、卡債、親友借款），房貸可評估轉貸降息。剛買房的家庭比率較高屬正常，重點是逐年下降。`);
+      if (dsr > CF.DSR_OK) adv.push(`<strong>還款負擔偏重：</strong>房租與貸款占每月收入 ${pct(dsr)}，超過 1/3。可評估延長房貸年期、轉貸降息，或在換屋前先降低貸款成數；收入若只靠一人，建議以壽險或房貸壽險保障還款能力。`);
+      if (premRate > CF.PREM_OK) adv.push(`<strong>保費負擔偏重：</strong>全家保費占年收入 ${pct(premRate)}（約 ${wan(premium)} 萬）。逐張檢視保單，保障型需求可改用定期壽險、定期醫療降低保費；儲蓄型保單解約前先比較解約金與已繳保費。`);
+      if (premium === 0 && income > 0) adv.push('<strong>沒有填保費：</strong>如果家中沒有任何壽險、醫療或失能保障，收入中斷時家人的生活費與房貸可能沒有著落，建議先補足基本保障。');
+      const r = globalRetireData;
+      if (surplus > 0 && r && r.gap > 0 && r.extraMonthly > 0) {
+        adv.push(surplus / 12 >= r.extraMonthly
+          ? `<strong>對照退休缺口：</strong>第1頁試算每月需再加存 ${fmt(r.extraMonthly)} 元，目前每月結餘約 ${fmt(surplus / 12)} 元，足以支應，建議每月固定撥入退休帳戶。`
+          : `<strong>對照退休缺口：</strong>第1頁試算每月需再加存 ${fmt(r.extraMonthly)} 元，但每月結餘只有約 ${fmt(surplus / 12)} 元，需同時調整支出、延後退休或降低退休後生活費。`);
+      } else if (surplus > 0 && !adv.length) {
+        adv.push(`<strong>財務體質良好：</strong>每月結餘約 ${fmt(surplus / 12)} 元，可依第1頁的退休目標與子女教育、換屋等計畫分配。`);
+      }
+      adv.push('每年或收入、家庭成員、房貸有變動時，重新整理一次收支表與資產負債表。');
+
+      // 畫面
+      const sur = document.getElementById('cfSurplus');
+      sur.innerText = `${surplus < 0 ? '−' : ''}${fmt(Math.abs(surplus) / 12)} 元`;
+      sur.className = 'text-2xl font-extrabold mt-0.5 ' + (surplus < 0 ? 'text-rose-300' : saveRate >= CF.SAVE_OK ? 'text-emerald-300' : 'text-amber-300');
+      document.getElementById('cfSurplusSub').innerText = `全年 ${surplus < 0 ? '−' : ''}${wan(Math.abs(surplus))} 萬，儲蓄率 ${income > 0 ? pct(saveRate) : '--'}`;
+      document.getElementById('cfNetWorth').innerText = `${fmt(netWorth)} 萬`;
+      document.getElementById('cfNetWorthSub').innerText = `資產 ${fmt(assets)} 萬 − 負債 ${fmt(debts)} 萬`;
+      document.getElementById('cfBadCount').innerText = badCount;
+      document.getElementById('cfRatioBody').innerHTML = ratios.map(x =>
+        `<tr class="${x.st === BAD ? 'bg-rose-50/60' : ''}"><td class="p-2 font-bold whitespace-nowrap">${x.name}</td><td class="p-2 text-slate-600">${x.how}</td><td class="p-2 whitespace-nowrap">${x.std}</td><td class="p-2 text-right font-bold whitespace-nowrap">${x.val}</td><td class="p-2 whitespace-nowrap ${x.st[1]}">${x.st[0]}</td></tr>`).join('');
+      const pctOf = (v, base) => base > 0 ? Math.round(v / base * 100) + '%' : '';
+      const row = (name, v, base, cls = '') => `<tr class="${cls}"><td class="p-2 whitespace-nowrap">${name}</td><td class="p-2 text-right">${(v / 10000).toLocaleString(undefined, { maximumFractionDigits: 1 })}</td><td class="p-2 text-right text-slate-500">${pctOf(v, base)}</td></tr>`;
+      const head = t => `<tr class="bg-slate-50"><td class="p-2 font-bold" colspan="3">${t}</td></tr>`;
+      document.getElementById('cfIncomeBody').innerHTML =
+        head('收入') + [['本人薪資', salary], ['配偶薪資', spSalary], ['年終、獎金、分紅', bonus], ['租金、利息、股利', otherInc]].filter(x => x[1] > 0).map(x => row(x[0], x[1], income)).join('')
+        + row('收入合計', income, income, 'font-bold')
+        + head('支出') + [['生活支出', living], ['房租', rent], ['貸款還款', loanPay], ['保費', premium], ['其他年度支出', yearly]].filter(x => x[1] > 0).map(x => row(x[0], x[1], income)).join('')
+        + row('支出合計', expense, income, 'font-bold')
+        + row(surplus < 0 ? '年度赤字' : '年度結餘', surplus, income, 'font-bold ' + (surplus < 0 ? 'text-rose-700 bg-rose-50/60' : 'text-emerald-700'));
+      const rowW = (name, v, cls = '') => row(name, v * 10000, assets * 10000, cls);
+      document.getElementById('cfBalanceBody').innerHTML =
+        head('資產') + [['現金、活期存款', cash], ['定存、短期債券基金', deposit], ['股票、基金、ETF', invest], ['保單價值準備金', cashValue], ['不動產', realEstate], ['其他資產', otherAsset]].filter(x => x[1] > 0).map(x => rowW(x[0], x[1])).join('')
+        + rowW('資產合計', assets, 'font-bold')
+        + head('負債') + [['一年內要還的負債', shortDebt], ['房貸', mortgage], ['其他長期負債', otherDebt]].filter(x => x[1] > 0).map(x => rowW(x[0], x[1])).join('')
+        + rowW('負債合計', debts, 'font-bold')
+        + rowW('淨資產', netWorth, 'font-bold ' + (netWorth < 0 ? 'text-rose-700' : 'text-blue-800'));
+      document.getElementById('cfAdvice').innerHTML = adv.map(x => `<li>${x}</li>`).join('');
+
+      globalCashData = { surplus, saveRate, netWorth, emerg, debtRatio, dsr, premRate, badCount, bad: ratios.filter(x => x.st === BAD).map(x => x.name) };
+    }
+    // 從第1頁（月薪、生活費）與第3頁（不動產市價、房貸）帶入
+    function importCashFlow() {
+      const set = (id, v) => { document.getElementById(id + '_num').value = Math.round(v); };
+      set('cf_salary', val('salary_num', 0));
+      set('cf_living', val('expense_num', 0));
+      set('cf_realEstate', val('reMarket_num', 0));
+      set('cf_mortgage', val('reLoan_num', 0));
+      calcCash();
+      storeMsg('✓ 已帶入第1、3頁的數字，請確認配偶收入、獎金與存款');
+    }
+    document.querySelectorAll('#tab-cash input').forEach(el => el.addEventListener('input', calcCash));
+
     function initFieldHelp() {
       const created = [];
       Object.entries(FIELD_HELP).forEach(([id, text]) => {
@@ -2714,6 +2952,7 @@
       'tab-tax': ['finAsset','reMarket','reRatio','reLoan','loanLtv','claim1030Toggle','maritalPct','spouseWealth','hasSpouse','kidsCount','minorYears','parentsCount','siblingsCount','disabledCount','lifeIns','lifePremium','giftYears'],
       'tab-stock': ['skOtherNet','skSaleNet','skInsSal','skOtherBonus','skType','skMarket','skShares','skStrike','skFmv','skSell','skYear','skHeld2','skNhiBonus','dvShares','dvCash','dvStock','dvTimes','osGain','osDiv','osTaxPaid'],
       'tab-family': ['biz_type','biz_book','biz_reBook','biz_reAssess','biz_stkBook','biz_stkMkt','biz_listedVal','biz_pct','biz_mkt','biz_giftYears','biz_donors','farm_val','farm_keep','tr_type','tr_amt','tr_years','tr_rate','tr_otherGift','os_resident','os_fin','os_inTab3','os_re','os_us','os_fx','os_forTax','os_lowTax','os_ctrl','os_fam','os_self','os_subst','os_cfcProfit','os_income','os_netInc','os_regTax'],
+      'tab-cash': ['cf_salary','cf_spSalary','cf_bonus','cf_otherInc','cf_living','cf_rent','cf_loanPay','cf_premium','cf_yearly','cf_cash','cf_deposit','cf_invest','cf_cashValue','cf_realEstate','cf_otherAsset','cf_shortDebt','cf_mortgage','cf_otherDebt'],
       'tab-tax-re': ['reCost','rePrice','reFee','reFeeAuto','reLandGain','reLandTax','reYears','reResident','reSelfUse','reExcept','rePre2016','reAssess','reHeirYears','reCpi','reHeirSelfUse']
     };
     const escapeHtml = t => String(t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -2758,7 +2997,7 @@
       document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('hidden'));
       savedAnimation = Chart.defaults.animation;
       Chart.defaults.animation = false;
-      calcRetire(); calcRisk(); calcTax(); calcStock(); calcFamily(); calcCheck();
+      calcRetire(); calcRisk(); calcTax(); calcStock(); calcFamily(); calcCheck(); calcCash();
       renderPrintSummary();
       // A4 可列印寬度約 700px；固定尺寸重畫，避免列印版面寬度與畫面不同時圖表空白
       retireChartInstance.resize(700, 280);
@@ -2817,6 +3056,8 @@
       if (f.bizHolding > 0) steps.push(`家族企業股權（稅法評價約 ${fmt(f.bizHolding)} 萬）：留到繼承約增加遺產稅 ${fmt(f.bizEstateTax)} 萬；分 ${f.giftYears} 年贈與約繳贈與稅 ${fmt(f.bizGiftTax)} 萬。請會計師確認股權淨值與接班安排。`);
       if (f.osExtra > 0) steps.push(`境外資產：預估增加遺產稅（含外國遺產稅）約 ${fmt(f.osExtra)} 萬，並確認海外繼承程序與申報。`);
       if (f.amtExtra > 0) steps.push(`海外所得與 CFC：預估需補繳最低稅負約 ${fmt(f.amtExtra)} 萬。`);
+      const cf = globalCashData;
+      if (cf.bad && cf.bad.length) steps.push(`家庭財務健診：每月${cf.surplus < 0 ? `赤字約 <strong>${fmt(-cf.surplus / 12)} 元</strong>` : `結餘約 ${fmt(cf.surplus / 12)} 元`}，需要調整的指標為「${cf.bad.join('」、「')}」。`);
       steps.push('每年或家庭狀況改變（換工作、結婚生子、退休、健康變化）時，重新檢視一次本試算。');
 
       document.getElementById('printSummaryBody').innerHTML = `
@@ -2860,7 +3101,7 @@
       applyCoupleUI();
       applyStockUI();
       applyBizUI();
-      calcRetire(); calcTax(); calcStock(); calcFamily(); calcCheck();
+      calcRetire(); calcTax(); calcStock(); calcFamily(); calcCheck(); calcCash();
       const active = document.querySelector('.tab-btn.active');
       switchTab(active ? active.id.replace('btn-', '') : 'retire');
     }
