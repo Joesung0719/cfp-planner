@@ -50,6 +50,10 @@
       .print-page1 { break-after: page; page-break-after: always; font-size: 14.5px; line-height: 1.45; }
       .print-page1 .print-table { font-size: 13.5px; }
       .print-page1 .print-table th, .print-page1 .print-table td { padding: 5px 8px; }
+      .topic-page { break-after: page; page-break-after: always; font-size: 14.5px; line-height: 1.5; }
+      .topic-page .print-table { font-size: 13.5px; }
+      .topic-page .print-table th, .topic-page .print-table td { padding: 5px 8px; }
+      body.print-simple .tab-section, body.print-simple .print-appendix, body.print-simple .print-summary, body.print-simple .print-topics { display: none !important; }
       .print-skip, .tab-section.print-skip, .tab-section.print-excluded { display: none !important; }   /* 依身分未納入報告的分頁 */
     }
     .nav-group { display:flex; align-items:center; gap:0.25rem; flex-shrink:0; }
@@ -134,7 +138,8 @@
         <label class="flex items-center gap-1.5 text-slate-600 cursor-pointer select-none whitespace-nowrap">
           <input type="checkbox" id="showAllHelp" class="w-4 h-4 accent-amber-500"> 顯示全部欄位說明
         </label>
-        <button onclick="printReport()" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold px-4 py-1.5 rounded-lg transition whitespace-nowrap">📄 匯出 PDF 報告</button>
+        <button onclick="printReport('simple')" class="bg-white hover:bg-slate-100 text-slate-800 border border-slate-400 font-semibold px-4 py-1.5 rounded-lg transition whitespace-nowrap" title="第 1 頁重點摘要＋結論與建議，共約 2～3 頁">📄 簡易版 PDF</button>
+        <button onclick="printReport('detail')" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold px-4 py-1.5 rounded-lg transition whitespace-nowrap" title="重點摘要＋每個主題一頁說明＋附錄（假設、公式、待確認），適合列印給客戶">📄 詳細版 PDF（列印用）</button>
       </div>
     </div>
 
@@ -145,10 +150,13 @@
     <!-- ==================== 列印用：第 1 頁「一圖兩表三文字」精簡摘要 ==================== -->
     <section id="printPage1" class="print-only print-page1 px-1 pt-2"></section>
 
-    <!-- ==================== 列印用：附錄（參考與驗算用）==================== -->
+    <!-- ==================== 列印用（詳細版）：每個主題一頁的說明 ==================== -->
+    <section id="printTopics" class="print-only print-topics px-1"></section>
+
+    <!-- ==================== 列印用（詳細版）：附錄（假設、公式、依據）==================== -->
     <section class="print-only print-appendix px-1 pt-3">
       <h2 class="text-lg font-bold text-white bg-slate-700 rounded px-3 py-1.5 mb-2">附錄　計算依據與驗算細節</h2>
-      <p class="text-[12px] text-slate-700 mb-2">第 1 頁已是完整的重點摘要；以下各頁是計算依據與驗算細節，供您或專業人員對照查核，不需要逐頁閱讀。</p>
+      <p class="text-[12px] text-slate-700 mb-2">第 1 頁是重點摘要，前面各頁逐一說明每個主題；以下是計算用的假設、公式、法規依據與待確認事項，供您或專業人員對照查核，不需要逐頁閱讀。</p>
       <p id="printToc" class="text-[11px] text-slate-500 mb-2">本報告共八部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務；六、傳承完整度檢查；七、家族企業股權、信託與境外資產；八、家庭財務健診。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
     </section>
 
@@ -2250,7 +2258,7 @@
       document.getElementById('pkRow2Calc').innerHTML = plannedTax > 0
         ? `市價 ${reMarket.toLocaleString()} 萬 × ${Math.round(loanLtv * 100)}% − 原貸款 ${reLoan.toLocaleString()} 萬，約可再貸 <strong>${loanable.toLocaleString()} 萬</strong>，${loanEnough ? '足以' : '<strong class="text-rose-600">不足以</strong>'}支應稅款 ${plannedTax} 萬。借 ${plannedTax} 萬（年利率2.5%、20年）每月約 <strong>${monthlyPayment.toLocaleString()} 元</strong> 本息。`
         : '無須申辦繳稅融資。';
-      globalTaxData = { plannedTax, plannedNet, taxRaw, savedTotal, isCashSufficient, cashAvail, loanable, loanEnough, lifeFace };
+      globalTaxData = { plannedTax, plannedNet, taxRaw, savedTotal, isCashSufficient, cashAvail, loanable, loanEnough, lifeFace, plannedGross, totalDeductions };
       globalTaxData.re = calcRealEstate(plannedGross - totalDeductions);
       globalTaxData.netRaw = plannedGross - totalDeductions;   // 未截斷的課稅遺產淨額，供第5、6頁計算增加的遺產稅   // 未截斷為0的淨額，扣除額有剩時可吸收此物件
       const rate2 = document.getElementById('pkRow2Rate');
@@ -3156,7 +3164,7 @@
         + rowW('淨資產', netWorth, 'font-bold ' + (netWorth < 0 ? 'text-rose-700' : 'text-blue-800'));
       document.getElementById('cfAdvice').innerHTML = adv.map(x => `<li>${x}</li>`).join('');
 
-      globalCashData = { surplus, saveRate, netWorth, emerg, debtRatio, dsr, premRate, badCount, bad: ratios.filter(x => x.st === BAD).map(x => x.name) };
+      globalCashData = { income, expense, surplus, saveRate, netWorth, emerg, debtRatio, dsr, premRate, badCount, bad: ratios.filter(x => x.st === BAD).map(x => x.name) };
     }
     // 從第1頁（月薪、生活費）與第3頁（不動產市價、房貸）帶入
     function importCashFlow() {
@@ -3444,10 +3452,12 @@
       return v + ' ' + unit;
     }
 
+    let printMode = 'detail';   // 'simple'＝簡易版（第 1 頁＋結論）；'detail'＝詳細版（預設，Ctrl+P 也用這個）
     let printChartsBackup = null;
     let savedAnimation = null;
     function preparePrint() {
       if (printChartsBackup) return;   // 按鈕已先準備好，beforeprint 不重做
+      document.body.classList.toggle('print-simple', printMode === 'simple');
       document.documentElement.style.setProperty('--ui-size', '100%');   // 列印以標準字級量測版面，不受畫面字級影響
       const client = document.getElementById('clientName').value.trim();
       document.getElementById('printClient').innerText = client || '＿＿＿＿＿＿';
@@ -3492,6 +3502,8 @@
       document.getElementById('printToc').innerText = `身分：${careerSel.options[careerSel.selectedIndex].text}。本報告共${CN[titles.length]}部分：${titles.join('；')}。每部分先列出試算採用的假設與說明，再呈現結果與建議；最後一頁為結論與建議。金額單位除另註明外為新台幣。`;
     }
     function restoreAfterPrint() {
+      document.body.classList.remove('print-simple');
+      printMode = 'detail';
       applyFont();
       if (!printChartsBackup) return;
       Chart.defaults.animation = savedAnimation;
@@ -3502,6 +3514,7 @@
     function renderPrintSummary() {
       document.getElementById('printSummaryBody').innerHTML = buildSummary(includedTabs(), true);
       document.getElementById('printPage1').innerHTML = buildPage1(includedTabs());
+      document.getElementById('printTopics').innerHTML = printMode === 'simple' ? '' : buildTopicPages(includedTabs());
       renderPrintConclusion();
     }
     // ===== 結論與建議：由計算結果依固定規則產生（最後一頁），每條都附上依據的數字 =====
@@ -3625,11 +3638,96 @@
       return `<h2 class="text-lg font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">重點摘要</h2>
         ${text1}<div style="margin:4px 0 8px">${chart}</div>${statusTable}<div style="height:10px"></div>${planTable}${text2}${text3}`;
     }
+
+    // ===== 詳細版：每個主題一頁。圖表只在能回答問題時才放；只有單一結論的主題用狀態文字，不硬湊圖。
+    // 所有數字取自既有試算結果，這裡只做版面，不做新的法規計算（唯一的運算是兩個已列出數字相減，並標明為「差額」）。
+    function stackedBars(groups, unit) {
+      const W = 700, rowH = 62, H = groups.length * rowH + 10, L = 150, R = 20;
+      const max = Math.max(1, ...groups.map(g => g.segs.reduce((a, x) => a + Math.max(0, x.v), 0)));
+      const sx = v => (W - L - R) * v / max;
+      let out = '', legend = '';
+      const seen = {};
+      groups.forEach((g, i) => {
+        const y = 8 + i * rowH; let x = L;
+        out += `<text x="${L - 8}" y="${y + 29}" text-anchor="end" font-size="16" font-weight="700" fill="#0f172a">${g.label}</text>`;
+        g.segs.filter(sg => sg.v > 0).forEach(sg => {
+          const w = sx(sg.v);
+          out += `<rect x="${x.toFixed(1)}" y="${y}" width="${w.toFixed(1)}" height="40" fill="${sg.c}"/>`;
+          if (!seen[sg.name]) { seen[sg.name] = 1; legend += `<span style="margin-right:14px;white-space:nowrap"><span style="color:${sg.c}">■</span> ${sg.name}</span>`; }
+          x += w;
+        });
+        out += `<text x="${Math.min(x + 6, W - 4)}" y="${y + 28}" font-size="16" font-weight="700" fill="#0f172a" ${x + 6 > W - 80 ? 'text-anchor="end" fill="#fff"' : ''}>${g.total}${unit || ''}</text>`;
+      });
+      return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${groups.map(g => g.label + g.total).join('、')}" style="max-height:60mm">${out}</svg><div class="text-[13px]" style="margin-top:2px">${legend}</div>`;
+    }
+    function buildTopicPages(inc) {
+      const r = globalRetireData, k = globalRiskData, t = globalTaxData, c = globalCheckData, cf = globalCashData, s = globalStockData, f = globalFamilyData;
+      const { status } = conclusionData(inc);
+      const st = name => { const x = status.find(y => y[0] === name); return x ? `<span style="color:${CONCL_COLOR[x[3]]};font-weight:800">${CONCL_LABEL[x[3]]}</span>` : ''; };
+      const CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+      const pages = [];
+      const table = rows => `<table class="print-table bg-white" style="margin-top:8px"><tbody>${rows.map(([a, b]) => `<tr><th style="width:42%">${a}</th><td style="font-weight:700">${b}</td></tr>`).join('')}</tbody></table>`;
+      const page = (title, badge, lead, chart, rows, why) => pages.push(`<div class="topic-page"><h2 class="text-lg font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-2">${CN[pages.length + 1]}、${title}　${badge}</h2>
+        <p style="font-size:17px;font-weight:600;margin:8px 0">${lead}</p>${chart ? `<div style="margin:6px 0">${chart}</div>` : ''}${table(rows)}<p style="margin:10px 0 0"><strong>為什麼這樣算：</strong>${why}</p></div>`);
+      if (inc.has('retire')) {
+        const pension = r.p1Total + r.p2Monthly + (r.couple ? r.spouseMonthly : 0);
+        const segs = [{ name: r.p1Title.replace(/^第一層：/, ''), v: r.p1Total, c: '#1d4ed8' }, { name: r.p2Title.replace(/^第二層：/, ''), v: r.p2Monthly, c: '#0f766e' }];
+        if (r.couple) segs.push({ name: '配偶退休金', v: r.spouseMonthly, c: '#7c3aed' });
+        const chart = `<div class="font-bold text-[15px]">退休首年每月：需要多少、收入多少</div>` + stackedBars([
+          { label: '每月需要', segs: [{ name: '退休後生活費', v: r.targetMonthly, c: '#b45309' }], total: fmt(r.targetMonthly), },
+          { label: '每月收入', segs, total: fmt(pension) }], ' 元');
+        page('退休金：夠不夠用', st('退休金'),
+          r.gap > 0 ? `照目前的準備，退休資產不足 <span style="color:#b91c1c">${wan(r.gap)} 萬</span>，每月需再加存約 ${fmt(r.extraMonthly)} 元。` : `照目前的準備，退休資產<span style="color:#047857">足以支撐到 ${r.lifeAge} 歲</span>。`,
+          chart, [['退休首年目標月生活費', `${fmt(r.targetMonthly)} 元`], ['每月年金與退休金合計', `${fmt(pension)} 元`], ['每月差額（由退休資產支應）', `${fmt(Math.max(0, r.targetMonthly - pension))} 元`], ['退休時需備資產', `${wan(r.need)} 萬`], ['預估可動用資產', `${wan(r.startBal)} 萬`], ['結果', r.gap > 0 ? `缺口 ${wan(r.gap)} 萬` : `無缺口，可支撐至 ${r.lifeAge} 歲`]],
+          '退休後每月的生活費，先由社會保險年金和職業退休金支應，不足的部分靠退休時累積的資產補。需備金額是把退休後每年的差額，依通膨與退休後報酬折算到退休時點。各項假設與公式見附錄。');
+      }
+      if (inc.has('risk')) {
+        if (k.isLtc) page('長照風險：資產會不會被吃掉', st('長照風險'),
+          k.shockExhaust !== null ? `若 ${k.ltcStart} 歲起需要長照，資產會在 <span style="color:#b91c1c">${k.shockExhaust} 歲見底</span>。` : `若 ${k.ltcStart} 歲起需要長照，資產撐得住，但會被侵蝕約 <span style="color:#b45309">${wan(k.ltcPV)} 萬</span>。`,
+          buildPage1Chart().replace('max-height:52mm', 'max-height:78mm'),
+          [['情境', `${k.ltcStart} 歲起照護 ${k.ltcYears} 年`], ['發生時每月費用', `${fmt(k.ltcCostAtStart)} 元`], ['扣除理賠後月缺口', `${fmt(k.firstNetGap)} 元`], ['長照準備金（退休時點）', `${wan(k.ltcPV)} 萬`]],
+          '藍線是照目前準備、健康退休的資產；紅線是在設定的年齡開始長期照護、每月多出照護費用後的資產。兩線的落差就是長照準備金。政府長照補助僅供參考，未自動計入。');
+        else page('長照風險', '', '目前未啟動長照情境，本報告沒有計入長照費用。', '', [['情境', '未啟動']], '長照情境需在試算頁啟用後才會計入；啟用後可看到資產軌跡與準備金。');
+      }
+      if (inc.has('tax')) {
+        const ded = t.totalDeductions, gross = t.plannedGross;
+        const chart = `<div class="font-bold text-[15px]">遺產總額與可扣除金額（萬）</div>` + stackedBars([
+          { label: '遺產總額', segs: [{ name: '遺產總額', v: gross, c: '#047857' }], total: gross.toLocaleString() },
+          { label: '免稅額與扣除額', segs: [{ name: '免稅額與扣除額', v: ded, c: '#64748b' }], total: ded.toLocaleString() }], ' 萬');
+        page('遺產稅：要繳多少、錢夠不夠', st('遺產稅'),
+          t.plannedTax > 0 ? `預估應納遺產稅 <span style="color:#b45309">${t.plannedTax.toLocaleString()} 萬</span>，${t.isCashSufficient ? '繳稅現金充足。' : '<span style="color:#b91c1c">繳稅現金不足</span>。'}` : '目前預估<span style="color:#047857">沒有應納遺產稅</span>：遺產未超過免稅額與扣除額。',
+          chart, [['遺產總額（規劃後）', `${gross.toLocaleString()} 萬`], ['免稅額與各項扣除額', `${ded.toLocaleString()} 萬`], ['課稅遺產淨額', `${t.plannedNet.toLocaleString()} 萬`], ['應納遺產稅', `${t.plannedTax.toLocaleString()} 萬`], ['規劃後節省', `${t.savedTotal.toLocaleString()} 萬`], ['可用現金＋保險金', `${t.cashAvail.toLocaleString()} 萬`], ['房地合一稅（現在出售）', t.re.oldRegime ? '舊制另計' : `${(+t.re.nowTax.toFixed(1)).toLocaleString()} 萬`], ['不動產傳承方式', `${t.re.best}最有利`]],
+          '依 115 年遺產及贈與稅法，遺產總額扣掉免稅額、各項扣除額（含配偶剩餘財產差額分配請求權）後才是課稅遺產淨額。不動產以課稅現值計算，與市價有差距。計算過程與房地合一稅比較見附錄。');
+      }
+      if (inc.has('check') && c.risks) page('傳承安排完整度', st('傳承完整度'),
+        `傳承安排完整度 <strong>${c.score}%</strong>，尚有 ${c.risks.length} 項未涵蓋。`, '',
+        [['完整度', `${c.score}%`], ['尚未涵蓋項目數', `${c.risks.length} 項`], ...c.risks.slice(0, 5).map((x, i) => [`優先項目 ${i + 1}`, x.title])],
+        '依資產類型與家庭狀況檢查常見的傳承缺漏（例如遺囑、不動產安排、保險受益人）。分數越低，家人日後需要自行處理的事越多；完整項目見附錄。');
+      if (inc.has('cash')) {
+        const chart = `<div class="font-bold text-[15px]">每年收入與支出（萬）</div>` + stackedBars([
+          { label: '收入', segs: [{ name: '收入', v: cf.income, c: '#0f766e' }], total: wan(cf.income) },
+          { label: '支出', segs: [{ name: '支出', v: cf.expense, c: '#b45309' }], total: wan(cf.expense) }], ' 萬');
+        page('家庭財務健診', st('家庭財務'),
+          cf.surplus < 0 ? `每月入不敷出約 <span style="color:#b91c1c">${fmt(-cf.surplus / 12)} 元</span>。` : `每月結餘約 <span style="color:#047857">${fmt(cf.surplus / 12)} 元</span>，儲蓄率 ${Math.round(cf.saveRate * 100)}%。`,
+          chart, [['每月結餘', `${cf.surplus < 0 ? '−' : ''}${fmt(Math.abs(cf.surplus) / 12)} 元`], ['儲蓄率', `${Math.round(cf.saveRate * 100)}%`], ['緊急預備金', isFinite(cf.emerg) ? `${cf.emerg.toFixed(1)} 個月` : '—'], ['淨資產', `${fmt(cf.netWorth)} 萬`], ['需調整的指標', cf.bad && cf.bad.length ? cf.bad.join('、') : '無']],
+          '收入扣掉支出就是能存下來的錢，也是退休缺口與長照準備能否靠自己補起來的基礎。緊急預備金是現金類資產可支付幾個月的支出。收支表與資產負債表見附錄。');
+      }
+      if (inc.has('stock') && s.best) page('員工股票與股利稅', '',
+        `稅後淨額最高的方案是「${s.best.name}」。`, '',
+        [['取得方式', s.typeName], ['員工股票應稅所得', `${fmt(s.income)} 元`], ['取得年度增加所得稅', `${fmt(s.taxA)} 元`], ['稅後淨額最高方案', `${s.best.name}（${fmt(s.best.net)} 元）`], ['最低稅負補繳', s.amtDue > 0 ? `${fmt(s.amtDue)} 元` : '無']],
+        '員工股票在取得、持有、出售的不同時點課稅，不同方案稅後金額不同；這裡列出稅後淨額最高者。各方案的比較與法令依據見附錄；部分規定仍待確認。');
+      const allAdv = pfChecked('pf_printAdv');
+      if (inc.has('family') && ((allAdv || pfChecked('pf_hasBiz')) && f.bizHolding > 0 || (allAdv || pfChecked('pf_hasOverseas')) && f.osExtra > 0)) page('家族企業、信託與境外資產', '',
+        '這些資產會影響遺產稅與最低稅負，建議與會計師確認後再安排。', '',
+        [...((allAdv || pfChecked('pf_hasBiz')) && f.bizHolding > 0 ? [['家族企業股權（稅法評價）', `${fmt(f.bizHolding)} 萬`], ['留到繼承增加的遺產稅', `${fmt(f.bizEstateTax)} 萬`]] : []), ...((allAdv || pfChecked('pf_hasOverseas')) && f.osExtra > 0 ? [['境外資產增加的遺產稅（含外國遺產稅）', `${fmt(f.osExtra)} 萬`]] : [])],
+        '依資產類型概估對遺產稅、贈與稅與最低稅負的影響，屬概估；詳細假設與待確認事項見附錄。');
+      return pages.join('');
+    }
     function renderPrintConclusion() {
       const inc = includedTabs();
       const CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
       const parts = PRINT_HEADS.filter(([key]) => inc.has(key === 're' ? 'tax' : key)).length;
-      document.getElementById('printConclusionHead').textContent = `${CN[parts + 1] || ''}、結論與建議（完整版）`;
+      document.getElementById('printConclusionHead').textContent = (printMode === 'simple' ? '結論與建議' : `${CN[parts + 1] || ''}、結論與建議（完整版）`);
       document.getElementById('printConclusionBody').innerHTML = buildConclusion(inc)
         + `<div class="mt-4 font-bold text-sm text-slate-800">待確認事項（共 ${LAW_META.PENDING.length} 項，法規數字更新日 ${LAW_META.UPDATED}）</div><ol class="list-decimal pl-5 text-[11px] text-slate-700 space-y-0.5 mt-1">${LAW_META.PENDING.map(t => `<li>${t}</li>`).join('')}</ol>`;
     }
@@ -3814,7 +3912,9 @@
     }
 
     // 按鈕列印：先畫好三頁與圖表，等瀏覽器繪製完成再開列印視窗（Safari/iPad 不一定觸發 beforeprint）
-    function printReport() {
+    function printReport(mode) {
+      printMode = mode === 'simple' ? 'simple' : 'detail';
+      if (printChartsBackup) { printChartsBackup = null; }   // 重新依所選版本準備
       preparePrint();
       requestAnimationFrame(() => setTimeout(() => {
         window.print();
