@@ -3385,7 +3385,9 @@
       const [stage] = lifeStage(val('age_num', 38));
       const careerSel = document.getElementById('career');
       document.getElementById('ovProfile').innerText = `${careerSel.options[careerSel.selectedIndex].text}・${val('age_num', 38)} 歲・${stage}`;
-      document.getElementById('overviewBody').innerHTML = buildSummary(includedTabs(), false);
+      const inc = includedTabs();
+      document.getElementById('overviewBody').innerHTML = buildSummary(inc, false)
+        + `<div class="mt-6 pt-4 border-t-2 border-amber-400"><h3 class="text-base font-bold text-slate-900 mb-2">結論與建議</h3>${buildConclusion(inc)}</div>`;
     }
     Object.keys(SHARED_MAP).forEach(pf => document.getElementById(pf).addEventListener(pf === 'pf_spouse' ? 'change' : 'input', () => {
       pushShared(pf);
