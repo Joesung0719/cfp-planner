@@ -103,11 +103,13 @@
           <button onclick="switchTab('stock')" id="btn-stock" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">4. 員工股票與股利</button>
         </div>
         <div class="nav-group" data-group="legacy"><span class="nav-group-label">傳承</span>
-          <button onclick="switchTab('check')" id="btn-check" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">5. 傳承完整度檢查</button>
-          <button onclick="switchTab('family')" id="btn-family" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">6. 股權·信託·境外</button>
+          <button onclick="switchTab('family')" id="btn-family" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">5. 股權·信託·境外</button>
         </div>
         <div class="nav-group" data-group="now"><span class="nav-group-label">現況</span>
-          <button onclick="switchTab('cash')" id="btn-cash" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">7. 家庭財務健診</button>
+          <button onclick="switchTab('cash')" id="btn-cash" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">6. 家庭財務健診</button>
+        </div>
+        <div class="nav-group" data-group="final"><span class="nav-group-label">總檢查</span>
+          <button onclick="switchTab('check')" id="btn-check" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">7. 傳承完整度檢查</button>
         </div>
         <button type="button" id="advToggle" onclick="toggleAdvanced()" class="whitespace-nowrap px-3 py-2 rounded-lg text-xs text-amber-300 hover:text-white transition" title="顯示與目前身分較無關的分頁">＋進階</button>
       </nav>
@@ -157,7 +159,7 @@
     <section class="print-only print-appendix px-1 pt-3">
       <h2 class="text-lg font-bold text-white bg-slate-700 rounded px-3 py-1.5 mb-2">附錄　計算依據與驗算細節</h2>
       <p class="text-[12px] text-slate-700 mb-2">第 1 頁是重點摘要，前面各頁逐一說明每個主題；以下是計算用的假設、公式、法規依據與待確認事項，供您或專業人員對照查核，不需要逐頁閱讀。</p>
-      <p id="printToc" class="text-[11px] text-slate-500 mb-2">本報告共八部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務；六、傳承完整度檢查；七、家族企業股權、信託與境外資產；八、家庭財務健診。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
+      <p id="printToc" class="text-[11px] text-slate-500 mb-2">本報告共八部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務；六、家族企業股權、信託與境外資產；七、家庭財務健診；八、傳承完整度檢查。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
     </section>
 
     <!-- ==================== 列印用：一頁摘要 ==================== -->
@@ -196,7 +198,7 @@
             <div class="bg-white p-2.5 rounded-lg border border-slate-200"><div class="flex justify-between items-center text-xs font-medium gap-2"><span class="whitespace-nowrap">不動產市價合計</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="pf_re" value="5000" min="0" step="50" class="pf-shared w-20 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5"><span>萬</span></div></div></div>
             <div class="bg-white p-2.5 rounded-lg border border-slate-200"><div class="flex justify-between items-center text-xs font-medium gap-2"><span class="whitespace-nowrap">房貸餘額</span><div class="flex items-center gap-1 shrink-0"><input type="number" id="pf_loan" value="1500" min="0" step="10" class="pf-shared w-20 text-right font-bold text-blue-600 border rounded px-1.5 py-0.5"><span>萬</span></div></div></div>
           </div>
-          <p class="text-[11px] text-slate-500">這裡的數字會帶入：年齡、月收入、生活支出→第1頁；存款投資、不動產、房貸、配偶與子女→第3頁；月收入、生活支出、不動產、房貸→第7頁。之後在各分頁再修改，以分頁上的數字為準（回到這頁會顯示最新數字）。</p>
+          <p class="text-[11px] text-slate-500">這裡的數字會帶入：年齡、月收入、生活支出→第1頁；存款投資、不動產、房貸、配偶與子女→第3頁；月收入、生活支出、不動產、房貸→第6頁。之後在各分頁再修改，以分頁上的數字為準（回到這頁會顯示最新數字）。</p>
         </div>
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
           <h2 class="text-sm font-bold text-slate-800">③ 您有哪些資產或關心的事？（決定要看哪些分頁）</h2>
@@ -1222,78 +1224,10 @@
         </div>
       </div>
     </div>
-    <!-- ==================== 模組 5：傳承完整度檢查 ==================== -->
-    <div id="tab-check" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-      <div class="print-only print-block lg:col-span-12">
-        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">六、傳承完整度檢查</h2>
-        <p class="text-[11px] text-slate-600 mb-2">盤點資產是否都有對應的傳承安排，並依家庭狀況檢查常見缺漏，列出尚未涵蓋的風險。</p>
-      </div>
-      <div class="lg:col-span-6 space-y-3.5 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
-        <div class="flex items-center justify-between border-b border-slate-200 pb-2 gap-2">
-          <h2 class="text-sm font-bold text-slate-800">📋 資產盤點與傳承安排</h2>
-          <button type="button" onclick="importInventory()" class="tool-btn text-[11px]" title="把第3頁的金融資產、不動產、保險、貸款，以及第6頁的公司股權、海外資產帶進來">↻ 從第3、6頁帶入金額</button>
-        </div>
-        <div class="space-y-1.5"><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">💵 現金與存款</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_cash_num" value="800" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_cash_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">📈 股票、基金、ETF</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_listed_num" value="2200" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_listed_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏠 不動產（市價）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_re_num" value="5000" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_re_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🌏 海外資產</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_overseas_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_overseas_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🛡️ 人壽保險（保額）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_ins_num" value="1000" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_ins_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏭 公司股權</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_company_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_company_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">💎 其他（車、珠寶、收藏）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_other_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_other_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏦 負債（房貸、借款、保證）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_debt_num" value="1500" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_debt_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="covered">有保險或指定資產清償</option></select></div></div></div>
-        <p class="text-[10px] text-slate-500">*右側選單填「這項資產目前用什麼方式安排給誰」。未安排的資產，過世後依民法應繼分由繼承人共同繼承。</p>
-
-        <div class="text-xs font-bold text-slate-700 pt-1">👨‍👩‍👧‍👦 家庭成員與狀況（勾選符合的）</div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5"><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_spouse" class="w-4 h-4 accent-indigo-600" checked><span>有配偶</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_minor" class="w-4 h-4 accent-indigo-600"><span>有未成年子女</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_care" class="w-4 h-4 accent-indigo-600"><span>有身心障礙或需長期照顧的家人</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_blended" class="w-4 h-4 accent-indigo-600"><span>再婚，或有前段婚姻、非婚生子女</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_noheir" class="w-4 h-4 accent-indigo-600"><span>沒有子女（將由父母、手足繼承）</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_business" class="w-4 h-4 accent-indigo-600"><span>持有家族企業股權</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_overseas" class="w-4 h-4 accent-indigo-600"><span>有海外資產，或家人住在海外、具外國籍</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_conflict" class="w-4 h-4 accent-indigo-600"><span>繼承人之間關係緊張或期望不同</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_spend" class="w-4 h-4 accent-indigo-600"><span>有繼承人理財能力不足或有負債</span></label></div>
-
-        <div class="text-xs font-bold text-slate-700 pt-1">✅ 已完成的安排（依家庭狀況顯示適用項目）</div>
-        <div class="space-y-1.5" id="chkList"><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="沒有遺囑時依民法應繼分分配；不動產會先成為全體繼承人「公同共有」，出售、貸款都要全體同意。"><input type="checkbox" id="ck_will" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已立遺囑，且符合法定方式（自書、公證、密封、代筆、口授）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="分配若侵害特留分，繼承人可主張扣減，容易引發訴訟。"><input type="checkbox" id="ck_forced" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>遺囑分配已考慮每位繼承人的特留分</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="沒有執行人時，遺囑可能找不到或無人執行，分配與報稅會拖延。"><input type="checkbox" id="ck_executor" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已指定遺囑執行人，並讓他知道遺囑存放處</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="ins" data-risk="受益人未指定或寫「法定繼承人」時，保險金可能列入遺產或分配與意願不符。"><input type="checkbox" id="ck_benef" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>保單受益人已指定，且與目前意願一致（不是只寫「法定繼承人」）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="家人不知道的帳戶與保單容易漏報，漏報遺產會被補稅並處罰鍰。"><input type="checkbox" id="ck_list" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>家人知道資產清單、帳戶、保單與保管箱的位置</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="遺產稅須在核定後繳納，現金不足時可能被迫賣房或以實物抵繳。"><input type="checkbox" id="ck_taxsrc" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已估算遺產稅，並準備好繳稅現金（稅源）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_spouse" data-risk="配偶請求權可降低遺產稅，但需於核定後一年內實際移轉，且會在配偶過世時再計入遺產。"><input type="checkbox" id="ck_regime" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已評估夫妻財產制與「剩餘財產差額分配請求權」</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_minor" data-risk="未成年子女繼承的財產由法定代理人管理，成年後一次取得，可能被不當使用。"><input type="checkbox" id="ck_guardian" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>未成年子女已安排監護人，並以信託或保險金信託管理財產</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_care" data-risk="需照顧的家人可能無法自行管理財產，長期照顧費用沒有保障。"><input type="checkbox" id="ck_care" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>需照顧的家人已安排安養信託或保險金信託</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_blended" data-risk="再婚家庭的繼承人彼此不熟悉，沒有書面安排時最容易發生爭產。"><input type="checkbox" id="ck_blended" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已就前段婚姻子女、再婚配偶的分配做書面安排</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_noheir" data-risk="沒有子女時由父母、兄弟姊妹、祖父母依序繼承，未必是您想照顧的人。"><input type="checkbox" id="ck_noheir" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已用遺囑或遺贈指定財產給想照顧的人</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_business" data-risk="股權可能分散給不參與經營的繼承人，影響公司控制權與決策。"><input type="checkbox" id="ck_success" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已確定接班人，並以章程或股東協議限制股權外流</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_business" data-risk="未上市股權以資產淨值計入遺產，接班人可能需準備大筆現金繳稅。"><input type="checkbox" id="ck_bizval" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已評估公司股權價值與移轉稅負</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_overseas" data-risk="海外資產多需經當地法院程序（如遺囑認證 probate），耗時且費用高。"><input type="checkbox" id="ck_osproc" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已確認海外資產的當地繼承程序（遺囑認證、受益人或聯名設定）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_overseas" data-risk="經常居住我國者，境外財產也要併入遺產；部分國家（如美國）另課遺產稅。"><input type="checkbox" id="ck_ostax" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已確認海外資產的我國申報與外國遺產稅</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_conflict" data-risk="分配理由沒有事先溝通，繼承人容易各自解讀而產生爭執。"><input type="checkbox" id="ck_meeting" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已召開家族會議或訂定家族憲章，說明分配理由</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_spend" data-risk="一次取得大筆財產，可能被揮霍或被債權人追索。"><input type="checkbox" id="ck_spend" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已用信託控制給付節奏（例如按月給付、特定用途）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="debt" data-risk="繼承人以所得遺產為限負清償責任，但沒有現金時可能需變賣資產還債。"><input type="checkbox" id="ck_debt" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已整理負債與保證責任，並預留清償來源</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="失智後無法再簽約或立遺囑，財產需經法院監護宣告才能處分。"><input type="checkbox" id="ck_guard" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已簽意定監護契約（失智或失能時由誰管理財產）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="重病時家人需代為做醫療決定，意見不同容易產生衝突。"><input type="checkbox" id="ck_medical" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已簽預立醫療決定或指定醫療委任代理人</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="法規、資產與家庭狀況會改變，舊的安排可能已不適用。"><input type="checkbox" id="ck_review" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>最近 3 年內檢視過整體安排</span></label></div>
-
-        <div class="text-xs font-bold text-slate-700 pt-1">📝 傳承意願</div>
-        <div class="bg-white border border-slate-200 rounded-lg p-2 space-y-1.5">
-          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">主要接班人／受益人</span><input type="text" id="wishHeir" placeholder="例：長子接公司、女兒繼承房產" class="flex-1 min-w-0 border rounded px-1.5 py-0.5"></div>
-          <textarea id="wishNote" rows="3" placeholder="例：希望配偶生活無虞、房子留給女兒、公司由長子經營但收益三個孩子平分" class="w-full text-xs border rounded px-1.5 py-1"></textarea>
-        </div>
-      </div>
-
-      <div class="lg:col-span-6 space-y-4">
-        <div class="grid grid-cols-3 gap-3">
-          <div class="bg-slate-800 text-white p-3.5 rounded-xl">
-            <div class="text-[11px] text-slate-300">傳承完整度</div>
-            <div class="text-2xl font-extrabold mt-0.5" id="ckScore">--</div>
-            <div class="text-[10px] text-slate-400" id="ckScoreSub">已完成 -- 項</div>
-          </div>
-          <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl">
-            <div class="text-[11px] text-emerald-700 font-bold">資產已有安排</div>
-            <div class="text-2xl font-extrabold text-emerald-900 mt-0.5" id="ckAssetPct">--</div>
-            <div class="text-[10px] text-emerald-600" id="ckAssetSub">-- 萬</div>
-          </div>
-          <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-xl">
-            <div class="text-[11px] text-rose-700 font-bold">尚未涵蓋的風險</div>
-            <div class="text-2xl font-extrabold text-rose-900 mt-0.5" id="ckRiskCount">--</div>
-            <div class="text-[10px] text-rose-600">項，依重要性排列</div>
-          </div>
-        </div>
-
-        <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
-          <div class="bg-slate-800 text-white px-4 py-2.5 text-xs font-bold">🗂️ 資產盤點表</div>
-          <table class="w-full text-xs text-left">
-            <thead class="bg-slate-100 text-slate-700 border-b"><tr><th class="p-2">項目</th><th class="p-2 text-right whitespace-nowrap">金額(萬)</th><th class="p-2 text-right">占比</th><th class="p-2 whitespace-nowrap">目前安排</th><th class="p-2">提醒</th></tr></thead>
-            <tbody id="ckInvBody" class="divide-y divide-slate-200"></tbody>
-          </table>
-        </div>
-
-        <div class="bg-rose-50 border border-rose-200 p-4 rounded-xl text-xs space-y-1.5">
-          <div class="font-bold text-rose-900 text-sm">⚠️ 尚未涵蓋的風險與建議</div>
-          <ol id="ckRiskList" class="list-decimal pl-5 text-rose-900 space-y-1 leading-relaxed"></ol>
-        </div>
-
-        <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-xl text-xs space-y-1" id="ckWishBox">
-          <div class="font-bold text-indigo-900 text-sm">📝 傳承意願摘要</div>
-          <div id="ckWishText" class="text-indigo-900 leading-relaxed"></div>
-        </div>
-
-        <p class="text-[10px] text-slate-500 leading-relaxed">本檢查表為整理思路之用，不代表安排在法律上有效。遺囑形式、特留分、信託契約與海外程序，請與律師、會計師確認。</p>
-      </div>
-    </div>
-
-    <!-- ==================== 模組 6：家族企業股權、信託與境外資產 ==================== -->
+    <!-- ==================== 模組 5：家族企業股權、信託與境外資產 ==================== -->
     <div id="tab-family" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="print-only print-block lg:col-span-12">
-        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">七、家族企業股權、信託與境外資產</h2>
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">六、家族企業股權、信託與境外資產</h2>
         <p class="text-[11px] text-slate-600 mb-2">概估家族企業股權移轉、各類信託與境外資產對遺產稅、贈與稅及最低稅負的影響。遺產稅增加額以第三部分的課稅遺產淨額為基礎，計算多加這筆財產後增加的稅額。</p>
         <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
         <div class="print-assumptions" data-section="tab-family"></div>
@@ -1375,10 +1309,10 @@
       </div>
     </div>
 
-    <!-- ==================== 模組 7：家庭財務健診 ==================== -->
+    <!-- ==================== 模組 6：家庭財務健診 ==================== -->
     <div id="tab-cash" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="print-only print-block lg:col-span-12">
-        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">八、家庭財務健診</h2>
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">七、家庭財務健診</h2>
         <p class="text-[11px] text-slate-600 mb-2">整理家庭的收支表與資產負債表，計算緊急預備金、儲蓄率、負債比率、流動比率、還款負擔與保費負擔，並依結果提出調整方向。</p>
         <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
         <div class="print-assumptions" data-section="tab-cash"></div>
@@ -1471,6 +1405,74 @@
         </div>
 
         <p class="text-[10px] text-slate-500 leading-relaxed">參考標準為一般理財規劃常用的經驗值，用來找出優先處理的項目，不是硬性規定；收入不穩定、家中只有一份收入或有需照顧的家人時，緊急預備金宜提高。</p>
+      </div>
+    </div>
+
+    <!-- ==================== 模組 7：傳承完整度檢查 ==================== -->
+    <div id="tab-check" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="print-only print-block lg:col-span-12">
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">八、傳承完整度檢查</h2>
+        <p class="text-[11px] text-slate-600 mb-2">盤點資產是否都有對應的傳承安排，並依家庭狀況檢查常見缺漏，列出尚未涵蓋的風險。</p>
+      </div>
+      <div class="lg:col-span-6 space-y-3.5 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-2 gap-2">
+          <h2 class="text-sm font-bold text-slate-800">📋 資產盤點與傳承安排</h2>
+          <button type="button" onclick="importInventory()" class="tool-btn text-[11px]" title="把第3頁的金融資產、不動產、保險、貸款，以及第5頁的公司股權、海外資產帶進來">↻ 從第3、5頁帶入金額</button>
+        </div>
+        <div class="space-y-1.5"><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">💵 現金與存款</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_cash_num" value="800" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_cash_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">📈 股票、基金、ETF</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_listed_num" value="2200" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_listed_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏠 不動產（市價）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_re_num" value="5000" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_re_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🌏 海外資產</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_overseas_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_overseas_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🛡️ 人壽保險（保額）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_ins_num" value="1000" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_ins_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏭 公司股權</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_company_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_company_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">💎 其他（車、珠寶、收藏）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_other_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_other_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏦 負債（房貸、借款、保證）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_debt_num" value="1500" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_debt_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="covered">有保險或指定資產清償</option></select></div></div></div>
+        <p class="text-[10px] text-slate-500">*右側選單填「這項資產目前用什麼方式安排給誰」。未安排的資產，過世後依民法應繼分由繼承人共同繼承。</p>
+
+        <div class="text-xs font-bold text-slate-700 pt-1">👨‍👩‍👧‍👦 家庭成員與狀況（勾選符合的）</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5"><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_spouse" class="w-4 h-4 accent-indigo-600" checked><span>有配偶</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_minor" class="w-4 h-4 accent-indigo-600"><span>有未成年子女</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_care" class="w-4 h-4 accent-indigo-600"><span>有身心障礙或需長期照顧的家人</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_blended" class="w-4 h-4 accent-indigo-600"><span>再婚，或有前段婚姻、非婚生子女</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_noheir" class="w-4 h-4 accent-indigo-600"><span>沒有子女（將由父母、手足繼承）</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_business" class="w-4 h-4 accent-indigo-600"><span>持有家族企業股權</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_overseas" class="w-4 h-4 accent-indigo-600"><span>有海外資產，或家人住在海外、具外國籍</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_conflict" class="w-4 h-4 accent-indigo-600"><span>繼承人之間關係緊張或期望不同</span></label><label class="flex items-center gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer"><input type="checkbox" id="fs_spend" class="w-4 h-4 accent-indigo-600"><span>有繼承人理財能力不足或有負債</span></label></div>
+
+        <div class="text-xs font-bold text-slate-700 pt-1">✅ 已完成的安排（依家庭狀況顯示適用項目）</div>
+        <div class="space-y-1.5" id="chkList"><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="沒有遺囑時依民法應繼分分配；不動產會先成為全體繼承人「公同共有」，出售、貸款都要全體同意。"><input type="checkbox" id="ck_will" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已立遺囑，且符合法定方式（自書、公證、密封、代筆、口授）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="分配若侵害特留分，繼承人可主張扣減，容易引發訴訟。"><input type="checkbox" id="ck_forced" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>遺囑分配已考慮每位繼承人的特留分</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="沒有執行人時，遺囑可能找不到或無人執行，分配與報稅會拖延。"><input type="checkbox" id="ck_executor" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已指定遺囑執行人，並讓他知道遺囑存放處</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="ins" data-risk="受益人未指定或寫「法定繼承人」時，保險金可能列入遺產或分配與意願不符。"><input type="checkbox" id="ck_benef" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>保單受益人已指定，且與目前意願一致（不是只寫「法定繼承人」）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="家人不知道的帳戶與保單容易漏報，漏報遺產會被補稅並處罰鍰。"><input type="checkbox" id="ck_list" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>家人知道資產清單、帳戶、保單與保管箱的位置</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="遺產稅須在核定後繳納，現金不足時可能被迫賣房或以實物抵繳。"><input type="checkbox" id="ck_taxsrc" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已估算遺產稅，並準備好繳稅現金（稅源）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_spouse" data-risk="配偶請求權可降低遺產稅，但需於核定後一年內實際移轉，且會在配偶過世時再計入遺產。"><input type="checkbox" id="ck_regime" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已評估夫妻財產制與「剩餘財產差額分配請求權」</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_minor" data-risk="未成年子女繼承的財產由法定代理人管理，成年後一次取得，可能被不當使用。"><input type="checkbox" id="ck_guardian" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>未成年子女已安排監護人，並以信託或保險金信託管理財產</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_care" data-risk="需照顧的家人可能無法自行管理財產，長期照顧費用沒有保障。"><input type="checkbox" id="ck_care" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>需照顧的家人已安排安養信託或保險金信託</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_blended" data-risk="再婚家庭的繼承人彼此不熟悉，沒有書面安排時最容易發生爭產。"><input type="checkbox" id="ck_blended" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已就前段婚姻子女、再婚配偶的分配做書面安排</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_noheir" data-risk="沒有子女時由父母、兄弟姊妹、祖父母依序繼承，未必是您想照顧的人。"><input type="checkbox" id="ck_noheir" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已用遺囑或遺贈指定財產給想照顧的人</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_business" data-risk="股權可能分散給不參與經營的繼承人，影響公司控制權與決策。"><input type="checkbox" id="ck_success" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已確定接班人，並以章程或股東協議限制股權外流</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_business" data-risk="未上市股權以資產淨值計入遺產，接班人可能需準備大筆現金繳稅。"><input type="checkbox" id="ck_bizval" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已評估公司股權價值與移轉稅負</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_overseas" data-risk="海外資產多需經當地法院程序（如遺囑認證 probate），耗時且費用高。"><input type="checkbox" id="ck_osproc" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已確認海外資產的當地繼承程序（遺囑認證、受益人或聯名設定）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_overseas" data-risk="經常居住我國者，境外財產也要併入遺產；部分國家（如美國）另課遺產稅。"><input type="checkbox" id="ck_ostax" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已確認海外資產的我國申報與外國遺產稅</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_conflict" data-risk="分配理由沒有事先溝通，繼承人容易各自解讀而產生爭執。"><input type="checkbox" id="ck_meeting" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已召開家族會議或訂定家族憲章，說明分配理由</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="fs_spend" data-risk="一次取得大筆財產，可能被揮霍或被債權人追索。"><input type="checkbox" id="ck_spend" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已用信託控制給付節奏（例如按月給付、特定用途）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="debt" data-risk="繼承人以所得遺產為限負清償責任，但沒有現金時可能需變賣資產還債。"><input type="checkbox" id="ck_debt" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已整理負債與保證責任，並預留清償來源</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="失智後無法再簽約或立遺囑，財產需經法院監護宣告才能處分。"><input type="checkbox" id="ck_guard" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已簽意定監護契約（失智或失能時由誰管理財產）</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="重病時家人需代為做醫療決定，意見不同容易產生衝突。"><input type="checkbox" id="ck_medical" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>已簽預立醫療決定或指定醫療委任代理人</span></label><label class="chk-item flex items-start gap-2 text-xs bg-white border border-slate-200 rounded p-1.5 cursor-pointer" data-when="" data-risk="法規、資產與家庭狀況會改變，舊的安排可能已不適用。"><input type="checkbox" id="ck_review" class="w-4 h-4 mt-0.5 accent-emerald-600 shrink-0"><span>最近 3 年內檢視過整體安排</span></label></div>
+
+        <div class="text-xs font-bold text-slate-700 pt-1">📝 傳承意願</div>
+        <div class="bg-white border border-slate-200 rounded-lg p-2 space-y-1.5">
+          <div class="flex justify-between items-center text-xs gap-2"><span class="whitespace-nowrap">主要接班人／受益人</span><input type="text" id="wishHeir" placeholder="例：長子接公司、女兒繼承房產" class="flex-1 min-w-0 border rounded px-1.5 py-0.5"></div>
+          <textarea id="wishNote" rows="3" placeholder="例：希望配偶生活無虞、房子留給女兒、公司由長子經營但收益三個孩子平分" class="w-full text-xs border rounded px-1.5 py-1"></textarea>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 space-y-4">
+        <div class="grid grid-cols-3 gap-3">
+          <div class="bg-slate-800 text-white p-3.5 rounded-xl">
+            <div class="text-[11px] text-slate-300">傳承完整度</div>
+            <div class="text-2xl font-extrabold mt-0.5" id="ckScore">--</div>
+            <div class="text-[10px] text-slate-400" id="ckScoreSub">已完成 -- 項</div>
+          </div>
+          <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl">
+            <div class="text-[11px] text-emerald-700 font-bold">資產已有安排</div>
+            <div class="text-2xl font-extrabold text-emerald-900 mt-0.5" id="ckAssetPct">--</div>
+            <div class="text-[10px] text-emerald-600" id="ckAssetSub">-- 萬</div>
+          </div>
+          <div class="bg-rose-50 border border-rose-200 p-3.5 rounded-xl">
+            <div class="text-[11px] text-rose-700 font-bold">尚未涵蓋的風險</div>
+            <div class="text-2xl font-extrabold text-rose-900 mt-0.5" id="ckRiskCount">--</div>
+            <div class="text-[10px] text-rose-600">項，依重要性排列</div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
+          <div class="bg-slate-800 text-white px-4 py-2.5 text-xs font-bold">🗂️ 資產盤點表</div>
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-100 text-slate-700 border-b"><tr><th class="p-2">項目</th><th class="p-2 text-right whitespace-nowrap">金額(萬)</th><th class="p-2 text-right">占比</th><th class="p-2 whitespace-nowrap">目前安排</th><th class="p-2">提醒</th></tr></thead>
+            <tbody id="ckInvBody" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+
+        <div class="bg-rose-50 border border-rose-200 p-4 rounded-xl text-xs space-y-1.5">
+          <div class="font-bold text-rose-900 text-sm">⚠️ 尚未涵蓋的風險與建議</div>
+          <ol id="ckRiskList" class="list-decimal pl-5 text-rose-900 space-y-1 leading-relaxed"></ol>
+        </div>
+
+        <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-xl text-xs space-y-1" id="ckWishBox">
+          <div class="font-bold text-indigo-900 text-sm">📝 傳承意願摘要</div>
+          <div id="ckWishText" class="text-indigo-900 leading-relaxed"></div>
+        </div>
+
+        <p class="text-[10px] text-slate-500 leading-relaxed">本檢查表為整理思路之用，不代表安排在法律上有效。遺囑形式、特留分、信託契約與海外程序，請與律師、會計師確認。</p>
       </div>
     </div>
 
@@ -1638,7 +1640,7 @@
       document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.add('text-slate-300'); });
       document.getElementById('btn-' + tab).classList.add('active');
       document.getElementById('btn-' + tab).classList.remove('text-slate-300');
-      ['start', 'overview', 'retire', 'risk', 'tax', 'stock', 'check', 'family', 'cash'].forEach(t => document.getElementById('tab-' + t).classList.toggle('hidden', t !== tab));
+      ['start', 'overview', 'retire', 'risk', 'tax', 'stock', 'family', 'cash', 'check'].forEach(t => document.getElementById('tab-' + t).classList.toggle('hidden', t !== tab));
       if (tab === 'start') { loadProfileFromTabs(); applyProfile(); }
       else if (tab === 'overview') renderOverview();
       else if (tab === 'retire') calcRetire();
@@ -2260,7 +2262,7 @@
         : '無須申辦繳稅融資。';
       globalTaxData = { plannedTax, plannedNet, taxRaw, savedTotal, isCashSufficient, cashAvail, loanable, loanEnough, lifeFace, plannedGross, totalDeductions };
       globalTaxData.re = calcRealEstate(plannedGross - totalDeductions);
-      globalTaxData.netRaw = plannedGross - totalDeductions;   // 未截斷的課稅遺產淨額，供第5、6頁計算增加的遺產稅   // 未截斷為0的淨額，扣除額有剩時可吸收此物件
+      globalTaxData.netRaw = plannedGross - totalDeductions;   // 未截斷的課稅遺產淨額，供第5、7頁計算增加的遺產稅   // 未截斷為0的淨額，扣除額有剩時可吸收此物件
       const rate2 = document.getElementById('pkRow2Rate');
       rate2.innerText = plannedTax === 0 ? '—' : (loanEnough ? '✅ 新制可行，需審核' : '⚠️ 額度不足');
 
@@ -2693,7 +2695,7 @@
       loanLtv: '子女繼承房地後，銀行願意以市價的幾成借錢給子女繳遺產稅。一般住宅約 6～7 成，實際依銀行審核與央行規定。'
     };
 
-    // ===== 第5、6頁的欄位說明 =====
+    // ===== 第5～7頁的欄位說明 =====
     Object.assign(FIELD_HELP, {
       cf_salary: '本人每月固定薪資（稅前），不含年終與獎金。',
       cf_spSalary: '配偶每月固定薪資（稅前）。只看個人時填 0。',
@@ -2718,7 +2720,7 @@
       inv_re: '名下房屋與土地的市價合計。',
       inv_overseas: '海外銀行帳戶、海外證券戶、境外保單、海外房地產等。',
       inv_ins: '有指定受益人的身故保險金，不計入遺產。',
-      inv_company: '持有的公司股權價值，可用第6頁算出的稅法評價。',
+      inv_company: '持有的公司股權價值，可用第5頁算出的稅法評價。',
       inv_other: '汽車、珠寶、收藏品、借給別人的錢（債權）等。',
       inv_debt: '房貸、信貸、借款，以及替別人作保的金額。',
       biz_type: '上市櫃股票以過世（或贈與）當日收盤價計算，興櫃以當日加權平均成交價計算；未上市櫃股票以公司資產淨值計算。',
@@ -2827,7 +2829,7 @@
       if (t.plannedTax > 0 && !t.isCashSufficient)
         risks.push({ w: 4.5, title: '遺產稅稅源不足', text: `依第3頁試算，應納遺產稅 ${t.plannedTax} 萬，遺產內現金加保險金不足 ${(t.plannedTax - t.cashAvail).toFixed(1)} 萬。` });
       const f = globalFamilyData;
-      if (f.amtExtra > 0) risks.push({ w: 3.5, title: '海外所得最低稅負', text: `依第6頁試算，海外所得與 CFC 所得可能需補繳最低稅負約 ${fmt(f.amtExtra)} 萬。` });
+      if (f.amtExtra > 0) risks.push({ w: 3.5, title: '海外所得最低稅負', text: `依第5頁試算，海外所得與 CFC 所得可能需補繳最低稅負約 ${fmt(f.amtExtra)} 萬。` });
       if (f.usTax > 0) risks.push({ w: 3.5, title: '美國遺產稅', text: `直接持有美國資產超過 6 萬美元，預估美國遺產稅約 ${fmt(f.usTax)} 萬元（新台幣），可考慮改以境外基金或非美國註冊的 ETF 持有，請會計師評估。` });
       risks.sort((a, b) => b.w - a.w);
 
@@ -2859,7 +2861,7 @@
 
       globalCheckData = { score, risks, assetPct: pct };
     }
-    // 從第3、6頁帶入金額
+    // 從第3、5頁帶入金額
     function importInventory() {
       calcTax(); calcFamily();
       const set = (id, v) => { document.getElementById(id + '_num').value = Math.round(v); };
@@ -2880,7 +2882,7 @@
       if (val('minorYears_num', 0) > 0) document.getElementById('fs_minor').checked = true;
       if (val('disabledCount_num', 0) > 0) document.getElementById('fs_care').checked = true;
       calcCheck();
-      storeMsg('✓ 已帶入第3、6頁的金額，請確認現金與股票的拆分');
+      storeMsg('✓ 已帶入第3、5頁的金額，請確認現金與股票的拆分');
     }
 
     // ===== 模組 5：家族企業股權、信託、境外資產 =====
@@ -3228,7 +3230,7 @@
     const CAREER_GROUP = { labor: 'salaried', doctor: 'salaried', owner: 'owner', private: 'public', teacherDB: 'public', civilDB: 'public',
                            publicDC: 'public', military: 'public', farmer: 'farm', fisher: 'farm' };
     const GROUP_DEFAULT = { salaried: 'labor', owner: 'owner', public: 'civilDB', farm: 'farmer' };
-    // 共用欄位 → 各分頁欄位（第1頁、第3頁、第7頁）
+    // 共用欄位 → 各分頁欄位（第1頁、第3頁、第6頁）
     const SHARED_MAP = {
       pf_age: ['age_num'], pf_income: ['salary_num', 'cf_salary_num'], pf_expense: ['expense_num', 'cf_living_num'],
       pf_fin: ['finAsset_num'], pf_re: ['reMarket_num', 'cf_realEstate_num'], pf_loan: ['reLoan_num', 'cf_mortgage_num'],
@@ -3239,11 +3241,11 @@
       risk:   ['2. 長照與醫療保障', '長照發生時，退休金撐不撐得住'],
       tax:    ['3. 遺贈與房地稅務', '遺產稅、繳稅現金、房地合一稅'],
       stock:  ['4. 員工股票與股利', '員工股票與股利怎麼課稅最省'],
-      check:  ['5. 傳承完整度檢查', '每項資產是否都安排好'],
-      family: ['6. 股權·信託·境外', '公司股權、信託、境外資產、農地'],
-      cash:   ['7. 家庭財務健診', '收支與資產負債是否健康']
+      family: ['5. 股權·信託·境外', '公司股權、信託、境外資產、農地'],
+      cash:   ['6. 家庭財務健診', '收支與資產負債是否健康'],
+      check:  ['7. 傳承完整度檢查', '每項資產是否都安排好']
     };
-    const TAB_ORDER = ['retire', 'risk', 'tax', 'stock', 'check', 'family', 'cash'];
+    const TAB_ORDER = ['retire', 'risk', 'tax', 'stock', 'family', 'cash', 'check'];
     const pfChecked = id => document.getElementById(id).checked;
     function currentGroup() { return CAREER_GROUP[document.getElementById('career').value] || 'salaried'; }
     function relevantTabs() {
@@ -3263,16 +3265,16 @@
       return new Set(TAB_ORDER.filter(t => all || rel[t]));
     }
     function lifeStage(age) {
-      if (age < 40) return ['累積期', ['先建立 6 個月的緊急預備金，再談投資（第7頁）。', '確認壽險、失能與醫療保障足夠（第2頁）。', '退休還很遠，越早開始每月投入，需要的金額越少（第1頁）。']];
-      if (age < 50) return ['成長期', ['房貸、子女教育與退休同時進行，先看每月結餘夠不夠分配（第7頁）。', '用第1頁逆算退休缺口，訂出每月固定投入金額。', '長照與失能是這個階段最容易忽略的風險（第2頁）。']];
+      if (age < 40) return ['累積期', ['先建立 6 個月的緊急預備金，再談投資（第6頁）。', '確認壽險、失能與醫療保障足夠（第2頁）。', '退休還很遠，越早開始每月投入，需要的金額越少（第1頁）。']];
+      if (age < 50) return ['成長期', ['房貸、子女教育與退休同時進行，先看每月結餘夠不夠分配（第6頁）。', '用第1頁逆算退休缺口，訂出每月固定投入金額。', '長照與失能是這個階段最容易忽略的風險（第2頁）。']];
       if (age < 60) return ['退休準備期', ['確認社會保險與退休金的請領年齡與金額，避免退休後出現空窗期（第1頁）。', '開始整理資產清單，估算遺產稅與繳稅現金（第3頁）。', '房地產與股權的移轉方式，越早規劃選擇越多。']];
-      return ['退休前後', ['決定退休金的領取方式與時間（第1頁）。', '長照費用與照顧安排要提早準備（第2頁）。', '傳承安排與稅源要確認到位（第3、5頁）。']];
+      return ['退休前後', ['決定退休金的領取方式與時間（第1頁）。', '長照費用與照顧安排要提早準備（第2頁）。', '傳承安排與稅源要確認到位（第3、7頁）。']];
     }
     const GROUP_FOCUS = {
       salaried: () => `受薪族的勞保投保薪資上限 ${fmt(LAW.LABOR_INS_CAP)} 元、勞退提繳工資上限 ${fmt(LAW.LP_WAGE_CAP)} 元，薪水越高，社會保險能替代的比例越低，主要靠自己準備。`,
-      owner: () => '沒有雇主提繳勞退，退休金要靠自願提繳與自己準備；事業交棒與公司股權的傳承，要和退休一起規劃（第6頁）。',
+      owner: () => '沒有雇主提繳勞退，退休金要靠自願提繳與自己準備；事業交棒與公司股權的傳承，要和退休一起規劃（第5頁）。',
       public: () => '先確認月退休金或個人專戶的起領年齡與所得替代率，再看還缺多少。',
-      farm: () => `老農津貼（目前每月 ${fmt(LAW.FARM_ALLOWANCE)} 元）與農退儲金只能支應基本生活；農地由繼承人承受可免遺產稅，但須繼續農用 ${LAW.FARM_KEEP_YEARS} 年（第6頁）。`
+      farm: () => `老農津貼（目前每月 ${fmt(LAW.FARM_ALLOWANCE)} 元）與農退儲金只能支應基本生活；農地由繼承人承受可免遺產稅，但須繼續農用 ${LAW.FARM_KEEP_YEARS} 年（第5頁）。`
     };
     function fillCareerOptions() {
       const g = currentGroup(), career = document.getElementById('career');
@@ -3485,8 +3487,8 @@
     }
     // 依開始頁的身分與資產，只列印相關分頁；章節編號依實際列印的部分重新排序
     const PRINT_HEADS = [['retire', '#tab-retire > .print-block h2'], ['risk', '#tab-risk > .print-block h2'], ['tax', '#tab-tax > .print-block h2'],
-      ['re', '#tab-tax .re-block > .print-block h2'], ['stock', '#tab-stock > .print-block h2'], ['check', '#tab-check > .print-block h2'],
-      ['family', '#tab-family > .print-block h2'], ['cash', '#tab-cash > .print-block h2']];
+      ['re', '#tab-tax .re-block > .print-block h2'], ['stock', '#tab-stock > .print-block h2'],
+      ['family', '#tab-family > .print-block h2'], ['cash', '#tab-cash > .print-block h2'], ['check', '#tab-check > .print-block h2']];
     function applyPrintScope() {
       const inc = includedTabs();
       TAB_ORDER.forEach(t => document.getElementById('tab-' + t).classList.toggle('print-excluded', !inc.has(t)));
@@ -3552,11 +3554,6 @@
           add(bad ? 1 : 2, `遺產稅 <strong>${t.plannedTax.toLocaleString()} 萬</strong>：${bad ? `稅源不足 ${(t.plannedTax - t.cashAvail).toFixed(1)} 萬，建議預先安排稅源（指定受益人的壽險，或以不動產向銀行借款的方式）。` : '稅源目前充足，可評估請求權與生前贈與是否能降低稅額。'}`);
         } else status.push(['遺產稅', '目前無應納稅額', `遺產淨額未超過免稅額與扣除額`, GOOD]);
       }
-      if (inc.has('check') && c.risks) {
-        const low = c.score < 50;
-        status.push(['傳承完整度', `${c.score}%`, `尚有 ${c.risks.length} 項未涵蓋`, low ? URGENT : (c.risks.length ? WATCH : GOOD)]);
-        if (c.risks.length) add(low ? 1 : 2, `傳承安排完整度 <strong>${c.score}%</strong>：優先處理「${c.risks.slice(0, 2).map(x => x.title).join('」、「')}」（共 ${c.risks.length} 項未涵蓋）。`);
-      }
       if (inc.has('cash')) {
         const bads = cf.bad || [];
         status.push(['家庭財務', cf.surplus < 0 ? `每月赤字 ${fmt(-monthlySurplus)} 元` : `每月結餘 ${fmt(monthlySurplus)} 元`, `儲蓄率 ${Math.round(cf.saveRate * 100)}%，淨資產 ${fmt(cf.netWorth)} 萬`, cf.surplus < 0 ? URGENT : (bads.length ? WATCH : GOOD)]);
@@ -3572,6 +3569,12 @@
         const allAdv = pfChecked('pf_printAdv');
         if ((allAdv || pfChecked('pf_hasBiz')) && f.bizHolding > 0) add(2, `家族企業股權（稅法評價約 ${fmt(f.bizHolding)} 萬）：規劃分年移轉與控制權安排。`);
         if ((allAdv || pfChecked('pf_hasOverseas')) && f.osExtra > 0) add(2, `境外資產：預估增加遺產稅約 ${fmt(f.osExtra)} 萬，並確認海外繼承程序與申報。`);
+      }
+
+      if (inc.has('check') && c.risks) {
+        const low = c.score < 50;
+        status.push(['傳承完整度', `${c.score}%`, `尚有 ${c.risks.length} 項未涵蓋`, low ? URGENT : (c.risks.length ? WATCH : GOOD)]);
+        if (c.risks.length) add(low ? 1 : 2, `傳承安排完整度 <strong>${c.score}%</strong>：優先處理「${c.risks.slice(0, 2).map(x => x.title).join('」、「')}」（共 ${c.risks.length} 項未涵蓋）。`);
       }
 
       const n = [0, 0, 0]; status.forEach(x => n[x[3]]++);
@@ -3698,10 +3701,6 @@
           chart, [['遺產總額（規劃後）', `${gross.toLocaleString()} 萬`], ['免稅額與各項扣除額', `${ded.toLocaleString()} 萬`], ['課稅遺產淨額', `${t.plannedNet.toLocaleString()} 萬`], ['應納遺產稅', `${t.plannedTax.toLocaleString()} 萬`], ['規劃後節省', `${t.savedTotal.toLocaleString()} 萬`], ['可用現金＋保險金', `${t.cashAvail.toLocaleString()} 萬`], ['房地合一稅（現在出售）', t.re.oldRegime ? '舊制另計' : `${(+t.re.nowTax.toFixed(1)).toLocaleString()} 萬`], ['不動產傳承方式', `${t.re.best}最有利`]],
           '依 115 年遺產及贈與稅法，遺產總額扣掉免稅額、各項扣除額（含配偶剩餘財產差額分配請求權）後才是課稅遺產淨額。不動產以課稅現值計算，與市價有差距。計算過程與房地合一稅比較見附錄。');
       }
-      if (inc.has('check') && c.risks) page('傳承安排完整度', st('傳承完整度'),
-        `傳承安排完整度 <strong>${c.score}%</strong>，尚有 ${c.risks.length} 項未涵蓋。`, '',
-        [['完整度', `${c.score}%`], ['尚未涵蓋項目數', `${c.risks.length} 項`], ...c.risks.slice(0, 5).map((x, i) => [`優先項目 ${i + 1}`, x.title])],
-        '依資產類型與家庭狀況檢查常見的傳承缺漏（例如遺囑、不動產安排、保險受益人）。分數越低，家人日後需要自行處理的事越多；完整項目見附錄。');
       if (inc.has('cash')) {
         const chart = `<div class="font-bold text-[15px]">每年收入與支出（萬）</div>` + stackedBars([
           { label: '收入', segs: [{ name: '收入', v: cf.income, c: '#0f766e' }], total: wan(cf.income) },
@@ -3720,6 +3719,10 @@
         '這些資產會影響遺產稅與最低稅負，建議與會計師確認後再安排。', '',
         [...((allAdv || pfChecked('pf_hasBiz')) && f.bizHolding > 0 ? [['家族企業股權（稅法評價）', `${fmt(f.bizHolding)} 萬`], ['留到繼承增加的遺產稅', `${fmt(f.bizEstateTax)} 萬`]] : []), ...((allAdv || pfChecked('pf_hasOverseas')) && f.osExtra > 0 ? [['境外資產增加的遺產稅（含外國遺產稅）', `${fmt(f.osExtra)} 萬`]] : [])],
         '依資產類型概估對遺產稅、贈與稅與最低稅負的影響，屬概估；詳細假設與待確認事項見附錄。');
+      if (inc.has('check') && c.risks) page('傳承安排完整度', st('傳承完整度'),
+        `傳承安排完整度 <strong>${c.score}%</strong>，尚有 ${c.risks.length} 項未涵蓋。`, '',
+        [['完整度', `${c.score}%`], ['尚未涵蓋項目數', `${c.risks.length} 項`], ...c.risks.slice(0, 5).map((x, i) => [`優先項目 ${i + 1}`, x.title])],
+        '依資產類型與家庭狀況檢查常見的傳承缺漏（例如遺囑、不動產安排、保險受益人）。分數越低，家人日後需要自行處理的事越多；完整項目見附錄。');
       return pages.join('');
     }
     function renderPrintConclusion() {
@@ -3733,7 +3736,7 @@
     // 摘要卡片與建議下一步：列印第一頁與「總覽」分頁共用；inc = 要納入的分頁
     function buildSummary(inc, forPrint) {
       const CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
-      const order = ['retire', 'risk', 'tax', 're', 'stock', 'check', 'family', 'cash'].filter(k => inc.has(k === 're' ? 'tax' : k));
+      const order = ['retire', 'risk', 'tax', 're', 'stock', 'family', 'cash', 'check'].filter(k => inc.has(k === 're' ? 'tax' : k));
       const head = (key, text) => forPrint ? `${CN[order.indexOf(key) + 1]}、${text}` : text;
       const r = globalRetireData, k = globalRiskData, t = globalTaxData, s = globalStockData;
       const pension = r.p1Total + r.p2Monthly + (r.couple ? r.spouseMonthly : 0);
@@ -3782,14 +3785,14 @@
       if (inc.has('tax') && t.plannedTax > 0 && !t.isCashSufficient) steps.push(`遺產稅：稅源不足 ${(t.plannedTax - t.cashAvail).toFixed(1)} 萬，可提高指定受益人的壽險保額，或預先評估以不動產向銀行融資繳稅（可貸約 ${t.loanable.toLocaleString()} 萬）。`);
       if (inc.has('stock') && s.best && s.best.key !== 'A') steps.push(`員工股票：可評估向公司申請產創條例緩課（${s.best.name}），稅後淨額約 ${fmt(s.best.net)} 元。`);
       if (inc.has('stock') && s.amtDue > 0) steps.push(`最低稅負：本年度預估需補繳 ${fmt(s.amtDue)} 元，可評估分散出售年度。`);
-      const c = globalCheckData;
-      if (inc.has('check') && c.risks && c.risks.length) steps.push(`傳承完整度 ${c.score}%：尚有 ${c.risks.length} 項未涵蓋，優先處理「${c.risks.slice(0, 2).map(x => x.title).join('」、「')}」。`);
       const f = globalFamilyData;
-      const allAdv = pfChecked('pf_printAdv');   // 第6頁預設有範例數字：只有勾選該資產（或要求列出進階分頁）時才列入建議
+      const allAdv = pfChecked('pf_printAdv');   // 第5頁預設有範例數字：只有勾選該資產（或要求列出進階分頁）時才列入建議
       if (inc.has('family') && (allAdv || pfChecked('pf_hasBiz')) && f.bizHolding > 0) steps.push(`家族企業股權（稅法評價約 ${fmt(f.bizHolding)} 萬）：留到繼承約增加遺產稅 ${fmt(f.bizEstateTax)} 萬；分 ${f.giftYears} 年贈與約繳贈與稅 ${fmt(f.bizGiftTax)} 萬。請會計師確認股權淨值與接班安排。`);
       if (inc.has('family') && (allAdv || pfChecked('pf_hasOverseas')) && f.osExtra > 0) steps.push(`境外資產：預估增加遺產稅（含外國遺產稅）約 ${fmt(f.osExtra)} 萬，並確認海外繼承程序與申報。`);
       if (inc.has('family') && (allAdv || pfChecked('pf_hasOverseas')) && f.amtExtra > 0) steps.push(`海外所得與 CFC：預估需補繳最低稅負約 ${fmt(f.amtExtra)} 萬。`);
       if (inc.has('cash') && cf.bad && cf.bad.length) steps.push(`家庭財務健診：每月${cf.surplus < 0 ? `赤字約 <strong>${fmt(-cf.surplus / 12)} 元</strong>` : `結餘約 ${fmt(cf.surplus / 12)} 元`}，需要調整的指標為「${cf.bad.join('」、「')}」。`);
+      const c = globalCheckData;
+      if (inc.has('check') && c.risks && c.risks.length) steps.push(`傳承完整度 ${c.score}%：尚有 ${c.risks.length} 項未涵蓋，優先處理「${c.risks.slice(0, 2).map(x => x.title).join('」、「')}」。`);
       steps.push('每年或家庭狀況改變（換工作、結婚生子、退休、健康變化）時，重新檢視一次本試算。');
 
       const boxes = [['retire', retireBox], ['risk', riskBox], ['tax', taxBox], ['stock', stockBox], ['cash', cashBox]]
