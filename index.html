@@ -125,6 +125,10 @@
     <!-- ==================== 開始：身分與共用基本資料 ==================== -->
     <div id="tab-start" class="tab-section no-print print-skip p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="lg:col-span-7 space-y-4">
+        <div class="bg-amber-50 border border-amber-300 p-3 rounded-xl text-xs flex flex-wrap items-center justify-between gap-2">
+          <div class="text-amber-900"><b>想先看看結果長什麼樣？</b>載入「50 歲勞工家庭」範例，再按右上角輸出 PDF，就能看到完整報告。範例的月薪、生活支出取自主計總處 113 年統計，其餘（存款、房產、年資等）是<b>示意假設</b>，不是統計平均。</div>
+          <button type="button" onclick="loadLaborSample()" class="whitespace-nowrap bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1.5 rounded-lg">載入勞工範例</button>
+        </div>
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
           <h2 class="text-sm font-bold text-slate-800">① 您的職業身分是？</h2>
           <div class="grid grid-cols-2 gap-2"><button type="button" class="pf-card" data-group="salaried" onclick="pickGroup('salaried')"><div class="font-bold text-sm text-slate-800 flex items-center gap-1.5">💼 受薪族<span class="text-[10px] bg-amber-500 text-slate-900 rounded px-1.5 py-0.5">最常見</span></div><div class="text-[11px] text-slate-500 mt-0.5">公司員工、受僱醫師（勞保＋勞退）</div></button><button type="button" class="pf-card" data-group="owner" onclick="pickGroup('owner')"><div class="font-bold text-sm text-slate-800 flex items-center gap-1.5">🏢 企業主／自營</div><div class="text-[11px] text-slate-500 mt-0.5">老闆、開業醫師、自營作業者</div></button><button type="button" class="pf-card" data-group="public" onclick="pickGroup('public')"><div class="font-bold text-sm text-slate-800 flex items-center gap-1.5">🏛️ 軍公教</div><div class="text-[11px] text-slate-500 mt-0.5">公務人員、公私立學校教職員、軍人</div></button><button type="button" class="pf-card" data-group="farm" onclick="pickGroup('farm')"><div class="font-bold text-sm text-slate-800 flex items-center gap-1.5">🌾 農漁民</div><div class="text-[11px] text-slate-500 mt-0.5">農保農民、漁會甲類會員漁民</div></button></div>
@@ -3226,6 +3230,50 @@
       sel.innerHTML = [...career.options].filter(o => CAREER_GROUP[o.value] === g)
         .map(o => `<option value="${o.value}">${escapeHtml(o.text)}</option>`).join('');
       sel.value = career.value;
+    }
+    // ===== 範例：50 歲勞工家庭（示意；來源與假設見 docs/sample-labor-50.md）=====
+    // 官方：月薪 49,060（113年全時本國籍員工經常性薪資平均）、配偶 46,450（全體受僱員工）、月支出 74,058（113年平均每戶消費支出 888,699÷12）、
+    //       年終等非經常性薪資 36.2 萬（兩人「總薪資−經常性薪資」×12）。其餘為示意假設，不是統計平均。
+    const SAMPLE_LABOR_50 = {
+      clientName: '範例：50 歲勞工家庭',
+      flags: { pf_hasRe: true, pf_hasStock: false, pf_hasBiz: false, pf_hasOverseas: false, pf_hasFarm: false },
+      shared: { pf_age: 50, pf_income: 49060, pf_expense: 74058, pf_fin: 600, pf_re: 1500, pf_loan: 400, pf_spouse: 1, pf_kids: 1 },
+      fields: {
+        retireAge_num: 65, lifeAge_num: 90, claimAge_num: 65, natYears_num: 0, laborYears_num: 35, selfContrib_num: 0,
+        lpBal_num: 143, saved_num: 600, monthlyInvest_num: 10000,
+        lifeIns_num: 0, lifePremium_num: 0, spouseWealth_num: 600, minorYears_num: 0, parentsCount_num: 0,
+        reCost_num: 1000, rePrice_num: 1500, reLandGain_num: 200, reLandTax_num: 40, reYears_num: 9, reAssess_num: 525,
+        reFeeAuto: true, reSelfUse: true, reExcept: false, rePre2016: false,
+        inv_cash_num: 300, inv_listed_num: 300, inv_re_num: 1500, inv_overseas_num: 0, inv_ins_num: 0, inv_company_num: 0, inv_other_num: 0, inv_debt_num: 400,
+        cf_spSalary_num: 46450, cf_bonus_num: 36.2, cf_otherInc_num: 0, cf_loanPay_num: 20000, cf_premium_num: 0, cf_yearly_num: 0,
+        cf_cash_num: 60, cf_deposit_num: 240, cf_invest_num: 300, cf_cashValue_num: 0, cf_otherAsset_num: 0
+      }
+    };
+    function loadLaborSample() {
+      const S = SAMPLE_LABOR_50;
+      if (!confirm('載入範例會覆蓋目前各頁已填的數字，確定嗎？')) return;
+      const set = (id, v) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox') el.checked = !!v; else el.value = v;
+        const slider = id.endsWith('_num') && document.getElementById(id.slice(0, -4));
+        if (slider && slider.type === 'range') slider.value = v;
+      };
+      document.getElementById('career').value = 'labor';
+      pickGroup('salaried');
+      document.getElementById('career').value = 'labor';
+      document.getElementById('coupleToggle').checked = false;
+      applyCoupleUI();
+      applyCareerUI();
+      Object.entries(S.flags).forEach(([id, v]) => set(id, v));
+      Object.entries(S.shared).forEach(([id, v]) => { set(id, v); pushShared(id); });
+      Object.entries(S.fields).forEach(([id, v]) => set(id, v));
+      set('hasSpouse', 1); set('kidsCount_num', 1);
+      document.getElementById('clientName').value = S.clientName;
+      applyCareerUI();
+      calcRetire(); calcRisk(); calcTax(); calcStock(); calcFamily(); calcCheck(); calcCash();
+      applyProfile();
+      if (typeof renderOverview === 'function') renderOverview();
     }
     function pickGroup(g) {
       const career = document.getElementById('career');
