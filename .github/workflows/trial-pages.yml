@@ -1,0 +1,41 @@
+# 客戶試用版發佈流程。
+# 只在「發佈 trial-* 標籤的 Release」或手動執行時才會跑；一般合併到 main 不會更新試用版。
+# 另需在 repo 設定 Settings → Pages → Source 選「GitHub Actions」才會真正公開（尚未啟用）。
+name: Deploy trial version
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 要發佈的標籤（例如 trial-0.1）
+        required: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: trial-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'trial-')
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.ref }}
+      - run: python3 trial/build.py --release
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      - id: deployment
+        uses: actions/deploy-pages@v4
