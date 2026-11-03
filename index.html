@@ -172,8 +172,8 @@
     <div id="tab-start" class="tab-section no-print print-skip p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="lg:col-span-7 space-y-4">
         <div class="bg-amber-50 border border-amber-300 p-3 rounded-xl text-xs flex flex-wrap items-center justify-between gap-2">
-          <div class="text-amber-900"><b>想先看看結果長什麼樣？</b>載入「50 歲勞工家庭」範例，再按右上角輸出 PDF，就能看到完整報告。範例的月薪、生活支出取自主計總處 113 年統計，其餘（存款、房產、年資等）是<b>示意假設</b>，不是統計平均。</div>
-          <button type="button" onclick="loadLaborSample()" class="whitespace-nowrap bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1.5 rounded-lg">載入勞工範例</button>
+          <div class="text-amber-900"><b>想先看看結果長什麼樣？</b>載入「50 歲家庭」範例，再按右上角輸出 PDF，就能看到完整報告。勞工範例的月薪、生活支出取自主計總處 113 年統計，其餘（存款、房產、年資等）是<b>示意假設</b>；企業主、自營、軍公教、農民範例的家庭收支與資產由<b>使用者提供</b>，都不是統計平均。</div>
+          <div class="flex flex-wrap gap-1.5"><button type="button" onclick="loadSample('labor')" class="whitespace-nowrap bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1.5 rounded-lg">勞工範例</button><button type="button" onclick="loadSample('owner')" class="whitespace-nowrap bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1.5 rounded-lg">企業主範例</button><button type="button" onclick="loadSample('self')" class="whitespace-nowrap bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1.5 rounded-lg">自營範例</button><button type="button" onclick="loadSample('public')" class="whitespace-nowrap bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1.5 rounded-lg">軍公教範例</button><button type="button" onclick="loadSample('farm')" class="whitespace-nowrap bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold px-3 py-1.5 rounded-lg">農民範例</button></div>
         </div>
         <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
           <h2 class="text-sm font-bold text-slate-800">① 您的職業身分是？</h2>
@@ -3312,26 +3312,113 @@
       window.addEventListener('resize', () => { if (!fontUserSet) { fontLevel = autoFontLevel(); applyFont(); } });
     })();
 
-    // ===== 範例：50 歲勞工家庭（示意；來源與假設見 docs/sample-labor-50.md）=====
-    // 官方：月薪 49,060（113年全時本國籍員工經常性薪資平均）、配偶 46,450（全體受僱員工）、月支出 74,058（113年平均每戶消費支出 888,699÷12）、
+    // ===== 範例：50 歲各族群家庭（示意；來源與假設見 docs/sample-*.md）=====
+    // 勞工：月薪 49,060（113年全時本國籍員工經常性薪資平均）、配偶 46,450（全體受僱員工）、月支出 74,058（113年平均每戶消費支出 888,699÷12）、
     //       年終等非經常性薪資 36.2 萬（兩人「總薪資−經常性薪資」×12）。其餘為示意假設，不是統計平均。
-    const SAMPLE_LABOR_50 = {
-      clientName: '範例：50 歲勞工家庭',
-      flags: { pf_hasRe: true, pf_hasStock: false, pf_hasBiz: false, pf_hasOverseas: false, pf_hasFarm: false },
-      shared: { pf_age: 50, pf_income: 49060, pf_expense: 74058, pf_fin: 600, pf_re: 1500, pf_loan: 400, pf_spouse: 1, pf_kids: 1 },
-      fields: {
-        retireAge_num: 65, lifeAge_num: 90, claimAge_num: 65, natYears_num: 0, laborYears_num: 35, selfContrib_num: 0,
-        lpBal_num: 143, saved_num: 600, monthlyInvest_num: 10000,
-        lifeIns_num: 0, lifePremium_num: 0, spouseWealth_num: 600, minorYears_num: 0, parentsCount_num: 0,
-        reCost_num: 1000, rePrice_num: 1500, reLandGain_num: 200, reLandTax_num: 40, reYears_num: 9, reAssess_num: 525,
-        reFeeAuto: true, reSelfUse: true, reExcept: false, rePre2016: false,
-        inv_cash_num: 300, inv_listed_num: 300, inv_re_num: 1500, inv_overseas_num: 0, inv_ins_num: 0, inv_company_num: 0, inv_other_num: 0, inv_debt_num: 400,
-        cf_spSalary_num: 46450, cf_bonus_num: 36.2, cf_otherInc_num: 0, cf_loanPay_num: 20000, cf_premium_num: 0, cf_yearly_num: 0,
-        cf_cash_num: 60, cf_deposit_num: 240, cf_invest_num: 300, cf_cashValue_num: 0, cf_otherAsset_num: 0
+    // 企業主／自營／軍公教／農民：家庭收支、資產、保險等由使用者提供（未經官方統計驗證）；法定數字（俸額、加給、扣除額、稅率等）已核對官方來源。
+    const SAMPLE_BASE_FIELDS = {
+      retireAge_num: 65, lifeAge_num: 90, claimAge_num: 65, natYears_num: 0, laborYears_num: 35, selfContrib_num: 0,
+      lpBal_num: 0, saved_num: 0, monthlyInvest_num: 0,
+      lifeIns_num: 0, lifePremium_num: 0, spouseWealth_num: 0, minorYears_num: 0, parentsCount_num: 0,
+      reCost_num: 0, rePrice_num: 0, reLandGain_num: 0, reLandTax_num: 0, reYears_num: 9, reAssess_num: 0,
+      reFeeAuto: true, reSelfUse: true, reExcept: false, rePre2016: false,
+      inv_cash_num: 0, inv_listed_num: 0, inv_re_num: 0, inv_overseas_num: 0, inv_ins_num: 0, inv_company_num: 0, inv_other_num: 0, inv_debt_num: 0,
+      inv_ins_plan: 'none',
+      cf_spSalary_num: 0, cf_bonus_num: 0, cf_otherInc_num: 0, cf_loanPay_num: 0, cf_premium_num: 0, cf_yearly_num: 0,
+      cf_cash_num: 0, cf_deposit_num: 0, cf_invest_num: 0, cf_cashValue_num: 0, cf_otherAsset_num: 0,
+      reRatio_num: 35, claim1030Toggle: true
+    };
+    const SAMPLES = {
+      labor: {
+        label: '勞工', career: 'labor', group: 'salaried',
+        clientName: '範例：50 歲勞工家庭',
+        flags: { pf_hasRe: true, pf_hasStock: false, pf_hasBiz: false, pf_hasOverseas: false, pf_hasFarm: false },
+        shared: { pf_age: 50, pf_income: 49060, pf_expense: 74058, pf_fin: 600, pf_re: 1500, pf_loan: 400, pf_spouse: 1, pf_kids: 1 },
+        fields: {
+          lpBal_num: 143, saved_num: 600, monthlyInvest_num: 10000, spouseWealth_num: 600,
+          reCost_num: 1000, rePrice_num: 1500, reLandGain_num: 200, reLandTax_num: 40, reAssess_num: 525,
+          inv_cash_num: 300, inv_listed_num: 300, inv_re_num: 1500, inv_debt_num: 400,
+          cf_spSalary_num: 46450, cf_bonus_num: 36.2, cf_loanPay_num: 20000,
+          cf_cash_num: 60, cf_deposit_num: 240, cf_invest_num: 300
+        }
+      },
+      owner: {
+        label: '企業主', career: 'owner', group: 'owner',
+        clientName: '範例：50 歲企業主家庭（使用者提供）',
+        flags: { pf_hasRe: true, pf_hasStock: false, pf_hasBiz: true, pf_hasOverseas: false, pf_hasFarm: false },
+        shared: { pf_age: 50, pf_income: 120000, pf_expense: 115000, pf_fin: 1800, pf_re: 2800, pf_loan: 850, pf_spouse: 1, pf_kids: 2 },
+        fields: {
+          selfContrib_num: 6, saved_num: 1200, monthlyInvest_num: 50000,
+          lifeIns_num: 1500, lifePremium_num: 680, minorYears_num: 3, reRatio_num: 30.36, claim1030Toggle: false,
+          reCost_num: 1870, rePrice_num: 2800, reLandGain_num: 373, reLandTax_num: 75, reAssess_num: 850,
+          inv_cash_num: 600, inv_listed_num: 1200, inv_re_num: 2800, inv_ins_num: 1500, inv_ins_plan: 'benef', inv_company_num: 2580, inv_debt_num: 850,
+          cf_spSalary_num: 65000, cf_otherInc_num: 260, cf_loanPay_num: 45000,
+          cf_deposit_num: 600, cf_invest_num: 1200,
+          biz_type: 'unlisted', biz_book_num: 3500, biz_reBook_num: 1800, biz_reAssess_num: 2600, biz_pct_num: 60, biz_mkt_num: 4300
+        }
+      },
+      self: {
+        label: '自營作業者', career: 'owner', group: 'owner',
+        clientName: '範例：50 歲自營作業者家庭（使用者提供）',
+        flags: { pf_hasRe: true, pf_hasStock: false, pf_hasBiz: false, pf_hasOverseas: false, pf_hasFarm: false },
+        shared: { pf_age: 50, pf_income: 95000, pf_expense: 75000, pf_fin: 700, pf_re: 1650, pf_loan: 520, pf_spouse: 1, pf_kids: 2 },
+        salaryOverride: 87600,
+        fields: {
+          selfContrib_num: 6, saved_num: 450, monthlyInvest_num: 25000,
+          lifeIns_num: 600, lifePremium_num: 240, minorYears_num: 4, reRatio_num: 30.3, claim1030Toggle: false,
+          reCost_num: 1100, rePrice_num: 1650, reLandGain_num: 220, reLandTax_num: 44, reAssess_num: 500,
+          inv_cash_num: 250, inv_listed_num: 450, inv_re_num: 1650, inv_ins_num: 600, inv_ins_plan: 'benef', inv_debt_num: 520,
+          cf_spSalary_num: 48000, cf_loanPay_num: 28000,
+          cf_deposit_num: 250, cf_invest_num: 450
+        }
+      },
+      public: {
+        label: '軍公教', career: 'civilDB', group: 'public',
+        clientName: '範例：50 歲公務人員家庭（使用者提供）',
+        flags: { pf_hasRe: true, pf_hasStock: false, pf_hasBiz: false, pf_hasOverseas: false, pf_hasFarm: false },
+        shared: { pf_age: 50, pf_income: 77880, pf_expense: 86000, pf_fin: 600, pf_re: 1500, pf_loan: 450, pf_spouse: 1, pf_kids: 2 },
+        fields: {
+          pubBase_num: 48030, pubYears_num: 40, pubStartAge_num: 65,
+          saved_num: 380, monthlyInvest_num: 20000,
+          lifeIns_num: 500, lifePremium_num: 180, minorYears_num: 2, reRatio_num: 30, claim1030Toggle: false,
+          reCost_num: 1000, rePrice_num: 1500, reLandGain_num: 200, reLandTax_num: 40, reAssess_num: 450,
+          inv_cash_num: 220, inv_listed_num: 380, inv_re_num: 1500, inv_ins_num: 500, inv_ins_plan: 'benef', inv_debt_num: 450,
+          cf_spSalary_num: 72000, cf_bonus_num: 27.258, cf_loanPay_num: 24000,
+          cf_deposit_num: 220, cf_invest_num: 380
+        }
+      },
+      farm: {
+        label: '農民', career: 'farmer', group: 'farm',
+        clientName: '範例：50 歲農民家庭（使用者提供）',
+        flags: { pf_hasRe: true, pf_hasStock: false, pf_hasBiz: false, pf_hasOverseas: false, pf_hasFarm: true },
+        shared: { pf_age: 50, pf_income: 54167, pf_expense: 58000, pf_fin: 500, pf_re: 3150, pf_loan: 0, pf_spouse: 1, pf_kids: 2 },
+        fields: {
+          farmYears_num: 35, farmPre103: true, farmNonAgriInc_num: 18, farmProperty_num: 150, farmFundRate_num: 10,
+          saved_num: 200, monthlyInvest_num: 10000,
+          lifeIns_num: 200, lifePremium_num: 85, minorYears_num: 1, reRatio_num: 40, claim1030Toggle: false,
+          reCost_num: 630, rePrice_num: 950, reLandGain_num: 127, reLandTax_num: 25, reAssess_num: 280,
+          inv_cash_num: 300, inv_listed_num: 200, inv_re_num: 3150, inv_ins_num: 200, inv_ins_plan: 'benef',
+          cf_spSalary_num: 28000, cf_otherInc_num: 18,
+          cf_deposit_num: 300, cf_invest_num: 200,
+          farm_val_num: 980, farm_keep: true
+        }
       }
     };
-    function loadLaborSample() {
-      const S = SAMPLE_LABOR_50;
+    // 把所有欄位還原成頁面原始預設值，避免上一個範例的數字殘留
+    function resetInputsToDefaults() {
+      document.querySelectorAll('input[id], select[id]').forEach(el => {
+        if (el.id === 'career' || ['file', 'button', 'submit'].includes(el.type)) return;
+        if (el.type === 'checkbox' || el.type === 'radio') el.checked = el.defaultChecked;
+        else if (el.tagName === 'SELECT') {
+          const o = Array.from(el.options).findIndex(x => x.defaultSelected);
+          el.selectedIndex = o >= 0 ? o : 0;
+        } else el.value = el.defaultValue;
+      });
+      pubRateDirty = false; pubStartDirty = false;
+    }
+    function loadSample(key) {
+      const S = SAMPLES[key];
+      if (!S) return;
       if (!confirm('載入範例會覆蓋目前各頁已填的數字，確定嗎？')) return;
       const set = (id, v) => {
         const el = document.getElementById(id);
@@ -3340,22 +3427,25 @@
         const slider = id.endsWith('_num') && document.getElementById(id.slice(0, -4));
         if (slider && slider.type === 'range') slider.value = v;
       };
-      document.getElementById('career').value = 'labor';
-      pickGroup('salaried');
-      document.getElementById('career').value = 'labor';
+      resetInputsToDefaults();
+      document.getElementById('career').value = S.career;
+      pickGroup(S.group);
+      document.getElementById('career').value = S.career;
       document.getElementById('coupleToggle').checked = false;
       applyCoupleUI();
       applyCareerUI();
       Object.entries(S.flags).forEach(([id, v]) => set(id, v));
       Object.entries(S.shared).forEach(([id, v]) => { set(id, v); pushShared(id); });
-      Object.entries(S.fields).forEach(([id, v]) => set(id, v));
-      set('hasSpouse', 1); set('kidsCount_num', 1);
+      if (S.salaryOverride) set('salary_num', S.salaryOverride);
+      Object.entries({ ...SAMPLE_BASE_FIELDS, ...S.fields }).forEach(([id, v]) => set(id, v));
+      set('hasSpouse', 1); set('kidsCount_num', S.shared.pf_kids);
       document.getElementById('clientName').value = S.clientName;
       applyCareerUI();
       calcRetire(); calcRisk(); calcTax(); calcStock(); calcFamily(); calcCheck(); calcCash();
       applyProfile();
       if (typeof renderOverview === 'function') renderOverview();
     }
+    function loadLaborSample() { loadSample('labor'); }
     function pickGroup(g) {
       const career = document.getElementById('career');
       if (CAREER_GROUP[career.value] !== g) career.value = GROUP_DEFAULT[g];
@@ -3559,7 +3649,7 @@
         status.push(['家庭財務', cf.surplus < 0 ? `每月赤字 ${fmt(-monthlySurplus)} 元` : `每月結餘 ${fmt(monthlySurplus)} 元`, `儲蓄率 ${Math.round(cf.saveRate * 100)}%，淨資產 ${fmt(cf.netWorth)} 萬`, cf.surplus < 0 ? URGENT : (bads.length ? WATCH : GOOD)]);
         if (cf.surplus < 0) add(1, `收支赤字：每月入不敷出約 <strong>${fmt(-monthlySurplus)} 元</strong>，先檢視最大的支出項目。`);
         else if (bads.length) add(2, `財務指標需調整：${bads.join('、')}。`);
-        if (val('cf_premium_num', 0) === 0) add(2, '保障：保費欄位為 0；若家中確實沒有壽險、醫療或失能保障，建議先確認基本保障（本報告的遺產稅與長照結果未計入任何保單）。');
+        if (val('cf_premium_num', 0) === 0 && val('lifeIns_num', 0) === 0) add(2, '保障：保費欄位為 0；若家中確實沒有壽險、醫療或失能保障，建議先確認基本保障（本報告的遺產稅與長照結果未計入任何保單）。');
       }
       if (inc.has('stock') && s.best) {
         if (s.amtDue > 0) add(2, `最低稅負：本年度預估補繳 <strong>${fmt(s.amtDue)} 元</strong>，可評估分散出售年度。`);
