@@ -47,6 +47,9 @@
       header { padding: 10px 14px !important; }
       .re-block { display: block !important; break-before: page; page-break-before: always; }
       .re-block > div { margin-bottom: 12px; }
+      .print-page1 { break-after: page; page-break-after: always; font-size: 14.5px; line-height: 1.45; }
+      .print-page1 .print-table { font-size: 13.5px; }
+      .print-page1 .print-table th, .print-page1 .print-table td { padding: 5px 8px; }
       .print-skip, .tab-section.print-skip, .tab-section.print-excluded { display: none !important; }   /* 依身分未納入報告的分頁 */
     }
     .nav-group { display:flex; align-items:center; gap:0.25rem; flex-shrink:0; }
@@ -137,12 +140,21 @@
 
     <div class="print-only px-4 pt-3 pb-1 text-sm border-b border-slate-300">
       <div class="flex justify-between"><span>客戶：<strong id="printClient">＿＿＿＿＿＿</strong></span><span>規劃人：宋秉諭</span><span>報告日期：<span id="printDate2"></span></span><span>法規數字更新：<span id="printLawUpdated"></span></span></div>
-      <p id="printToc" class="text-[11px] text-slate-500 mt-1">本報告共八部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務；六、傳承完整度檢查；七、家族企業股權、信託與境外資產；八、家庭財務健診。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
     </div>
+
+    <!-- ==================== 列印用：第 1 頁「一圖兩表三文字」精簡摘要 ==================== -->
+    <section id="printPage1" class="print-only print-page1 px-1 pt-2"></section>
+
+    <!-- ==================== 列印用：附錄（參考與驗算用）==================== -->
+    <section class="print-only print-appendix px-1 pt-3">
+      <h2 class="text-lg font-bold text-white bg-slate-700 rounded px-3 py-1.5 mb-2">附錄　計算依據與驗算細節</h2>
+      <p class="text-[12px] text-slate-700 mb-2">第 1 頁已是完整的重點摘要；以下各頁是計算依據與驗算細節，供您或專業人員對照查核，不需要逐頁閱讀。</p>
+      <p id="printToc" class="text-[11px] text-slate-500 mb-2">本報告共八部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務；六、傳承完整度檢查；七、家族企業股權、信託與境外資產；八、家庭財務健診。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
+    </section>
 
     <!-- ==================== 列印用：一頁摘要 ==================== -->
     <section class="print-only print-summary px-1 pt-3">
-      <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-2">規劃摘要</h2>
+      <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-2">各部分重點數字</h2>
       <div id="printSummaryBody"></div>
     </section>
 
@@ -3489,11 +3501,12 @@
     // 列印第一頁：三個模組的結論與建議下一步
     function renderPrintSummary() {
       document.getElementById('printSummaryBody').innerHTML = buildSummary(includedTabs(), true);
+      document.getElementById('printPage1').innerHTML = buildPage1(includedTabs());
       renderPrintConclusion();
     }
     // ===== 結論與建議：由計算結果依固定規則產生（最後一頁），每條都附上依據的數字 =====
     // 狀態判斷標準（顯示於報告）：良好＝該項沒有缺口或風險；留意＝有風險但目前資產撐得住；需優先處理＝缺口、赤字、提前見底、稅源不足，或傳承完整度低於 50%。
-    function buildConclusion(inc) {
+    function conclusionData(inc) {
       const r = globalRetireData, k = globalRiskData, t = globalTaxData, c = globalCheckData, cf = globalCashData, s = globalStockData, f = globalFamilyData;
       const monthlySurplus = cf.surplus / 12;
       const GOOD = 0, WATCH = 1, URGENT = 2;
@@ -3549,7 +3562,12 @@
       }
 
       const n = [0, 0, 0]; status.forEach(x => n[x[3]]++);
-      const label = ['良好', '留意', '需優先處理'], color = ['#047857', '#b45309', '#b91c1c'];
+      return { status, todo, n };
+    }
+    const CONCL_LABEL = ['良好', '留意', '需優先處理'], CONCL_COLOR = ['#047857', '#b45309', '#b91c1c'];
+    function buildConclusion(inc) {
+      const { status, todo, n } = conclusionData(inc);
+      const label = CONCL_LABEL, color = CONCL_COLOR;
       const tier = (n, title, color, items) => `<div class="mt-3"><div class="font-bold text-sm" style="color:${color}">${title}</div>${items.length
         ? `<ol class="list-decimal pl-5 text-[12px] text-slate-700 space-y-1 mt-1">${items.slice(0, 5).map(x => `<li>${x.text}</li>`).join('')}</ol>${items.length > 5 ? `<div class="text-[11px] text-slate-500 pl-5">其餘 ${items.length - 5} 項請見各部分的說明。</div>` : ''}`
         : '<div class="text-[12px] text-slate-500 mt-1">目前沒有這一類的項目。</div>'}</div>`;
@@ -3562,12 +3580,58 @@
         <div class="mt-3"><div class="font-bold text-sm" style="color:#1d4ed8">定期檢視</div><ol class="list-decimal pl-5 text-[12px] text-slate-700 space-y-1 mt-1">${periodic.map(x => `<li>${x}</li>`).join('')}</ol></div>
         <p class="mt-4 text-[11px] text-slate-500">判斷標準：良好＝沒有缺口或風險；留意＝有風險但目前資產撐得住；需優先處理＝有缺口、赤字、資產提前見底、稅源不足，或傳承完整度低於 50%。本結論依您輸入的數字與頁面假設自動產生，並非針對個人的專業建議；各項金額與稅額以實際資料與主管機關核定為準，本試算不構成投資、法律或稅務建議。</p>`;
     }
+    // ===== 第 1 頁「一圖兩表三文字」：一張圖（資產會不會用完）、兩張表（狀態、建議）、三段文字（結論、前提、待確認）。
+    // 所有數字都取自既有試算結果（conclusionData、globalRetireData、圖表資料），這裡不做任何新的計算。每位使用者版面相同，只有內容不同。
+    function buildPage1Chart() {
+      const r = globalRetireData, k = globalRiskData;
+      const a = retireChartInstance && retireChartInstance.data;
+      if (!a || !a.labels.length) return '';
+      const labels = a.labels, base = a.datasets[0].data;
+      // 長照圖從現在的年齡開始畫；這裡只取與退休後圖表相同年齡的那一段，兩條線才能放在同一張圖
+      const rl = riskChartInstance ? riskChartInstance.data.labels : [], off = rl.indexOf(labels[0]);
+      const shock = (k.isLtc && off >= 0 && rl.length - off === labels.length) ? riskChartInstance.data.datasets[1].data.slice(off) : null;
+      const W = 700, H = 250, L = 64, R = 14, T = 14, B = 34;
+      const maxV = Math.max(1, ...base, ...(shock || [0]));
+      const niceStep = (() => { const raw = maxV / 4, p = Math.pow(10, Math.floor(Math.log10(raw))); return [1, 2, 2.5, 5, 10].map(m => m * p).find(v => v >= raw); })();
+      const top = niceStep * Math.ceil(maxV / niceStep);
+      const x = i => L + (W - L - R) * i / Math.max(1, labels.length - 1), y = v => T + (H - T - B) * (1 - v / top);
+      const line = (d, c, w) => `<polyline fill="none" stroke="${c}" stroke-width="${w}" stroke-linejoin="round" points="${d.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')}"/>`;
+      let grid = '';
+      for (let v = 0; v <= top + 1; v += niceStep) grid += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#e2e8f0"/><text x="${L - 6}" y="${y(v) + 5}" text-anchor="end" font-size="14" fill="#334155">${(v / 10000).toLocaleString()}萬</text>`;
+      const tickEvery = Math.max(1, Math.ceil(labels.length / 6));
+      let xt = '';
+      labels.forEach((lb, i) => { if (i % tickEvery === 0 || i === labels.length - 1) xt += `<text x="${x(i)}" y="${H - 10}" text-anchor="middle" font-size="14" fill="#334155">${lb}</text>`; });
+      const mark = (d, c, age, dy) => { const i = labels.findIndex(l => parseInt(l, 10) === age); return i < 0 ? '' : `<circle cx="${x(i)}" cy="${y(d[i])}" r="5" fill="${c}"/><text x="${Math.min(x(i), W - R - 60)}" y="${y(d[i]) + dy}" font-size="15" font-weight="700" fill="${c}">${age} 歲見底</text>`; };
+      const title = `退休後資產會不會用完（${r.retireAge}～${r.lifeAge} 歲）`;
+      const legend = `<span style="color:#1d4ed8;font-weight:700">━ 健康退休（依目前投入）</span>${shock ? '　<span style="color:#dc2626;font-weight:700">━ 發生長照</span>' : ''}`;
+      return `<div class="font-bold text-[15px] text-slate-900">${title}</div><div class="text-[13px] mb-1">${legend}</div>
+        <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${title}" style="max-height:52mm">${grid}${xt}${line(base, '#1d4ed8', 3)}${shock ? line(shock, '#dc2626', 3) : ''}${r.exhaustedAge !== null ? mark(base, '#1d4ed8', r.exhaustedAge, -10) : ''}${shock && k.shockExhaust !== null ? mark(shock, '#dc2626', k.shockExhaust, -10) : ''}</svg>`;
+    }
+    function buildPage1(inc) {
+      const { status, todo, n } = conclusionData(inc);
+      const chart = inc.has('retire') ? buildPage1Chart() : '';
+      const statusTable = `<table class="print-table bg-white"><thead><tr><th style="width:24%">項目</th><th>結果</th><th style="width:22%">判斷</th></tr></thead><tbody>${status.map(([a, b, , st]) =>
+        `<tr><td>${a}</td><td class="v">${b}</td><td><strong style="color:${CONCL_COLOR[st]}">${CONCL_LABEL[st]}</strong></td></tr>`).join('')}</tbody></table>`;
+      const cell = (tierNo, max) => { const items = todo.filter(x => x.tier === tierNo); return items.length
+        ? items.slice(0, max).map(x => `<div style="margin-bottom:3px">• ${x.text}</div>`).join('') + (items.length > max ? `<div class="text-slate-500">其餘 ${items.length - max} 項見附錄的「結論與建議」。</div>` : '')
+        : '<span class="text-slate-500">目前沒有</span>'; };
+      const planTable = `<table class="print-table bg-white"><thead><tr><th style="width:16%">順序</th><th>建議做法</th></tr></thead><tbody>
+        <tr><td><strong style="color:#b91c1c">先做</strong></td><td>${cell(1, 2)}</td></tr>
+        <tr><td><strong style="color:#b45309">接著做</strong></td><td>${cell(2, 1)}</td></tr>
+        <tr><td><strong style="color:#1d4ed8">定期檢視</strong></td><td>每年，或換工作、結婚生子、退休、健康變化、買賣房地產時，重新輸入最新數字再試算一次。</td></tr></tbody></table>`;
+      const text1 = `<p style="margin:6px 0"><strong>重點結論：</strong>整體來看，<strong style="color:${CONCL_COLOR[2]}">${n[2]} 項需優先處理</strong>、<strong style="color:${CONCL_COLOR[1]}">${n[1]} 項留意</strong>、<strong style="color:${CONCL_COLOR[0]}">${n[0]} 項良好</strong>。</p>`;
+      const text2 = `<p style="margin:6px 0;font-size:12.5px;color:#475569"><strong>使用前提：</strong>本報告依您輸入的數字與固定規則自動產生，並非針對個人的專業建議，不構成投資、法律或稅務建議；實際金額與稅額以主管機關核定為準。計算依據與驗算細節見附錄。</p>`;
+      const text3 = `<p style="margin:6px 0;font-size:12.5px;color:#475569"><strong>待確認事項：</strong>法規數字更新日 ${LAW_META.UPDATED}；仍有 <strong>${LAW_META.PENDING.length} 項</strong>法規待確認（列於報告最後一頁），這些項目以現行規定試算，日後定案後結果可能改變。</p>`;
+      return `<h2 class="text-lg font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">重點摘要</h2>
+        ${text1}<div style="margin:4px 0 8px">${chart}</div>${statusTable}<div style="height:10px"></div>${planTable}${text2}${text3}`;
+    }
     function renderPrintConclusion() {
       const inc = includedTabs();
       const CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
       const parts = PRINT_HEADS.filter(([key]) => inc.has(key === 're' ? 'tax' : key)).length;
-      document.getElementById('printConclusionHead').textContent = `${CN[parts + 1] || ''}、結論與建議`;
-      document.getElementById('printConclusionBody').innerHTML = buildConclusion(inc);
+      document.getElementById('printConclusionHead').textContent = `${CN[parts + 1] || ''}、結論與建議（完整版）`;
+      document.getElementById('printConclusionBody').innerHTML = buildConclusion(inc)
+        + `<div class="mt-4 font-bold text-sm text-slate-800">待確認事項（共 ${LAW_META.PENDING.length} 項，法規數字更新日 ${LAW_META.UPDATED}）</div><ol class="list-decimal pl-5 text-[11px] text-slate-700 space-y-0.5 mt-1">${LAW_META.PENDING.map(t => `<li>${t}</li>`).join('')}</ol>`;
     }
     // 摘要卡片與建議下一步：列印第一頁與「總覽」分頁共用；inc = 要納入的分頁
     function buildSummary(inc, forPrint) {
