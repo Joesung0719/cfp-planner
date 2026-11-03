@@ -3626,20 +3626,19 @@
     function buildPage1(inc) {
       const { status, todo, n } = conclusionData(inc);
       const chart = inc.has('retire') ? buildPage1Chart() : '';
-      const statusTable = `<table class="print-table bg-white"><thead><tr><th style="width:24%">項目</th><th>結果</th><th style="width:22%">判斷</th></tr></thead><tbody>${status.map(([a, b, , st]) =>
-        `<tr><td>${a}</td><td class="v">${b}</td><td><strong style="color:${CONCL_COLOR[st]}">${CONCL_LABEL[st]}</strong></td></tr>`).join('')}</tbody></table>`;
-      const cell = (tierNo, max) => { const items = todo.filter(x => x.tier === tierNo); return items.length
-        ? items.slice(0, max).map(x => `<div style="margin-bottom:3px">• ${x.text}</div>`).join('') + (items.length > max ? `<div class="text-slate-500">其餘 ${items.length - max} 項見附錄的「結論與建議」。</div>` : '')
-        : '<span class="text-slate-500">目前沒有</span>'; };
-      const planTable = `<table class="print-table bg-white"><thead><tr><th style="width:16%">順序</th><th>建議做法</th></tr></thead><tbody>
-        <tr><td><strong style="color:#b91c1c">先做</strong></td><td>${cell(1, 2)}</td></tr>
-        <tr><td><strong style="color:#b45309">接著做</strong></td><td>${cell(2, 1)}</td></tr>
-        <tr><td><strong style="color:#1d4ed8">定期檢視</strong></td><td>每年，或換工作、結婚生子、退休、健康變化、買賣房地產時，重新輸入最新數字再試算一次。</td></tr></tbody></table>`;
-      const text1 = `<p style="margin:6px 0"><strong>重點結論：</strong>整體來看，<strong style="color:${CONCL_COLOR[2]}">${n[2]} 項需優先處理</strong>、<strong style="color:${CONCL_COLOR[1]}">${n[1]} 項留意</strong>、<strong style="color:${CONCL_COLOR[0]}">${n[0]} 項良好</strong>。</p>`;
-      const text2 = `<p style="margin:6px 0;font-size:12.5px;color:#475569"><strong>使用前提：</strong>本報告依您輸入的數字與固定規則自動產生，並非針對個人的專業建議，不構成投資、法律或稅務建議；實際金額與稅額以主管機關核定為準。計算依據與驗算細節見附錄。</p>`;
+      // 儀表板：最多三張狀態卡片（固定順序：退休金、長照風險、傳承完整度、家庭財務，取前三個有納入的），內容直接取自結論表的「結果」與「依據」
+      const cards = ['退休金', '長照風險', '傳承完整度', '家庭財務'].map(name => status.find(x => x[0] === name)).filter(Boolean).slice(0, 3)
+        .map(([name, big, basis, st]) => `<div style="flex:1;border:3px solid ${CONCL_COLOR[st]};border-radius:12px;padding:10px 8px;text-align:center;break-inside:avoid">
+          <div style="font-size:15px;font-weight:700;color:#334155">${name}</div>
+          <div style="font-size:${big.length > 8 ? 21 : 28}px;font-weight:800;line-height:1.25;color:${CONCL_COLOR[st]};margin:6px 0;min-height:2.5em;display:flex;align-items:center;justify-content:center">${big}</div>
+          <div style="font-size:13px;color:#475569;min-height:3.2em">${basis}</div>
+          <div style="margin-top:6px;display:inline-block;padding:2px 14px;border-radius:999px;background:${CONCL_COLOR[st]};color:#fff;font-weight:700;font-size:14px">${CONCL_LABEL[st]}</div></div>`).join('');
+      const first = todo.find(x => x.tier === 1);
+      const text1 = `<p style="margin:6px 0"><strong>重點結論：</strong>整體來看，<strong style="color:${CONCL_COLOR[2]}">${n[2]} 項需優先處理</strong>、<strong style="color:${CONCL_COLOR[1]}">${n[1]} 項留意</strong>、<strong style="color:${CONCL_COLOR[0]}">${n[0]} 項良好</strong>。${first ? `<br><strong style="color:#b91c1c">先做：</strong>${first.text}` : ''}</p>`;
+      const text2 = `<p style="margin:6px 0;font-size:12.5px;color:#475569"><strong>使用前提：</strong>本報告依您輸入的數字與固定規則自動產生，並非針對個人的專業建議，不構成投資、法律或稅務建議；實際金額與稅額以主管機關核定為準。計算依據與完整建議見後面各頁。</p>`;
       const text3 = `<p style="margin:6px 0;font-size:12.5px;color:#475569"><strong>待確認事項：</strong>法規數字更新日 ${LAW_META.UPDATED}；仍有 <strong>${LAW_META.PENDING.length} 項</strong>法規待確認（列於報告最後一頁），這些項目以現行規定試算，日後定案後結果可能改變。</p>`;
       return `<h2 class="text-lg font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">重點摘要</h2>
-        ${text1}<div style="margin:4px 0 8px">${chart}</div>${statusTable}<div style="height:10px"></div>${planTable}${text2}${text3}`;
+        ${text1}<div style="display:flex;gap:10px;margin:8px 0">${cards}</div><div style="margin:8px 0">${chart}</div>${text2}${text3}`;
     }
 
     // ===== 詳細版：每個主題一頁。圖表只在能回答問題時才放；只有單一結論的主題用狀態文字，不硬湊圖。
