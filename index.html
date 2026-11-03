@@ -3428,6 +3428,7 @@
     let savedAnimation = null;
     function preparePrint() {
       if (printChartsBackup) return;   // 按鈕已先準備好，beforeprint 不重做
+      document.documentElement.style.setProperty('--ui-size', '100%');   // 列印以標準字級量測版面，不受畫面字級影響
       const client = document.getElementById('clientName').value.trim();
       document.getElementById('printClient').innerText = client || '＿＿＿＿＿＿';
       document.getElementById('printDate2').innerText = new Date().toLocaleDateString('zh-TW');
@@ -3471,6 +3472,7 @@
       document.getElementById('printToc').innerText = `身分：${careerSel.options[careerSel.selectedIndex].text}。本報告共${CN[titles.length]}部分：${titles.join('；')}。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。`;
     }
     function restoreAfterPrint() {
+      applyFont();
       if (!printChartsBackup) return;
       Chart.defaults.animation = savedAnimation;
       switchTab(printChartsBackup);
