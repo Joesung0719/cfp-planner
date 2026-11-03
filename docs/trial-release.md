@@ -15,7 +15,7 @@
 
 ## 發佈步驟（需 Joe 核准後才做）
 
-1. 在 `trial/config.json` 填入 `feedbackFormUrl` 與 `lineUrl`（皆須 https）。
+1. （選用）在 `trial/config.json` 填入 `feedbackFormUrl` 與 `lineUrl`（須 https）；留空則橫幅不顯示回報連結，客戶直接回覆規劃人。
 2. 在 GitHub：Settings → Pages → Source 選「GitHub Actions」。
 3. 建立 Release，標籤為 `trial-0.1`（之後 `trial-0.2`…）。工作流程會用該標籤的程式碼建置並發佈，所以試用版固定在該版本，工作版繼續改也不會影響。
 4. 網址通常是 `https://joesung0719.github.io/cfp-planner/`。
