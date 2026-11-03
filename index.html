@@ -52,15 +52,16 @@
           <span class="bg-amber-500 text-slate-900 text-xs font-extrabold px-2.5 py-1 rounded whitespace-nowrap">115年版</span>
           <h1 class="text-lg md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">全方位退休與傳承規劃試算</h1>
         </div>
-        <p class="text-slate-400 text-xs mt-1">跨制度退休金流 ✕ 逆算模型 ✕ 115年遺贈稅與流動性 ✕ 股權、信託與境外資產</p>
+        <p class="text-slate-400 text-xs mt-1">跨制度退休金流 ✕ 逆算模型 ✕ 115年遺贈稅與流動性 ✕ 員工股票 ✕ 股權、信託與境外資產</p>
       </div>
 
       <nav class="no-print flex bg-slate-800 p-1 rounded-xl gap-1 overflow-x-auto shrink-0">
         <button onclick="switchTab('retire')" id="btn-retire" class="tab-btn active whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm transition">1. 退休金流與逆算</button>
         <button onclick="switchTab('risk')" id="btn-risk" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">2. 長照與醫療保障</button>
         <button onclick="switchTab('tax')" id="btn-tax" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">3. 遺贈與房地稅務</button>
-        <button onclick="switchTab('check')" id="btn-check" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">4. 傳承完整度檢查</button>
-        <button onclick="switchTab('family')" id="btn-family" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">5. 股權·信託·境外</button>
+        <button onclick="switchTab('stock')" id="btn-stock" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">4. 員工股票與股利</button>
+        <button onclick="switchTab('check')" id="btn-check" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">5. 傳承完整度檢查</button>
+        <button onclick="switchTab('family')" id="btn-family" class="tab-btn whitespace-nowrap px-3.5 py-2 rounded-lg text-xs md:text-sm text-slate-300 hover:text-white transition">6. 股權·信託·境外</button>
       </nav>
     </header>
 
@@ -90,7 +91,7 @@
 
     <div class="print-only px-4 pt-3 pb-1 text-sm border-b border-slate-300">
       <div class="flex justify-between"><span>客戶：<strong id="printClient">＿＿＿＿＿＿</strong></span><span>規劃人：宋秉諭</span><span>報告日期：<span id="printDate2"></span></span></div>
-      <p class="text-[11px] text-slate-500 mt-1">本報告共五部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、傳承完整度檢查；五、家族企業股權、信託與境外資產。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
+      <p class="text-[11px] text-slate-500 mt-1">本報告共七部分：一、退休金流與逆算；二、長照風險壓力測試；三、遺產稅與傳承規劃；四、房地合一稅與不動產傳承；五、員工股票與股利稅務；六、傳承完整度檢查；七、家族企業股權、信託與境外資產。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。</p>
     </div>
 
     <!-- ==================== 列印用：一頁摘要 ==================== -->
@@ -833,16 +834,232 @@
       </div>
     </div>
 
-    <!-- ==================== 模組 4：傳承完整度檢查 ==================== -->
+    <!-- ==================== 模組 4：員工股票與股利稅務 ==================== -->
+    <div id="tab-stock" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="print-only print-block lg:col-span-12">
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">五、員工股票與股利稅務</h2>
+        <p class="text-[11px] text-slate-600 mb-2">試算公司配發或員工認購股票（員工酬勞配股、認股權、限制型股票、現金增資認購、庫藏股、外國母公司股票）在不同課稅時點的稅負與稅後淨額，並比較股利合併計稅與分開計稅、二代健保補充保費、證券交易稅與個人最低稅負。</p>
+        <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
+        <div class="print-assumptions" data-section="tab-stock"></div>
+      </div>
+      <div class="lg:col-span-6 space-y-3.5 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
+        <h2 class="text-sm font-bold text-slate-800 border-b border-slate-200 pb-2">📈 115年度 股票所得與股利參數</h2>
+
+        <div class="bg-white p-3 rounded-lg border border-slate-200 space-y-2">
+          <div class="text-xs font-bold text-slate-700">🧾 本人所得背景</div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>取得年度其他綜合所得淨額（不含股票所得）</span>
+            <div class="flex items-center gap-1"><input type="number" id="skOtherNet_num" value="150" min="0" max="10000" step="10" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>出售年度其他綜合所得淨額（緩課時適用）</span>
+            <div class="flex items-center gap-1"><input type="number" id="skSaleNet_num" value="150" min="0" max="10000" step="10" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>健保投保金額（月）</span>
+            <div class="flex items-center gap-1"><input type="number" id="skInsSal_num" value="76500" min="0" max="313000" step="100" class="w-24 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>元</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>本年度已領其他獎金（年終、績效等）</span>
+            <div class="flex items-center gap-1"><input type="number" id="skOtherBonus_num" value="20" min="0" max="5000" step="1" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span></div>
+          </div>
+        </div>
+
+        <div class="bg-white p-3 rounded-lg border border-amber-300 space-y-2">
+          <div class="text-xs font-bold text-amber-900">🏢 公司配發或員工認購的股票</div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>取得方式</span>
+            <select id="skType" class="font-bold text-amber-800 bg-slate-50 border rounded px-1 py-0.5 max-w-[14rem]">
+              <option value="comp">員工酬勞配股（分紅配股）</option>
+              <option value="option">員工認股權憑證（履約認股）</option>
+              <option value="rsa">限制員工權利新股（RSA）</option>
+              <option value="cashinc">現金增資保留員工認購</option>
+              <option value="treasury">庫藏股轉讓員工</option>
+              <option value="foreign">外國母公司股票（RSU／認股權）</option>
+            </select>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>股票市場別</span>
+            <select id="skMarket" class="font-bold text-amber-800 bg-slate-50 border rounded px-1 py-0.5">
+              <option value="listed">上市／上櫃</option>
+              <option value="emerging">興櫃</option>
+              <option value="private">未上市櫃</option>
+              <option value="foreign">國外交易所</option>
+            </select>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>取得股數</span>
+            <div class="flex items-center gap-1"><input type="number" id="skShares_num" value="10000" min="0" max="100000000" step="1000" class="w-24 text-right font-bold text-amber-700 border rounded px-1 py-0.5"><span>股</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span id="lbl-skStrike">員工每股認購價／履約價</span>
+            <div class="flex items-center gap-1"><input type="number" id="skStrike_num" value="50" min="0" max="100000" step="0.5" class="w-20 text-right font-bold text-amber-700 border rounded px-1 py-0.5"><span>元</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>課稅時點每股時價</span>
+            <div class="flex items-center gap-1"><input type="number" id="skFmv_num" value="120" min="0" max="100000" step="0.5" class="w-20 text-right font-bold text-amber-700 border rounded px-1 py-0.5"><span>元</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>預計出售每股價格</span>
+            <div class="flex items-center gap-1"><input type="number" id="skSell_num" value="150" min="0" max="100000" step="0.5" class="w-20 text-right font-bold text-amber-700 border rounded px-1 py-0.5"><span>元</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>取得年度</span>
+            <select id="skYear" class="font-bold text-amber-800 bg-slate-50 border rounded px-1 py-0.5">
+              <option value="115">115年（緩課上限 500 萬）</option>
+              <option value="116">116年以後（緩課上限 1,000 萬）</option>
+            </select>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>取得後持有股票且在公司服務滿 2 年</span>
+            <input type="checkbox" id="skHeld2" checked class="w-4 h-4 accent-amber-600 cursor-pointer">
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2" id="skNhiRow">
+            <span>員工酬勞股票計入獎金補充保費</span>
+            <input type="checkbox" id="skNhiBonus" checked class="w-4 h-4 accent-amber-600 cursor-pointer">
+          </div>
+          <p class="text-[10px] text-amber-700" id="skTypeNote"></p>
+        </div>
+
+        <div class="bg-white p-3 rounded-lg border border-emerald-300 space-y-2">
+          <div class="text-xs font-bold text-emerald-900">💰 台股股利（現金股利＋股票股利）</div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>持有股數</span>
+            <div class="flex items-center gap-1"><input type="number" id="dvShares_num" value="100000" min="0" max="1000000000" step="1000" class="w-24 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>股</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>每股現金股利（全年合計）</span>
+            <div class="flex items-center gap-1"><input type="number" id="dvCash_num" value="3" min="0" max="1000" step="0.1" class="w-20 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>元</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>每股股票股利（全年合計）</span>
+            <div class="flex items-center gap-1"><input type="number" id="dvStock_num" value="0.5" min="0" max="100" step="0.1" class="w-20 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>元</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>每年發放次數</span>
+            <div class="flex items-center gap-1"><input type="number" id="dvTimes_num" value="1" min="1" max="12" step="1" class="w-14 text-right font-bold text-emerald-700 border rounded px-1 py-0.5"><span>次</span></div>
+          </div>
+        </div>
+
+        <div class="bg-white p-3 rounded-lg border border-indigo-300 space-y-2">
+          <div class="text-xs font-bold text-indigo-900">🌏 海外所得（最低稅負制）</div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>其他海外股票出售價差（全戶）</span>
+            <div class="flex items-center gap-1"><input type="number" id="osGain_num" value="0" min="-10000" max="100000" step="10" class="w-20 text-right font-bold text-indigo-700 border rounded px-1 py-0.5"><span>萬</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>海外股利、利息等其他海外所得（全戶）</span>
+            <div class="flex items-center gap-1"><input type="number" id="osDiv_num" value="0" min="0" max="100000" step="10" class="w-20 text-right font-bold text-indigo-700 border rounded px-1 py-0.5"><span>萬</span></div>
+          </div>
+          <div class="flex justify-between items-center text-xs gap-x-2">
+            <span>海外所得在國外已繳的所得稅</span>
+            <div class="flex items-center gap-1"><input type="number" id="osTaxPaid_num" value="0" min="0" max="100000" step="1" class="w-20 text-right font-bold text-indigo-700 border rounded px-1 py-0.5"><span>萬</span></div>
+          </div>
+          <p class="text-[10px] text-indigo-700">*上方「公司股票」若為外國母公司或未上市櫃股票，出售價差會自動計入（假設在同一年度出售）。</p>
+        </div>
+      </div>
+
+      <div class="lg:col-span-6 space-y-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-2 2xl:grid-cols-4 gap-3">
+          <div class="bg-slate-800 text-white p-3.5 rounded-xl">
+            <div class="text-[11px] text-slate-300">員工股票應稅所得</div>
+            <div class="text-lg font-bold mt-0.5" id="skIncomeVal">--</div>
+            <div class="text-[10px] text-slate-400" id="skIncomeCat">--</div>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 p-3.5 rounded-xl">
+            <div class="text-[11px] text-amber-800 font-bold">稅後淨額最高的方案</div>
+            <div class="text-base font-extrabold text-amber-900 mt-0.5" id="skBestVal">--</div>
+            <div class="text-[10px] text-amber-700" id="skBestDesc">--</div>
+          </div>
+          <div class="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl">
+            <div class="text-[11px] text-emerald-700 font-bold">股利較省稅的方式</div>
+            <div class="text-base font-extrabold text-emerald-900 mt-0.5" id="dvBestVal">--</div>
+            <div class="text-[10px] text-emerald-600" id="dvBestDesc">--</div>
+          </div>
+          <div class="bg-indigo-50 border border-indigo-200 p-3.5 rounded-xl">
+            <div class="text-[11px] text-indigo-700 font-bold">最低稅負應補繳</div>
+            <div class="text-base font-extrabold text-indigo-900 mt-0.5" id="amtVal">--</div>
+            <div class="text-[10px] text-indigo-600" id="amtDesc">--</div>
+          </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
+          <div class="bg-slate-800 text-white px-4 py-2.5 text-xs font-bold flex justify-between items-center gap-2">
+            <span>🏢 員工股票課稅方案比較（<span id="skTypeTitle" class="text-amber-400">--</span>）</span>
+            <span class="text-[11px] text-slate-300 whitespace-nowrap">單位：元</span>
+          </div>
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-100 text-slate-700 border-b">
+              <tr><th class="p-2">方案</th><th class="p-2">課稅年度與計算</th><th class="p-2 text-right">所得稅</th><th class="p-2 text-right">證交稅＋補充保費</th><th class="p-2 text-right">稅後淨額</th></tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200" id="skPlanBody"></tbody>
+          </table>
+          <p class="text-[10px] text-slate-500 px-3 py-2" id="skPlanNote"></p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl overflow-x-auto shadow-sm">
+          <div class="bg-emerald-800 text-white px-4 py-2.5 text-xs font-bold flex justify-between items-center gap-2">
+            <span>💰 股利計稅方式比較（股利所得 <span id="dvTotalTitle" class="text-amber-300">--</span> 元）</span>
+            <span class="text-[11px] text-emerald-100 whitespace-nowrap">全戶須擇一</span>
+          </div>
+          <table class="w-full text-xs text-left">
+            <thead class="bg-slate-100 text-slate-700 border-b">
+              <tr><th class="p-2">方式</th><th class="p-2">計算</th><th class="p-2 text-right">因股利增加的稅</th><th class="p-2 text-right">補充保費</th><th class="p-2 text-right">股利稅後淨額</th></tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200" id="dvPlanBody"></tbody>
+          </table>
+        </div>
+
+        <div class="bg-indigo-50 border border-indigo-200 p-4 rounded-xl text-xs space-y-1" id="amtBox"></div>
+
+        <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl text-xs space-y-1.5">
+          <div class="font-bold text-amber-900 text-sm">💡 股票與股利稅務分析：</div>
+          <div id="stockAdvisorText" class="text-amber-900 space-y-1.5 leading-relaxed"></div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 text-xs text-slate-700 space-y-3">
+          <button type="button" class="collapse-btn w-full flex justify-between items-center font-bold text-slate-800 text-sm text-left" aria-expanded="false" aria-controls="stockGuide" onclick="toggleCollapse(this)">
+            <span>📚 員工股票課稅時點與法令依據</span><span class="collapse-icon no-print text-xs text-slate-500 font-normal whitespace-nowrap">▸ 展開</span>
+          </button>
+          <div id="stockGuide" class="print-expand hidden space-y-3">
+          <table class="print-table">
+            <thead><tr><th style="width:18%">取得方式</th><th style="width:16%">所得類別</th><th style="width:30%">課稅時點與金額</th><th>依據</th></tr></thead>
+            <tbody>
+              <tr><th>員工酬勞配股</th><td>薪資所得</td><td>交付股票日之時價 × 股數（員工未出資）。97 年以前曾以面額計算，99 年 1 月 1 日起改按時價。</td><td><a class="text-blue-700 underline" href="https://law-out.mof.gov.tw/LawContent.aspx?id=GL008256" target="_blank" rel="noopener">財政部 99.3.12 台財稅字第09900025480號令</a></td></tr>
+              <tr><th>員工認股權憑證</th><td>其他所得</td><td>執行權利日（或交付股票日）時價超過認股價格的差額，計入執行或交付股票年度。</td><td><a class="text-blue-700 underline" href="https://law-out.mof.gov.tw/LawContent.aspx?id=GL008991" target="_blank" rel="noopener">財政部 101.5.24 台財稅字第10100069320號令</a>、<a class="text-blue-700 underline" href="https://www.ntbna.gov.tw/singlehtml/374fe8c4b18e48c691a6806ac02b9984?cntId=595f94eb5e8e4091b1cbf84c9b3707ec" target="_blank" rel="noopener">北區國稅局說明</a></td></tr>
+              <tr><th>限制員工權利新股（RSA）</th><td>其他所得</td><td>以既得條件達成日（集保解除註記日或信託撥付日）為可處分日，按當日時價減員工認購價計算。</td><td><a class="text-blue-700 underline" href="https://law-out.mof.gov.tw/LawContent.aspx?id=GL009012" target="_blank" rel="noopener">財政部 101.7.11 台財稅字第10100549471號令</a></td></tr>
+              <tr><th>現金增資員工認購</th><td>其他所得</td><td>可處分日（股票撥入集保帳戶或交付日；有限制轉讓期間者為期滿次日）時價超過認購價的差額。</td><td><a class="text-blue-700 underline" href="https://law-out.mof.gov.tw/LawContent.aspx?id=GL006502" target="_blank" rel="noopener">財政部 97.7.10 台財稅字第09704515241號令</a></td></tr>
+              <tr><th>庫藏股轉讓員工</th><td>其他所得</td><td>交付股票日時價超過認購價的差額；依公司法限制轉讓者，於可處分日年度課稅。</td><td><a class="text-blue-700 underline" href="https://law-out.mof.gov.tw/LawContent.aspx?id=GL008991" target="_blank" rel="noopener">財政部 101.5.24 台財稅字第10100069320號令</a></td></tr>
+              <tr><th>外國母公司股票</th><td>其他所得（中華民國來源）</td><td>因在台灣提供勞務取得，屬中華民國來源所得。<span class="text-rose-700 font-semibold">⚠️ 課稅時點待確認：</span>認股權為執行日；RSU 實務上多以既得（股票撥入帳戶）日時價計算，請依公司扣（免）繳憑單與國稅局認定為準。之後出售的價差為海外所得。</td><td><a class="text-blue-700 underline" href="https://www.leeandli.com/TW/Newsletters/2475.htm" target="_blank" rel="noopener">財政部 94.5.17 台財稅字第0940452755號函（摘要）</a></td></tr>
+              <tr><th>員工獎酬股票緩課</th><td>—</td><td>上述國內公司股票，員工每年取得時價合計 500 萬元內（116 年 1 月 1 日起 1,000 萬元）可選擇緩至轉讓年度課稅；持有且服務滿 2 年者，按取得時價與轉讓時價較低者課稅。須公司申報、董監不適用，一經選定不得變更。</td><td><a class="text-blue-700 underline" href="https://www.president.gov.tw/File/Doc/44b56c8f-61aa-4e02-b500-6379e14bee30" target="_blank" rel="noopener">產業創新條例第19條之1（108.7.24 修正）</a>、<a class="text-blue-700 underline" href="https://cna.com.tw/news/aipl/202608270256.aspx" target="_blank" rel="noopener">115.8.27 三讀提高上限</a></td></tr>
+              <tr><th>時價認定</th><td colspan="2">上市櫃：當日收盤價；興櫃：當日加權平均成交價（現增認購令仍採每股淨值）；未上市櫃：前一年內最近一期經會計師查核之每股淨值。</td><td>同上各令</td></tr>
+            </tbody>
+          </table>
+          <table class="print-table">
+            <thead><tr><th style="width:18%">項目</th><th>115 年度規定</th><th style="width:30%">依據</th></tr></thead>
+            <tbody>
+              <tr><th>綜所稅級距</th><td>綜合所得淨額 61 萬以下 5%、138 萬以下 12%、277 萬以下 20%、519 萬以下 30%、超過 40%</td><td><a class="text-blue-700 underline" href="https://www.mof.gov.tw/singlehtml/384fb3077bb349ea973e7fc6f13b6974?cntId=34b463dc8f1b49f29d440d92a6fd5139" target="_blank" rel="noopener">財政部 114.11.27 公告</a></td></tr>
+              <tr><th>股利所得</th><td>合併計稅：股利 × 8.5% 可抵減，每戶上限 8 萬元；分開計稅：股利 × 28% 單一稅率。全戶只能擇一。股票股利按面額計算所得。</td><td>所得稅法第15條第4、5項</td></tr>
+              <tr><th>二代健保補充保費</th><td>費率 2.11%。股利單次給付達 2 萬元即扣（現金與股票股利皆計，單次上限 1,000 萬元）；獎金全年累計超過當月投保金額 4 倍的部分計收。</td><td><a class="text-blue-700 underline" href="https://www.nhi.gov.tw/ch/dl-26429-47de962ef1464d8f91828d4421028290-1.pdf" target="_blank" rel="noopener">健保署 115.1.5 版說明</a></td></tr>
+              <tr><th>證券交易稅</th><td>出售國內股票由賣方負擔成交價 0.3%；上市櫃股票交易所得目前停徵所得稅。</td><td>證券交易稅條例第2條、所得稅法第4條之1</td></tr>
+              <tr><th>個人最低稅負</th><td>基本所得額＝綜合所得淨額＋分開計稅股利＋海外所得（全戶達 100 萬元才全數計入）＋未上市櫃股票交易所得等；減除 750 萬元後 × 20%，超過一般所得稅額的差額須補繳。符合條件的國內高風險新創事業股票可排除。115 年度免稅額未調整。</td><td><a class="text-blue-700 underline" href="https://www.etax.nat.gov.tw/etwmain/tax-info/understanding/tax-saving-manual/national/individual-income-tax/6xKrvGR" target="_blank" rel="noopener">財政部稅務入口網</a>、所得基本稅額條例第12、13條</td></tr>
+            </tbody>
+          </table>
+          <p class="text-rose-700 bg-rose-50 rounded px-2 py-1">⚠️ 待確認事項：(1) 員工酬勞「股票」是否計入獎金補充保費及其計價方式，健保署說明未明文，本試算以時價估算並可關閉；認股權、RSA 等其他所得不計獎金補充保費。(2) 外國母公司 RSU 的課稅日。(3) 衛福部規劃股利補充保費改為全年合併計算、單次上限提高至 5,000 萬元（目標 116 年），尚未立法，本試算仍依現制。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ==================== 模組 5：傳承完整度檢查 ==================== -->
     <div id="tab-check" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="print-only print-block lg:col-span-12">
-        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">四、傳承完整度檢查</h2>
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">六、傳承完整度檢查</h2>
         <p class="text-[11px] text-slate-600 mb-2">盤點資產是否都有對應的傳承安排，並依家庭狀況檢查常見缺漏，列出尚未涵蓋的風險。</p>
       </div>
       <div class="lg:col-span-6 space-y-3.5 no-print bg-slate-50 p-4 rounded-xl border border-slate-200 max-h-[84vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-slate-200 pb-2 gap-2">
           <h2 class="text-sm font-bold text-slate-800">📋 資產盤點與傳承安排</h2>
-          <button type="button" onclick="importInventory()" class="tool-btn text-[11px]" title="把第3頁的金融資產、不動產、保險、貸款，以及第5頁的公司股權、海外資產帶進來">↻ 從第3、5頁帶入金額</button>
+          <button type="button" onclick="importInventory()" class="tool-btn text-[11px]" title="把第3頁的金融資產、不動產、保險、貸款，以及第6頁的公司股權、海外資產帶進來">↻ 從第3、6頁帶入金額</button>
         </div>
         <div class="space-y-1.5"><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">💵 現金與存款</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_cash_num" value="800" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_cash_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">📈 股票、基金、ETF</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_listed_num" value="2200" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_listed_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏠 不動產（市價）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_re_num" value="5000" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_re_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🌏 海外資產</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_overseas_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_overseas_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🛡️ 人壽保險（保額）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_ins_num" value="1000" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_ins_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏭 公司股權</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_company_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_company_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">💎 其他（車、珠寶、收藏）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_other_num" value="0" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_other_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="will">遺囑指定</option><option value="benef">指定受益人</option><option value="trust">信託</option><option value="gift">生前移轉</option><option value="other">其他安排</option></select></div></div><div class="flex flex-wrap sm:flex-nowrap justify-between items-center text-xs gap-x-2 gap-y-1 bg-white border border-slate-200 rounded-lg p-1.5"><span class="whitespace-nowrap">🏦 負債（房貸、借款、保證）</span><div class="flex items-center gap-1 shrink-0 ml-auto"><input type="number" id="inv_debt_num" value="1500" min="0" step="50" class="w-20 text-right font-bold text-blue-600 border rounded px-1 py-0.5"><span>萬</span><select id="inv_debt_plan" class="text-[11px] border rounded px-1 py-0.5 bg-slate-50 text-slate-700 w-[7.5rem]"><option value="none">未安排</option><option value="covered">有保險或指定資產清償</option></select></div></div></div>
         <p class="text-[10px] text-slate-500">*右側選單填「這項資產目前用什麼方式安排給誰」。未安排的資產，過世後依民法應繼分由繼承人共同繼承。</p>
@@ -901,10 +1118,10 @@
       </div>
     </div>
 
-    <!-- ==================== 模組 5：家族企業股權、信託與境外資產 ==================== -->
+    <!-- ==================== 模組 6：家族企業股權、信託與境外資產 ==================== -->
     <div id="tab-family" class="tab-section hidden p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
       <div class="print-only print-block lg:col-span-12">
-        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">五、家族企業股權、信託與境外資產</h2>
+        <h2 class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-1">七、家族企業股權、信託與境外資產</h2>
         <p class="text-[11px] text-slate-600 mb-2">概估家族企業股權移轉、各類信託與境外資產對遺產稅、贈與稅及最低稅負的影響。遺產稅增加額以第三部分的課稅遺產淨額為基礎，計算多加這筆財產後增加的稅額。</p>
         <div class="text-xs font-bold text-slate-700 mb-1">試算假設與欄位說明</div>
         <div class="print-assumptions" data-section="tab-family"></div>
@@ -1019,12 +1236,25 @@
       RE_EXCEPT_RATE: 20, RE_EXCEPT_YEARS: 5,   // 非自願因素、自有土地合建、都更危老：5年以下仍 20%
       RE_SELF_EXEMPT: 400, RE_SELF_RATE: 10, RE_SELF_YEARS: 6, // 自住房地：設籍並居住連續滿6年，400萬免稅、超過部分10%，6年內限1次
       RE_FEE_RATE: 0.03, RE_FEE_CAP: 30,        // 未提示費用憑證：按成交價 3% 計，上限 30 萬
+      // --- 股票與股利（單位：元）---
+      // 115年度綜所稅級距（財政部 114.11.27 公告）：[級距上限, 稅率]
+      PIT_BRACKETS: [[610000, 0.05], [1380000, 0.12], [2770000, 0.20], [5190000, 0.30], [Infinity, 0.40]],
+      DIV_CREDIT_RATE: 0.085,   // 股利合併計稅可抵減率（所得稅法§15Ⅳ）
+      DIV_CREDIT_CAP: 80000,    // 每一申報戶可抵減上限
+      DIV_SEPARATE_RATE: 0.28,  // 股利分開計稅稅率（所得稅法§15Ⅴ）
+      NHI_RATE: 0.0211,         // 二代健保補充保費費率（110/1/1起）
+      NHI_DIV_MIN: 20000,       // 股利單次給付達2萬元才扣
+      NHI_CAP: 10000000,        // 單次給付計費上限1,000萬元
+      NHI_BONUS_X: 4,           // 獎金超過當月投保金額4倍部分計收
+      STT_RATE: 0.003,          // 證券交易稅（股票，賣方）
+      DEFER_CAP_115: 5000000,   // 產創§19-1 員工獎酬股票緩課上限（115年）
+      DEFER_CAP_116: 10000000,  // 115.8.27 三讀，116/1/1 起提高為1,000萬
+      AMT_EXEMPT: 7500000,      // 個人基本所得額免稅額（115年度未調整）
+      AMT_OVERSEAS_MIN: 1000000,// 全戶海外所得達100萬元才計入
+      AMT_RATE: 0.20,
       // ---- 家族企業、信託、境外（遺產及贈與稅法、所得基本稅額條例）----
       FARM_KEEP_YEARS: 5,       // 農業用地繼承/贈與：承受後5年內須繼續農用，否則追繳（遺贈稅法 §17Ⅰ⑥、§20Ⅰ⑤）
       POST_1Y_RATE: 1.725,      // 他益信託折現：郵政儲金一年期定期儲金固定利率(%)（§10-2）；依中華郵政牌告，115/1 報導為 1.725%，以設立當日牌告為準
-      AMT_EXEMPT: 750,          // 個人基本所得額免稅額(萬)，115年度未調整（CPI 漲幅未達10%）
-      AMT_RATE: 0.20,           // 基本稅額稅率
-      AMT_OVERSEAS_MIN: 100,    // 申報戶海外所得合計未達100萬免計入基本所得額（所得基本稅額條例 §12Ⅰ①）
       CFC_CTRL_PCT: 50,         // 個人CFC：本人與關係人持股≥50%或具重大影響力（§12-1，112/1/1施行）
       CFC_FAMILY_PCT: 10,       // 且本人、配偶及二親等親屬直接持股合計≥10%
       CFC_LOW_TAX: 14,          // 低稅負：稅率未逾我國營所稅率20%之70%（14%），或僅就境內來源所得課稅
@@ -1033,7 +1263,7 @@
       US_NRA_CREDIT_USD: 13000, // 美國對非居民之統一抵免額 13,000 美元（IRC §2102(b)，相當於6萬美元免稅）
       US_EST_BRACKETS: [[10000, .18], [20000, .20], [40000, .22], [60000, .24], [80000, .26], [100000, .28], [150000, .30],
                         [250000, .32], [500000, .34], [750000, .37], [1000000, .39], [Infinity, .40]], // IRC §2001(c) 稅率表(美元)
-      CRS_PARTNERS: '日本、澳洲、英國' // 我國CRS自動交換夥伴（115/7 財政部說明，待確認是否新增）
+      CRS_PARTNERS: '日本、澳洲、英國', // 我國CRS自動交換夥伴（115/7 財政部說明，待確認是否新增）
     };
 
     const num = id => +document.getElementById(id).value;
@@ -1079,14 +1309,21 @@
     ['reFeeAuto','reResident','reSelfUse','reExcept','rePre2016','reHeirSelfUse']
       .forEach(id => document.getElementById(id).addEventListener('change', calcTax));
 
+    ['skOtherNet_num','skSaleNet_num','skInsSal_num','skOtherBonus_num','skShares_num','skStrike_num','skFmv_num','skSell_num',
+     'dvShares_num','dvCash_num','dvStock_num','dvTimes_num','osGain_num','osDiv_num','osTaxPaid_num']
+      .forEach(id => document.getElementById(id).addEventListener('input', calcStock));
+    ['skMarket','skYear','skHeld2','skNhiBonus'].forEach(id => document.getElementById(id).addEventListener('change', calcStock));
+    document.getElementById('skType').addEventListener('change', () => { applyStockUI(); calcStock(); });
+
     function switchTab(tab) {
       document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.classList.add('text-slate-300'); });
       document.getElementById('btn-' + tab).classList.add('active');
       document.getElementById('btn-' + tab).classList.remove('text-slate-300');
-      ['retire', 'risk', 'tax', 'check', 'family'].forEach(t => document.getElementById('tab-' + t).classList.toggle('hidden', t !== tab));
+      ['retire', 'risk', 'tax', 'stock', 'check', 'family'].forEach(t => document.getElementById('tab-' + t).classList.toggle('hidden', t !== tab));
       if (tab === 'retire') calcRetire();
       else if (tab === 'risk') { calcRetire(); calcRisk(); }
       else if (tab === 'tax') calcTax();
+      else if (tab === 'stock') calcStock();
       else if (tab === 'check') { calcTax(); calcFamily(); calcCheck(); }
       else if (tab === 'family') { calcTax(); calcFamily(); }
     }
@@ -1097,7 +1334,7 @@
     function sinkingPmt(fv, r, n) { return r > 0 ? fv * r / (Math.pow(1 + r, n) - 1) : fv / n; }
     function fvAnnuity(p, r, n) { return r > 0 ? p * (Math.pow(1 + r, n) - 1) / r : p * n; }
 
-    let globalRetireData = {}, globalRiskData = {}, globalTaxData = {}, globalCheckData = {}, globalFamilyData = {};
+    let globalRetireData = {}, globalRiskData = {}, globalTaxData = {}, globalStockData = {}, globalCheckData = {}, globalFamilyData = {};
 
     // 公教月退所得替代率上限（114/12 修法後以 112 年附表認定）：15年39%，每年+1.5%，35年69%，之後每年+0.5%至40年
     function dbReplacementRate(years) {
@@ -1648,7 +1885,7 @@
         : '無須申辦繳稅融資。';
       globalTaxData = { plannedTax, plannedNet, taxRaw, savedTotal, isCashSufficient, cashAvail, loanable, loanEnough, lifeFace };
       globalTaxData.re = calcRealEstate(plannedGross - totalDeductions);
-      globalTaxData.netRaw = plannedGross - totalDeductions;   // 未截斷的課稅遺產淨額，供第4、5頁計算增加的遺產稅   // 未截斷為0的淨額，扣除額有剩時可吸收此物件
+      globalTaxData.netRaw = plannedGross - totalDeductions;   // 未截斷的課稅遺產淨額，供第5、6頁計算增加的遺產稅   // 未截斷為0的淨額，扣除額有剩時可吸收此物件
       const rate2 = document.getElementById('pkRow2Rate');
       rate2.innerText = plannedTax === 0 ? '—' : (loanEnough ? '✅ 新制可行，需審核' : '⚠️ 額度不足');
 
@@ -1675,6 +1912,195 @@
       if (netWan <= 5621) return { tax: +(netWan * 0.10).toFixed(1), rate: '10%' };
       if (netWan <= 11242) return { tax: +(netWan * 0.15 - 281.05).toFixed(1), rate: '15%' };
       return { tax: +(netWan * 0.20 - 843.15).toFixed(1), rate: '20%' };
+    }
+
+    // ===== 模組 4：員工股票與股利稅務 =====
+    // 115年度綜所稅應納稅額（元）：依 LAW.PIT_BRACKETS 累進計算
+    function incomeTax(net) {
+      let tax = 0, lower = 0;
+      for (const [upper, rate] of LAW.PIT_BRACKETS) {
+        if (net <= lower) break;
+        tax += (Math.min(net, upper) - lower) * rate;
+        lower = upper;
+      }
+      return tax;
+    }
+    function marginalRate(net) {
+      let lower = 0;
+      for (const [upper, rate] of LAW.PIT_BRACKETS) { if (net <= upper) return rate; lower = upper; }
+      return LAW.PIT_BRACKETS[LAW.PIT_BRACKETS.length - 1][1];
+    }
+    // 最低稅負：回傳 { basic, basicTax, credit, due }
+    function computeAMT(netIncome, separateDiv, overseas, privateGain, generalTax, foreignTaxPaid) {
+      const osIn = overseas >= LAW.AMT_OVERSEAS_MIN ? overseas : 0;
+      const base = netIncome + separateDiv + Math.max(0, privateGain);
+      const basic = base + osIn;
+      const bt = b => Math.max(0, b - LAW.AMT_EXEMPT) * LAW.AMT_RATE;
+      const basicTax = bt(basic);
+      const credit = Math.min(foreignTaxPaid, Math.max(0, basicTax - bt(base)));
+      const due = Math.max(0, basicTax - generalTax - credit);
+      return { basic, basicTax, credit, due, osIn };
+    }
+
+    const SK_TYPES = {
+      comp:     { name: '員工酬勞配股', cat: '薪資所得', when: '交付股票日', defer: true,
+                  note: '員工酬勞配股不需出資，認購價固定為 0；以交付股票日時價計入薪資所得。' },
+      option:   { name: '員工認股權憑證', cat: '其他所得', when: '執行權利日', defer: true,
+                  note: '履約時「時價－認股價」為其他所得；之後出售上市櫃股票的價差停徵所得稅。' },
+      rsa:      { name: '限制員工權利新股（RSA）', cat: '其他所得', when: '既得條件達成日（可處分日）', defer: true,
+                  note: '課稅時點是既得條件達成、集保解除限制註記的那一天，不是發行日；無償配發者認購價填 0。' },
+      cashinc:  { name: '現金增資員工認購', cat: '其他所得', when: '可處分日（股票撥入集保帳戶或交付日）', defer: true,
+                  note: '可處分日時價高於認購價才有所得；有限制轉讓期間者，於期滿次日課稅。' },
+      treasury: { name: '庫藏股轉讓員工', cat: '其他所得', when: '交付股票日（限制轉讓者為可處分日）', defer: true,
+                  note: '交付股票日時價超過員工認購價的差額為其他所得。' },
+      foreign:  { name: '外國母公司股票', cat: '其他所得（中華民國來源）', when: '⚠️ 執行日或既得日（待確認）', defer: false,
+                  note: '在台灣工作取得的母公司股票屬中華民國來源所得；產創條例緩課不適用。之後出售的價差是海外所得，適用最低稅負制。⚠️ RSU 課稅日請以公司開立的憑單與國稅局認定為準。' }
+    };
+
+    function applyStockUI() {
+      const type = document.getElementById('skType').value;
+      const t = SK_TYPES[type];
+      const strike = document.getElementById('skStrike_num');
+      if (type === 'comp') { strike.value = 0; strike.disabled = true; } else strike.disabled = false;
+      const market = document.getElementById('skMarket');
+      if (type === 'foreign') market.value = 'foreign';
+      else if (market.value === 'foreign') market.value = 'listed';
+      [...market.options].forEach(o => { o.disabled = (type === 'foreign') !== (o.value === 'foreign'); });
+      document.getElementById('skNhiRow').classList.toggle('hidden', type !== 'comp');
+      document.getElementById('skTypeNote').innerText = '*' + t.note;
+    }
+
+    function calcStock() {
+      const W = 10000;
+      const type = document.getElementById('skType').value;
+      const T = SK_TYPES[type];
+      const market = document.getElementById('skMarket').value;
+      const otherNet = Math.max(0, val('skOtherNet_num', 0)) * W;
+      const saleNet = Math.max(0, val('skSaleNet_num', 0)) * W;
+      const insSal = Math.max(0, val('skInsSal_num', 0));
+      const otherBonus = Math.max(0, val('skOtherBonus_num', 0)) * W;
+      const shares = Math.max(0, val('skShares_num', 0));
+      const strike = type === 'comp' ? 0 : Math.max(0, val('skStrike_num', 0));
+      const fmv = Math.max(0, val('skFmv_num', 0));
+      const sell = Math.max(0, val('skSell_num', 0));
+      const held2 = document.getElementById('skHeld2').checked;
+      const nhiBonusOn = type === 'comp' && document.getElementById('skNhiBonus').checked;
+      const deferCap = document.getElementById('skYear').value === '116' ? LAW.DEFER_CAP_116 : LAW.DEFER_CAP_115;
+      const domestic = market !== 'foreign';
+
+      const cost = shares * strike;
+      const proceeds = shares * sell;
+      const stt = domestic ? proceeds * LAW.STT_RATE : 0;
+      const income = shares * Math.max(0, fmv - strike);
+      // 員工酬勞股票視為獎金：全年獎金超過投保金額 4 倍的部分 × 2.11%
+      const bonusLimit = insSal * LAW.NHI_BONUS_X;
+      const nhiOn = bonus => Math.max(0, bonus - bonusLimit) * LAW.NHI_RATE;
+      const nhiBonus = nhiBonusOn ? nhiOn(otherBonus + shares * fmv) - nhiOn(otherBonus) : 0;
+      const incTax = (base, add) => incomeTax(base + add) - incomeTax(base);
+      // 取得後到出售的價差：上市櫃停徵；未上市櫃、外國股票另計入基本所得額
+      const gainNote = g => g <= 0 ? '出售時無價差' : (market === 'listed' || market === 'emerging' ? `價差 ${fmt(g)} 元停徵所得稅` : market === 'private' ? `價差 ${fmt(g)} 元計入最低稅負基本所得額` : `價差 ${fmt(g)} 元為海外所得`);
+
+      const plans = [];
+      // 方案A：取得年度課稅
+      const taxA = incTax(otherNet, income);
+      const gainA = shares * (sell - fmv);
+      plans.push({ key: 'A', name: '取得年度課稅（一般情況）',
+        desc: `${T.when}按時價計 ${fmt(income)} 元${T.cat}，邊際稅率 ${Math.round(marginalRate(otherNet + income) * 100)}%；${gainNote(gainA)}`,
+        tax: taxA, fee: stt + nhiBonus, net: proceeds - cost - taxA - stt - nhiBonus, laterGain: gainA });
+
+      if (T.defer && shares > 0 && fmv > 0) {
+        const deferShares = Math.min(shares, Math.floor(deferCap / fmv));
+        const restShares = shares - deferShares;
+        const restIncome = restShares * Math.max(0, fmv - strike);
+        const restNote = restShares > 0 ? `；超過上限的 ${fmt(restShares)} 股仍於取得年度課稅` : '';
+        // 方案B：緩課，未滿2年出售 → 轉讓時價計所得
+        const deferIncB = deferShares * Math.max(0, sell - strike);
+        const taxB = incTax(otherNet, restIncome) + incTax(saleNet, deferIncB);
+        plans.push({ key: 'B', name: '選擇緩課，未滿 2 年出售',
+          desc: `${fmt(deferShares)} 股延至出售年度，按出售時價計 ${fmt(deferIncB)} 元${T.cat}${restNote}`,
+          tax: taxB, fee: stt + nhiBonus, net: proceeds - cost - taxB - stt - nhiBonus, laterGain: restShares * (sell - fmv) });
+        // 方案C：緩課且持有服務滿2年 → 取得時價與轉讓時價孰低
+        const low = Math.min(fmv, sell);
+        const deferIncC = deferShares * Math.max(0, low - strike);
+        const taxC = incTax(otherNet, restIncome) + incTax(saleNet, deferIncC);
+        const gainC = deferShares * Math.max(0, sell - fmv) + restShares * (sell - fmv);
+        plans.push({ key: 'C', name: '選擇緩課，持有且服務滿 2 年',
+          desc: `${fmt(deferShares)} 股於出售年度按「取得時價 ${fmv}／出售價 ${sell}」較低者計 ${fmt(deferIncC)} 元${restNote}；${gainNote(gainC)}`,
+          tax: taxC, fee: stt + nhiBonus, net: proceeds - cost - taxC - stt - nhiBonus, laterGain: gainC, needHeld: true });
+      }
+      const usable = plans.filter(p => !p.needHeld || held2);
+      const best = usable.reduce((a, b) => (b.net > a.net ? b : a), usable[0]);
+
+      document.getElementById('skTypeTitle').innerText = T.name;
+      document.getElementById('skIncomeVal').innerText = fmt(income) + ' 元';
+      document.getElementById('skIncomeCat').innerText = `${T.cat}｜${T.when}`;
+      document.getElementById('skBestVal').innerText = fmt(best.net) + ' 元';
+      document.getElementById('skBestDesc').innerText = best.name;
+      document.getElementById('skPlanBody').innerHTML = plans.map(p => {
+        const off = p.needHeld && !held2;
+        return `<tr class="${p === best ? 'bg-amber-50' : ''} ${off ? 'opacity-50' : ''}">
+          <td class="p-2 font-bold ${p === best ? 'text-amber-800' : 'text-slate-700'}">${p === best ? '⭐ ' : ''}${p.name}${off ? '<div class="text-[10px] font-normal text-rose-600">未勾選「持有且服務滿2年」</div>' : ''}</td>
+          <td class="p-2 text-slate-600">${p.desc}</td>
+          <td class="p-2 text-right font-semibold text-rose-700">${fmt(p.tax)}</td>
+          <td class="p-2 text-right text-slate-600">${fmt(p.fee)}</td>
+          <td class="p-2 text-right font-bold text-slate-900">${fmt(p.net)}</td></tr>`;
+      }).join('');
+      document.getElementById('skPlanNote').innerHTML = `稅後淨額＝出售所得 ${fmt(proceeds)} 元 − 員工出資 ${fmt(cost)} 元 − 所得稅 − 證交稅（${domestic ? '0.3%' : '國外股票不課台灣證交稅'}）${nhiBonusOn ? ' − 獎金補充保費' : ''}。所得稅為「加入這筆所得後增加的綜所稅」，未含最低稅負與券商手續費。${T.defer ? `緩課上限以取得時價計，本年度上限 ${wan(deferCap)} 萬元。` : ''}`;
+
+      // ===== 股利 =====
+      const dvShares = Math.max(0, val('dvShares_num', 0));
+      const cashDiv = dvShares * Math.max(0, val('dvCash_num', 0));
+      const stockDiv = dvShares * Math.max(0, val('dvStock_num', 0));   // 股票股利按面額計
+      const div = cashDiv + stockDiv;
+      const times = Math.max(1, Math.round(val('dvTimes_num', 1)));
+      const perPay = div / times;
+      const nhiDiv = perPay >= LAW.NHI_DIV_MIN ? Math.min(perPay, LAW.NHI_CAP) * LAW.NHI_RATE * times : 0;
+      // 以「取得年度課稅」方案的所得作為當年度背景
+      const baseNet = otherNet + income;
+      const credit = Math.min(div * LAW.DIV_CREDIT_RATE, LAW.DIV_CREDIT_CAP);
+      const combinedAdd = incTax(baseNet, div) - credit;
+      const separateAdd = div * LAW.DIV_SEPARATE_RATE;
+      const useCombined = combinedAdd <= separateAdd;
+      document.getElementById('dvTotalTitle').innerText = fmt(div);
+      document.getElementById('dvBestVal').innerText = div === 0 ? '無股利' : (useCombined ? '合併計稅' : '分開計稅 28%');
+      document.getElementById('dvBestDesc').innerText = div === 0 ? '--' : `比另一方式少繳 ${fmt(Math.abs(combinedAdd - separateAdd))} 元`;
+      const dvRow = (name, calc, add, on) => `<tr class="${on ? 'bg-emerald-50' : ''}">
+        <td class="p-2 font-bold ${on ? 'text-emerald-800' : 'text-slate-700'}">${on ? '⭐ ' : ''}${name}</td><td class="p-2 text-slate-600">${calc}</td>
+        <td class="p-2 text-right font-semibold ${add < 0 ? 'text-emerald-700' : 'text-rose-700'}">${fmt(add)}</td>
+        <td class="p-2 text-right text-slate-600">${fmt(nhiDiv)}</td>
+        <td class="p-2 text-right font-bold text-slate-900">${fmt(div - add - nhiDiv)}</td></tr>`;
+      document.getElementById('dvPlanBody').innerHTML = div === 0 ? '<tr><td colspan="5" class="p-2 text-slate-500">未輸入股利。</td></tr>' :
+        dvRow('合併計稅', `併入綜合所得，邊際稅率 ${Math.round(marginalRate(baseNet + div) * 100)}%；可抵減 ${fmt(credit)} 元（8.5%，每戶上限 8 萬）${credit < div * LAW.DIV_CREDIT_RATE ? '，已達上限' : ''}`, combinedAdd, useCombined)
+        + dvRow('分開計稅', '股利 × 28% 單一稅率，不併入綜合所得', separateAdd, !useCombined);
+
+      // ===== 最低稅負 =====
+      const W2 = W;
+      const foreignGain = market === 'foreign' ? Math.max(0, gainA) : 0;
+      const privateGain = market === 'private' ? gainA : 0;
+      const overseas = val('osGain_num', 0) * W2 + Math.max(0, val('osDiv_num', 0)) * W2 + foreignGain;
+      const netIncome = baseNet + (useCombined ? div : 0);
+      const generalTax = incomeTax(netIncome) + (useCombined ? 0 : separateAdd);
+      const amt = computeAMT(netIncome, useCombined ? 0 : div, overseas, privateGain, generalTax, Math.max(0, val('osTaxPaid_num', 0)) * W2);
+      document.getElementById('amtVal').innerText = amt.due > 0 ? fmt(amt.due) + ' 元' : '免補繳';
+      document.getElementById('amtDesc').innerText = `基本所得額 ${wan(amt.basic)} 萬（免稅額 ${wan(LAW.AMT_EXEMPT)} 萬）`;
+      document.getElementById('amtBox').innerHTML = `
+        <div class="font-bold text-indigo-900 text-sm">🌏 個人最低稅負檢核（以「取得年度課稅」方案、當年度出售估算）</div>
+        <p>海外所得合計 <strong>${fmt(overseas)}</strong> 元${foreignGain > 0 ? `（含母公司股票出售價差 ${fmt(foreignGain)} 元）` : ''}：${overseas >= LAW.AMT_OVERSEAS_MIN ? '已達 100 萬元，<strong>全數</strong>計入基本所得額' : '未達全戶 100 萬元，不計入（仍須留意明年是否超過）'}。${privateGain > 0 ? `未上市櫃股票交易所得 ${fmt(privateGain)} 元計入基本所得額。` : ''}</p>
+        <p>基本所得額 ${fmt(amt.basic)} 元 → 基本稅額 ${fmt(amt.basicTax)} 元；一般所得稅額 ${fmt(generalTax)} 元${amt.credit > 0 ? `；國外已納稅額可扣抵 ${fmt(amt.credit)} 元` : ''}。</p>
+        <p class="font-bold ${amt.due > 0 ? 'text-rose-700' : 'text-emerald-700'}">${amt.due > 0 ? `基本稅額高於一般所得稅額，需另補繳 ${fmt(amt.due)} 元。` : '一般所得稅額已高於基本稅額，不需補繳最低稅負。'}</p>`;
+
+      // ===== 分析 =====
+      const notes = [];
+      notes.push(`<p>1. <strong>${T.name}</strong>屬<strong>${T.cat}</strong>，課稅時點為<strong>${T.when}</strong>，應稅所得 ${fmt(income)} 元，使當年度綜所稅增加 ${fmt(taxA)} 元（加入後邊際稅率 ${Math.round(marginalRate(otherNet + income) * 100)}%）。${T.note}</p>`);
+      if (T.defer) {
+        const pB = plans.find(p => p.key === 'B'), pC = plans.find(p => p.key === 'C');
+        if (pB && pC) notes.push(`<p>2. <strong>產創條例緩課：</strong>${sell > fmv ? `出售價高於取得時價時，未滿 2 年出售會以較高的出售價課稅（所得稅 ${fmt(pB.tax)} 元，取得年度課稅為 ${fmt(taxA)} 元）；持有並服務滿 2 年則以取得時價課稅（${fmt(pC.tax)} 元），超過部分${market === 'private' ? '計入最低稅負基本所得額' : '屬停徵的證券交易所得'}。` : '出售價不高於取得時價時，緩課可用較低的出售價計稅，降低稅負，但要承擔股價下跌的風險。'}${saleNet < otherNet ? `出售年度所得較低（例如退休後）時，緩課可適用較低級距。` : ''}緩課須公司向主管機關申報，董監事不適用，一經選擇不得變更；116 年起每年上限提高為 1,000 萬元。</p>`);
+      } else notes.push('<p>2. 外國母公司股票不適用產創條例緩課。母公司若有代扣美國等國的稅款，屬於工作所得部分不一定能在台灣扣抵，出售價差與海外股利則併入海外所得，全戶海外所得達 100 萬元須申報最低稅負。</p>');
+      if (nhiBonusOn) notes.push(`<p>3. <strong>補充保費：</strong>員工酬勞股票按時價 ${fmt(shares * fmv)} 元與其他獎金 ${fmt(otherBonus)} 元合計，超過投保金額 4 倍（${fmt(bonusLimit)} 元）的部分以 2.11% 計，估算 ${fmt(nhiBonus)} 元。⚠️ 股票型員工酬勞的補充保費計價方式請洽健保署確認。</p>`);
+      if (div > 0) notes.push(`<p>${nhiBonusOn ? 4 : 3}. <strong>股利：</strong>${useCombined ? '合併計稅較有利' : '分開計稅（28%）較有利'}，股利稅後約 ${fmt(div - Math.min(combinedAdd, separateAdd) - nhiDiv)} 元。股票股利 ${fmt(stockDiv)} 元按面額計入所得、可配得 ${fmt(stockDiv / 10)} 股，但沒有現金入帳，要預留繳稅現金。單次股利達 2 萬元會扣 2.11% 補充保費（本例 ${fmt(nhiDiv)} 元）。</p>`);
+      document.getElementById('stockAdvisorText').innerHTML = notes.join('');
+
+      globalStockData = { typeName: T.name, income, taxA, best, div, useCombined, divTaxSaved: Math.abs(combinedAdd - separateAdd), amtDue: amt.due };
     }
 
     // ===== 房地合一稅 2.0（單位：萬元）=====
@@ -1849,6 +2275,26 @@
       lifeIns: '過世時保險公司會理賠的身故保險金。有指定受益人的保險金不算遺產，可直接給家人拿來繳稅。',
       lifePremium: '為這些保單總共繳了多少保費。這筆錢已經從您的存款移出，所以會讓遺產變少。',
       giftYears: '每人每年可以免稅贈與 244 萬。這裡填打算連續贈與幾年。注意：過世前 2 年內的贈與仍會算回遺產，115 年修法後這部分的稅由受贈人按比例自行負擔。',
+      skOtherNet: '取得股票那一年，除了這筆股票所得以外的「綜合所得淨額」，也就是所得總額扣掉免稅額（每人10.1萬）、標準或列舉扣除額、薪資特別扣除額（22.7萬）等之後的金額。可參考去年報稅的「綜合所得淨額」。',
+      skSaleNet: '選擇緩課時，股票所得會在出售那一年才課稅。若打算退休後才賣，這裡可填退休後較低的所得淨額。',
+      skInsSal: '健保投保金額，可看薪資單或健保卡資料。員工酬勞等獎金全年累計超過投保金額 4 倍的部分，要扣 2.11% 補充保費。',
+      skOtherBonus: '今年已經或將會領到的其他獎金（年終、績效、三節獎金等），用來判斷獎金補充保費的門檻。',
+      skType: '公司給股票的方式不同，所得類別和課稅日也不同：員工酬勞配股是薪資所得；認股權、限制型股票、現金增資認購、庫藏股是其他所得；外國母公司股票也屬台灣來源所得。',
+      skMarket: '上市櫃股票以收盤價、興櫃以加權平均價、未上市櫃以每股淨值認定時價。出售上市櫃與興櫃股票的價差停徵所得稅；未上市櫃股票價差要計入最低稅負；國外股票價差是海外所得。',
+      skShares: '這次公司配發或您認購的股數（1 張 = 1,000 股）。',
+      skStrike: '員工每股要付多少錢：認股權的履約價、現金增資或庫藏股的認購價。員工酬勞配股與無償配發的限制型股票為 0。',
+      skFmv: '課稅那一天的每股時價：員工酬勞為交付股票日，認股權為履約日，限制型股票為既得條件達成日，現金增資為股票撥入集保帳戶日。',
+      skSell: '預計之後賣出的每股價格，用來比較不同課稅方案與稅後淨額。',
+      skYear: '取得股票的年度。產業創新條例的緩課額度，115 年為每年 500 萬元，116 年起提高為 1,000 萬元（以取得時價計算）。',
+      skHeld2: '選擇緩課後，若取得股票後繼續持有且在公司服務滿 2 年，出售時可用「取得時價」與「出售時價」較低者課稅。',
+      skNhiBonus: '員工酬勞屬獎金性質，全年獎金超過投保金額 4 倍的部分要扣 2.11% 補充保費。股票型員工酬勞的計價方式健保署未明文，本試算以時價估算，可取消。',
+      dvShares: '目前持有、會領股利的台股股數。',
+      dvCash: '每股一年合計配發的現金股利（元）。季配息的股票請把四季加總。',
+      dvStock: '每股配發的股票股利（元）。股票股利按面額 10 元計算，配 1 元等於每 1,000 股配 100 股，雖然沒有現金入帳，仍要計入股利所得繳稅。',
+      dvTimes: '一年發放幾次。補充保費是看「單次」股利是否達 2 萬元，季配息的股票每次金額較小，可能不用扣。',
+      osGain: '全戶出售美股、海外 ETF、海外基金等的已實現價差（賠錢可填負數）。',
+      osDiv: '全戶的海外股利、利息、海外薪資等其他海外所得。全戶海外所得合計達 100 萬元，才需要全數計入最低稅負的基本所得額。',
+      osTaxPaid: '海外所得已在國外繳的所得稅（例如美股股利被預扣的 30%），可在限額內扣抵最低稅負。',
       reCost: '當初買進這間房地的價格（含土地與房屋）。繼承或受贈取得的，以當時的房屋評定現值＋公告土地現值，依物價指數調整後計算。',
       rePrice: '預估現在可以賣到的價格。',
       reFee: '買進與賣出時可列舉的費用，例如仲介費、代書費、契稅、印花稅、裝修改良支出等，需有單據。',
@@ -1867,14 +2313,14 @@
       loanLtv: '子女繼承房地後，銀行願意以市價的幾成借錢給子女繳遺產稅。一般住宅約 6～7 成，實際依銀行審核與央行規定。'
     };
 
-    // ===== 第4、5頁的欄位說明 =====
+    // ===== 第5、6頁的欄位說明 =====
     Object.assign(FIELD_HELP, {
       inv_cash: '活存、定存、外幣存款等。過世後帳戶會凍結，115年修法後需繼承人過半數且應繼分過半數同意，才能動用來繳遺產稅。',
       inv_listed: '台股、基金、ETF、債券等，以目前市值填寫。',
       inv_re: '名下房屋與土地的市價合計。',
       inv_overseas: '海外銀行帳戶、海外證券戶、境外保單、海外房地產等。',
       inv_ins: '有指定受益人的身故保險金，不計入遺產。',
-      inv_company: '持有的公司股權價值，可用第5頁算出的稅法評價。',
+      inv_company: '持有的公司股權價值，可用第6頁算出的稅法評價。',
       inv_other: '汽車、珠寶、收藏品、借給別人的錢（債權）等。',
       inv_debt: '房貸、信貸、借款，以及替別人作保的金額。',
       biz_type: '上市櫃股票以過世（或贈與）當日收盤價計算，興櫃以當日加權平均成交價計算；未上市櫃股票以公司資產淨值計算。',
@@ -1983,7 +2429,7 @@
       if (t.plannedTax > 0 && !t.isCashSufficient)
         risks.push({ w: 4.5, title: '遺產稅稅源不足', text: `依第3頁試算，應納遺產稅 ${t.plannedTax} 萬，遺產內現金加保險金不足 ${(t.plannedTax - t.cashAvail).toFixed(1)} 萬。` });
       const f = globalFamilyData;
-      if (f.amtExtra > 0) risks.push({ w: 3.5, title: '海外所得最低稅負', text: `依第5頁試算，海外所得與 CFC 所得可能需補繳最低稅負約 ${fmt(f.amtExtra)} 萬。` });
+      if (f.amtExtra > 0) risks.push({ w: 3.5, title: '海外所得最低稅負', text: `依第6頁試算，海外所得與 CFC 所得可能需補繳最低稅負約 ${fmt(f.amtExtra)} 萬。` });
       if (f.usTax > 0) risks.push({ w: 3.5, title: '美國遺產稅', text: `直接持有美國資產超過 6 萬美元，預估美國遺產稅約 ${fmt(f.usTax)} 萬元（新台幣），可考慮改以境外基金或非美國註冊的 ETF 持有，請會計師評估。` });
       risks.sort((a, b) => b.w - a.w);
 
@@ -2015,7 +2461,7 @@
 
       globalCheckData = { score, risks, assetPct: pct };
     }
-    // 從第3、5頁帶入金額
+    // 從第3、6頁帶入金額
     function importInventory() {
       calcTax(); calcFamily();
       const set = (id, v) => { document.getElementById(id + '_num').value = Math.round(v); };
@@ -2036,7 +2482,7 @@
       if (val('minorYears_num', 0) > 0) document.getElementById('fs_minor').checked = true;
       if (val('disabledCount_num', 0) > 0) document.getElementById('fs_care').checked = true;
       calcCheck();
-      storeMsg('✓ 已帶入第3、5頁的金額，請確認現金與股票的拆分');
+      storeMsg('✓ 已帶入第3、6頁的金額，請確認現金與股票的拆分');
     }
 
     // ===== 模組 5：家族企業股權、信託、境外資產 =====
@@ -2175,9 +2621,9 @@
       const cfcExempt = subst || profit <= LAW.CFC_DE_MINIMIS;
       const cfcIncome = cfcHit && !cfcExempt ? Math.max(0, profit) * self / 100 : 0;
       const osIncome = val('os_income_num', 0) + cfcIncome;
-      const osCounted = osIncome >= LAW.AMT_OVERSEAS_MIN ? osIncome : 0;
+      const osCounted = osIncome >= (LAW.AMT_OVERSEAS_MIN / 10000) ? osIncome : 0;
       const basic = val('os_netInc_num', 0) + osCounted;
-      const amt = Math.max(0, basic - LAW.AMT_EXEMPT) * LAW.AMT_RATE;
+      const amt = Math.max(0, basic - (LAW.AMT_EXEMPT / 10000)) * LAW.AMT_RATE;
       const amtExtra = Math.max(0, amt - val('os_regTax_num', 0));
       Object.assign(fd, { osExtra: Math.max(0, osExtra), usTax, amtExtra, cfcIncome });
 
@@ -2197,7 +2643,7 @@
           : '經常居住境外者只就境內財產課遺產稅，但只能扣除免稅額，配偶、子女等扣除額大多不能適用。過世或贈與前 2 年內自願喪失我國國籍者，仍視為我國國民（第3條之1）。'}</p>
         <p><strong>外國遺產稅：</strong>非美國居民以個人名義持有美國股票或不動產，超過 ${fmt(LAW.US_NRA_EXEMPT_USD)} 美元要申報美國遺產稅，稅率 18%～40%；台美之間目前沒有遺產稅協定（待確認）。${usUsd > 0 ? `本例美國資產 ${fmt(usUsd / 10000)} 萬美元，美國遺產稅約 ${fmt(usTax / fx * 10000)} 美元（約 ${fmt(usTax)} 萬元）。` : ''}其他國家（如日本、韓國）也可能依財產所在地課稅。</p>
         <p><strong>受控外國企業（CFC）：</strong>${cfcMsg}</p>
-        <p><strong>海外所得最低稅負：</strong>申報戶海外所得合計 ${fmt(osIncome)} 萬，${osIncome >= LAW.AMT_OVERSEAS_MIN ? '已達' : '未達'} ${LAW.AMT_OVERSEAS_MIN} 萬門檻${osIncome >= LAW.AMT_OVERSEAS_MIN ? '，全數計入基本所得額' : '，不計入'}。基本所得額 ${fmt(basic)} 萬 − 免稅額 ${LAW.AMT_EXEMPT} 萬，× ${LAW.AMT_RATE * 100}% ＝ 基本稅額 ${fmt(amt)} 萬；高於一般所得稅時補繳差額，約 <strong>${fmt(amtExtra)} 萬</strong>（海外已納所得稅可依規定扣抵，本頁未計入）。</p>
+        <p><strong>海外所得最低稅負：</strong>申報戶海外所得合計 ${fmt(osIncome)} 萬，${osIncome >= (LAW.AMT_OVERSEAS_MIN / 10000) ? '已達' : '未達'} ${(LAW.AMT_OVERSEAS_MIN / 10000)} 萬門檻${osIncome >= (LAW.AMT_OVERSEAS_MIN / 10000) ? '，全數計入基本所得額' : '，不計入'}。基本所得額 ${fmt(basic)} 萬 − 免稅額 ${(LAW.AMT_EXEMPT / 10000)} 萬，× ${LAW.AMT_RATE * 100}% ＝ 基本稅額 ${fmt(amt)} 萬；高於一般所得稅時補繳差額，約 <strong>${fmt(amtExtra)} 萬</strong>（海外已納所得稅可依規定扣抵，本頁未計入）。</p>
         <p><strong>CRS 共同申報：</strong>我國目前與${LAW.CRS_PARTNERS}進行金融帳戶資訊自動交換，國稅局也會透過大額結匯與申報資料追蹤海外資產。沒有交換不代表不用申報，漏報的海外所得與遺產會被補稅並處罰。</p>
         <p><strong>境外信託：</strong>委託人為我國居住者時，設立他益境外信託仍課我國贈與稅；委託人保留撤銷或變更受益人權利時，可能被認定為自益，過世時計入遺產。境外信託持有境外公司時，也要一併檢視 CFC 規定。</p>`;
 
@@ -2259,12 +2705,14 @@
     }
     initFieldHelp();
     applyCareerUI();
+    applyStockUI();
 
     // ===== 列印報告 =====
     const PRINT_FIELDS = {
       'tab-retire': ['age','retireAge','lifeAge','salary','expense','salGrowth','repRate','inflation','roi','postRoi','career','pubBase','pubYears','pubRate','pubStartAge','gepiRate','laborYears','natYears','claimAge','selfContrib','lpBal','lpRoi','saved','monthlyInvest','coupleToggle','spouseAge','spouseClaimAge','spousePension','spouseSaved','spouseInvest'],
       'tab-risk': ['ltcToggleRisk','ltcStart','ltcYears','ltcCostRisk','ltcInsRisk','ltcStopInvest'],
       'tab-tax': ['finAsset','reMarket','reRatio','reLoan','loanLtv','claim1030Toggle','maritalPct','spouseWealth','hasSpouse','kidsCount','minorYears','parentsCount','siblingsCount','disabledCount','lifeIns','lifePremium','giftYears'],
+      'tab-stock': ['skOtherNet','skSaleNet','skInsSal','skOtherBonus','skType','skMarket','skShares','skStrike','skFmv','skSell','skYear','skHeld2','skNhiBonus','dvShares','dvCash','dvStock','dvTimes','osGain','osDiv','osTaxPaid'],
       'tab-family': ['biz_type','biz_book','biz_reBook','biz_reAssess','biz_stkBook','biz_stkMkt','biz_listedVal','biz_pct','biz_mkt','biz_giftYears','biz_donors','farm_val','farm_keep','tr_type','tr_amt','tr_years','tr_rate','tr_otherGift','os_resident','os_fin','os_inTab3','os_re','os_us','os_fx','os_forTax','os_lowTax','os_ctrl','os_fam','os_self','os_subst','os_cfcProfit','os_income','os_netInc','os_regTax'],
       'tab-tax-re': ['reCost','rePrice','reFee','reFeeAuto','reLandGain','reLandTax','reYears','reResident','reSelfUse','reExcept','rePre2016','reAssess','reHeirYears','reCpi','reHeirSelfUse']
     };
@@ -2299,7 +2747,7 @@
       document.querySelectorAll('.print-assumptions').forEach(box => {
         const rows = PRINT_FIELDS[box.dataset.section].filter(id => {
           const el = document.getElementById(id + '_num') || document.getElementById(id);
-          return !el.closest('.career-field.hidden, .couple-field.hidden, .cond-field.hidden');
+          return !el.closest('.career-field.hidden, .couple-field.hidden, #skNhiRow.hidden, .cond-field.hidden');
         }).map(id =>
           `<tr><td>${escapeHtml(fieldLabel(id))}</td><td class="v">${escapeHtml(fieldValue(id))}</td><td>${escapeHtml(FIELD_HELP[id] || '')}</td></tr>`).join('');
         box.innerHTML = `<table class="print-table"><thead><tr><th style="width:26%">項目</th><th style="width:14%">數值</th><th>說明</th></tr></thead><tbody>${rows}</tbody></table>`;
@@ -2310,7 +2758,7 @@
       document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('hidden'));
       savedAnimation = Chart.defaults.animation;
       Chart.defaults.animation = false;
-      calcRetire(); calcRisk(); calcTax(); calcFamily(); calcCheck();
+      calcRetire(); calcRisk(); calcTax(); calcStock(); calcFamily(); calcCheck();
       renderPrintSummary();
       // A4 可列印寬度約 700px；固定尺寸重畫，避免列印版面寬度與畫面不同時圖表空白
       retireChartInstance.resize(700, 280);
@@ -2324,7 +2772,7 @@
     }
     // 列印第一頁：三個模組的結論與建議下一步
     function renderPrintSummary() {
-      const r = globalRetireData, k = globalRiskData, t = globalTaxData;
+      const r = globalRetireData, k = globalRiskData, t = globalTaxData, s = globalStockData;
       const pension = r.p1Total + r.p2Monthly + (r.couple ? r.spouseMonthly : 0);
       const box = (title, color, rows, verdict) => `<div class="rounded-xl border p-3" style="border-color:${color}">
         <div class="font-bold text-sm mb-1" style="color:${color}">${title}</div>
@@ -2350,10 +2798,19 @@
         ['不動產傳承方式', `${t.re.best}最有利`]
       ], t.plannedTax === 0 ? '目前無應納遺產稅' : (t.isCashSufficient ? '繳稅現金充足' : `繳稅現金不足 ${(t.plannedTax - t.cashAvail).toFixed(1)} 萬`));
 
+      const stockBox = box('五、員工股票與股利', '#b45309', [
+        ['取得方式', s.typeName],
+        ['員工股票應稅所得', `${fmt(s.income)} 元`],
+        ['取得年度增加所得稅', `${fmt(s.taxA)} 元`],
+        ['稅後淨額最高方案', `${fmt(s.best.net)} 元`]
+      ], `${s.best.name}${s.div > 0 ? `；股利宜${s.useCombined ? '合併' : '分開'}計稅` : ''}${s.amtDue > 0 ? `；最低稅負補繳 ${fmt(s.amtDue)} 元` : ''}`);
+
       const steps = [];
       if (r.gap > 0) steps.push(`退休缺口：每月增加退休投入約 <strong>${fmt(r.extraMonthly)} 元</strong>，或延後退休、調整退休後生活費。`);
       if (k.isLtc && k.firstNetGap > 0) steps.push(`長照：長照險月給付補足約 <strong>${fmt(k.firstNetGap)} 元</strong>，或另外準備約 <strong>${wan(k.ltcPV)} 萬</strong> 長照準備金；同時檢視失能險保障。`);
       if (t.plannedTax > 0 && !t.isCashSufficient) steps.push(`遺產稅：稅源不足 ${(t.plannedTax - t.cashAvail).toFixed(1)} 萬，可提高指定受益人的壽險保額，或預先評估以不動產向銀行融資繳稅（可貸約 ${t.loanable.toLocaleString()} 萬）。`);
+      if (s.best && s.best.key !== 'A') steps.push(`員工股票：可評估向公司申請產創條例緩課（${s.best.name}），稅後淨額約 ${fmt(s.best.net)} 元。`);
+      if (s.amtDue > 0) steps.push(`最低稅負：本年度預估需補繳 ${fmt(s.amtDue)} 元，可評估分散出售年度。`);
       const c = globalCheckData;
       if (c.risks && c.risks.length) steps.push(`傳承完整度 ${c.score}%：尚有 ${c.risks.length} 項未涵蓋，優先處理「${c.risks.slice(0, 2).map(x => x.title).join('」、「')}」。`);
       const f = globalFamilyData;
@@ -2363,7 +2820,7 @@
       steps.push('每年或家庭狀況改變（換工作、結婚生子、退休、健康變化）時，重新檢視一次本試算。');
 
       document.getElementById('printSummaryBody').innerHTML = `
-        <div class="grid grid-cols-3 gap-3">${retireBox}${riskBox}${taxBox}</div>
+        <div class="grid grid-cols-2 gap-3">${retireBox}${riskBox}${taxBox}${stockBox}</div>
         <div class="mt-4 text-sm font-bold text-slate-800">建議下一步</div>
         <ol class="list-decimal pl-5 text-[12px] text-slate-700 space-y-1 mt-1">${steps.map(x => `<li>${x}</li>`).join('')}</ol>
         <p class="mt-4 text-[11px] text-slate-500">以下各頁依序說明每一部分採用的假設、計算結果與建議。本試算僅供規劃參考，不構成投資、法律或稅務建議；實際稅額以國稅局核定為準。</p>`;
@@ -2401,8 +2858,9 @@
       pubStartDirty = !!rec.pubStartDirty;
       applyCareerUI();
       applyCoupleUI();
+      applyStockUI();
       applyBizUI();
-      calcRetire(); calcTax(); calcFamily(); calcCheck();
+      calcRetire(); calcTax(); calcStock(); calcFamily(); calcCheck();
       const active = document.querySelector('.tab-btn.active');
       switchTab(active ? active.id.replace('btn-', '') : 'retire');
     }
