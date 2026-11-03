@@ -1454,6 +1454,12 @@
       </div>
     </div>
 
+    <!-- ==================== 列印用：結論與建議（最後一頁）==================== -->
+    <section id="printConclusion" class="print-only px-4 pt-3" style="break-before:page;page-break-before:always">
+      <h2 id="printConclusionHead" class="text-base font-bold text-slate-900 border-b-2 border-amber-500 pb-1 mb-2">結論與建議</h2>
+      <div id="printConclusionBody"></div>
+    </section>
+
     <footer class="bg-slate-50 border-t border-slate-200 px-6 py-3 flex flex-col md:flex-row gap-1 justify-between text-xs text-slate-500">
       <span>規劃人：宋秉諭 ｜ 生涯財務模擬與 115 年稅務傳承試算</span>
       <span>本試算僅供規劃參考，不構成投資、法律或稅務建議；實際稅額以國稅局核定為準 ｜ 諮詢日期：<span id="printDate"></span></span>
@@ -3469,7 +3475,7 @@
         titles.push(h.textContent);
       });
       const careerSel = document.getElementById('career');
-      document.getElementById('printToc').innerText = `身分：${careerSel.options[careerSel.selectedIndex].text}。本報告共${CN[titles.length]}部分：${titles.join('；')}。每部分先列出試算採用的假設與說明，再呈現結果與建議。金額單位除另註明外為新台幣。`;
+      document.getElementById('printToc').innerText = `身分：${careerSel.options[careerSel.selectedIndex].text}。本報告共${CN[titles.length]}部分：${titles.join('；')}。每部分先列出試算採用的假設與說明，再呈現結果與建議；最後一頁為結論與建議。金額單位除另註明外為新台幣。`;
     }
     function restoreAfterPrint() {
       applyFont();
@@ -3481,6 +3487,85 @@
     // 列印第一頁：三個模組的結論與建議下一步
     function renderPrintSummary() {
       document.getElementById('printSummaryBody').innerHTML = buildSummary(includedTabs(), true);
+      renderPrintConclusion();
+    }
+    // ===== 結論與建議：由計算結果依固定規則產生（最後一頁），每條都附上依據的數字 =====
+    // 狀態判斷標準（顯示於報告）：良好＝該項沒有缺口或風險；留意＝有風險但目前資產撐得住；需優先處理＝缺口、赤字、提前見底、稅源不足，或傳承完整度低於 50%。
+    function buildConclusion(inc) {
+      const r = globalRetireData, k = globalRiskData, t = globalTaxData, c = globalCheckData, cf = globalCashData, s = globalStockData, f = globalFamilyData;
+      const monthlySurplus = cf.surplus / 12;
+      const GOOD = 0, WATCH = 1, URGENT = 2;
+      const status = [], todo = [];   // todo: {tier: 1先做 | 2接著做, text}
+      const add = (tier, text) => todo.push({ tier, text });
+
+      if (inc.has('retire')) {
+        if (r.gap > 0) {
+          const hard = r.exhaustedAge !== null || r.extraMonthly > Math.max(0, monthlySurplus);
+          status.push(['退休金', `缺口 ${wan(r.gap)} 萬`, `65 歲需備 ${wan(r.need)} 萬，預估可動用 ${wan(r.startBal)} 萬`, hard ? URGENT : WATCH]);
+          add(hard ? 1 : 2, `退休缺口 <strong>${wan(r.gap)} 萬</strong>：每月再加存約 <strong>${fmt(r.extraMonthly)} 元</strong>（${monthlySurplus < 0 ? `目前每月入不敷出約 ${fmt(-monthlySurplus)} 元` : `目前每月結餘約 ${fmt(monthlySurplus)} 元`}${r.extraMonthly > Math.max(0, monthlySurplus) ? '，不足以負擔，需搭配延後退休或調整退休後支出' : '，可從中支應'}）。`);
+        } else {
+          status.push(['退休金', '目前無缺口', `需備 ${wan(r.need)} 萬，預估可動用 ${wan(r.startBal)} 萬`, GOOD]);
+          add(2, `退休金「無缺口」的前提是已備資產 <strong>${wan(r.totalSaved)} 萬</strong>、每月投入 <strong>${fmt(r.totalInvest)} 元</strong>；實際金額若較少，請改填後重算。`);
+        }
+      }
+      if (inc.has('risk') && k.isLtc) {
+        if (k.shockExhaust !== null) {
+          status.push(['長照風險', `${k.shockExhaust} 歲資產見底`, `長照準備金需 ${wan(k.ltcPV)} 萬`, URGENT]);
+          add(1, `長照：發生長照時資產會在 <strong>${k.shockExhaust} 歲</strong>見底，建議提高長照保障（長照險月給付補足約 ${fmt(k.firstNetGap)} 元）或另備 <strong>${wan(k.ltcPV)} 萬</strong>。`);
+        } else if (k.ltcPV > 0) {
+          status.push(['長照風險', '資產撐得住但被侵蝕', `長照準備金（退休時點）${wan(k.ltcPV)} 萬`, WATCH]);
+          add(2, `長照：資產雖撐得住，仍會被侵蝕約 <strong>${wan(k.ltcPV)} 萬</strong>；可評估長照險（月給付約 ${fmt(k.firstNetGap)} 元可完全覆蓋首年費用）或預留專款。政府補助僅供參考，未自動計入。`);
+        } else status.push(['長照風險', '影響不大', '', GOOD]);
+      }
+      if (inc.has('tax')) {
+        if (t.plannedTax > 0) {
+          const bad = !t.isCashSufficient;
+          status.push(['遺產稅', `應納 ${t.plannedTax.toLocaleString()} 萬`, `可用現金＋保險金 ${t.cashAvail.toLocaleString()} 萬`, bad ? URGENT : WATCH]);
+          add(bad ? 1 : 2, `遺產稅 <strong>${t.plannedTax.toLocaleString()} 萬</strong>：${bad ? `稅源不足 ${(t.plannedTax - t.cashAvail).toFixed(1)} 萬，建議預先安排稅源（指定受益人的壽險，或以不動產向銀行借款的方式）。` : '稅源目前充足，可評估請求權與生前贈與是否能降低稅額。'}`);
+        } else status.push(['遺產稅', '目前無應納稅額', `遺產淨額未超過免稅額與扣除額`, GOOD]);
+      }
+      if (inc.has('check') && c.risks) {
+        const low = c.score < 50;
+        status.push(['傳承完整度', `${c.score}%`, `尚有 ${c.risks.length} 項未涵蓋`, low ? URGENT : (c.risks.length ? WATCH : GOOD)]);
+        if (c.risks.length) add(low ? 1 : 2, `傳承安排完整度 <strong>${c.score}%</strong>：優先處理「${c.risks.slice(0, 2).map(x => x.title).join('」、「')}」（共 ${c.risks.length} 項未涵蓋）。`);
+      }
+      if (inc.has('cash')) {
+        const bads = cf.bad || [];
+        status.push(['家庭財務', cf.surplus < 0 ? `每月赤字 ${fmt(-monthlySurplus)} 元` : `每月結餘 ${fmt(monthlySurplus)} 元`, `儲蓄率 ${Math.round(cf.saveRate * 100)}%，淨資產 ${fmt(cf.netWorth)} 萬`, cf.surplus < 0 ? URGENT : (bads.length ? WATCH : GOOD)]);
+        if (cf.surplus < 0) add(1, `收支赤字：每月入不敷出約 <strong>${fmt(-monthlySurplus)} 元</strong>，先檢視最大的支出項目。`);
+        else if (bads.length) add(2, `財務指標需調整：${bads.join('、')}。`);
+        if (val('cf_premium_num', 0) === 0) add(2, '保障：保費欄位為 0；若家中確實沒有壽險、醫療或失能保障，建議先確認基本保障（本報告的遺產稅與長照結果未計入任何保單）。');
+      }
+      if (inc.has('stock') && s.best) {
+        if (s.amtDue > 0) add(2, `最低稅負：本年度預估補繳 <strong>${fmt(s.amtDue)} 元</strong>，可評估分散出售年度。`);
+        if (s.best.key !== 'A') add(2, `員工股票：稅後淨額最高的方案是「${s.best.name}」（約 ${fmt(s.best.net)} 元）。`);
+      }
+      if (inc.has('family')) {
+        const allAdv = pfChecked('pf_printAdv');
+        if ((allAdv || pfChecked('pf_hasBiz')) && f.bizHolding > 0) add(2, `家族企業股權（稅法評價約 ${fmt(f.bizHolding)} 萬）：規劃分年移轉與控制權安排。`);
+        if ((allAdv || pfChecked('pf_hasOverseas')) && f.osExtra > 0) add(2, `境外資產：預估增加遺產稅約 ${fmt(f.osExtra)} 萬，並確認海外繼承程序與申報。`);
+      }
+
+      const n = [0, 0, 0]; status.forEach(x => n[x[3]]++);
+      const label = ['良好', '留意', '需優先處理'], color = ['#047857', '#b45309', '#b91c1c'];
+      const tier = (n, title, color, items) => `<div class="mt-3"><div class="font-bold text-sm" style="color:${color}">${title}</div>${items.length
+        ? `<ol class="list-decimal pl-5 text-[12px] text-slate-700 space-y-1 mt-1">${items.slice(0, 5).map(x => `<li>${x.text}</li>`).join('')}</ol>${items.length > 5 ? `<div class="text-[11px] text-slate-500 pl-5">其餘 ${items.length - 5} 項請見各部分的說明。</div>` : ''}`
+        : '<div class="text-[12px] text-slate-500 mt-1">目前沒有這一類的項目。</div>'}</div>`;
+      const periodic = ['每年，或換工作、結婚生子、退休、健康變化、買賣房地產時，重新輸入最新數字再試算一次。', `法規數字更新日 ${LAW_META.UPDATED}；仍有 ${LAW_META.PENDING.length} 項法規待確認（頁面最下方列出），這些項目以現行規定試算，日後定案後結果可能改變。`];
+      return `<div class="text-[12px] text-slate-800">整體來看：<strong style="color:${color[2]}">${n[2]} 項需優先處理</strong>、<strong style="color:${color[1]}">${n[1]} 項留意</strong>、<strong style="color:${color[0]}">${n[0]} 項良好</strong>。以下結論由您填入的數字依固定規則自動產生。</div>
+        <table class="print-table bg-white mt-2"><thead><tr><th style="width:18%">項目</th><th style="width:24%">結果</th><th>依據</th><th style="width:16%">判斷</th></tr></thead><tbody>${status.map(([a, b, d, st]) =>
+          `<tr><td>${a}</td><td class="v">${b}</td><td>${d}</td><td><strong style="color:${color[st]}">${label[st]}</strong></td></tr>`).join('')}</tbody></table>
+        ${tier(0, '先做', '#b91c1c', todo.filter(x => x.tier === 1))}
+        ${tier(0, '接著做', '#b45309', todo.filter(x => x.tier === 2))}
+        <div class="mt-3"><div class="font-bold text-sm" style="color:#1d4ed8">定期檢視</div><ol class="list-decimal pl-5 text-[12px] text-slate-700 space-y-1 mt-1">${periodic.map(x => `<li>${x}</li>`).join('')}</ol></div>
+        <p class="mt-4 text-[11px] text-slate-500">判斷標準：良好＝沒有缺口或風險；留意＝有風險但目前資產撐得住；需優先處理＝有缺口、赤字、資產提前見底、稅源不足，或傳承完整度低於 50%。本結論依您輸入的數字與頁面假設自動產生，並非針對個人的專業建議；各項金額與稅額以實際資料與主管機關核定為準，本試算不構成投資、法律或稅務建議。</p>`;
+    }
+    function renderPrintConclusion() {
+      const inc = includedTabs();
+      const CN = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+      const parts = PRINT_HEADS.filter(([key]) => inc.has(key === 're' ? 'tax' : key)).length;
+      document.getElementById('printConclusionHead').textContent = `${CN[parts + 1] || ''}、結論與建議`;
+      document.getElementById('printConclusionBody').innerHTML = buildConclusion(inc);
     }
     // 摘要卡片與建議下一步：列印第一頁與「總覽」分頁共用；inc = 要納入的分頁
     function buildSummary(inc, forPrint) {
