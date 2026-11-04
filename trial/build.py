@@ -35,14 +35,13 @@ def link(url, text):
 banner = f"""
 <div id="trialBanner" style="background:#fef3c7;border-bottom:2px solid #f59e0b;color:#78350f;font-size:0.9375rem;line-height:1.5;padding:8px 12px;text-align:center">
   <strong>試用版</strong>，試用至 <strong id="trialEnd"></strong><span id="trialLeft"></span>，數字為示意估算，不構成投資、法律或稅務建議。
-  ｜ <a href="https://joesung0719.github.io/us-tax-planner/trial/" target="_blank" rel="noopener" class="underline font-bold">美國稅務試算（測試版）</a>
   <span class="no-print">
     {" ｜ " + link(form, "回報問題") if form else ""}{" ｜ " + link(line, cfg.get("lineLabel", "LINE 聯絡")) if line else ""}
     ｜ 所有計算都在您的瀏覽器內完成，不會上傳或蒐集您輸入的資料。有問題請直接回覆給提供試用連結的規劃人，請勿傳送身分證字號。
   </span>
   <span style="opacity:.7">（{cfg["trialVersion"]}）</span>
 </div>
-<script>document.getElementById("trialEnd").textContent = TRIAL.expires; document.getElementById("trialLeft").textContent = "（剩 " + TRIAL.daysLeft + " 天）";</script>
+<script>document.getElementById("trialEnd").textContent = TRIAL.expires; document.getElementById("trialLeft").textContent = "（" + TRIAL.daysText + "）";</script>
 """
 
 # 1) 橫幅放在 <body> 之後
