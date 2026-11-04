@@ -1,0 +1,21 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>全方位退休與傳承規劃試算(試用版)</title>
+<script src="/us-tax-planner/trial/expiry.js"></script>
+<script>if (window.TRIAL && !TRIAL.expired) location.replace("app.html" + location.search + location.hash);</script>
+<style>
+:root{--bg:#f6f7f9;--fg:#1c2230;--card:#fff;--mut:#5b6475;--bd:#d9dde5}
+@media(prefers-color-scheme:dark){:root{--bg:#10131a;--fg:#e8ebf2;--card:#1a1f2b;--mut:#9aa3b5;--bd:#2d3444}}
+body{margin:0;background:var(--bg);color:var(--fg);font:20px/1.7 system-ui,"Noto Sans TC",sans-serif}
+main{max-width:640px;margin:12vh auto;padding:24px 16px}div{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:24px}
+h1{font-size:1.5rem;margin:0 0 .5em}small{color:var(--mut)}
+</style></head><body><main><div>
+<h1>全方位退休與傳承規劃試算(試用版)</h1>
+<p id="msg">正在確認試用期限…</p>
+<noscript><p>請開啟瀏覽器的 JavaScript 後再試。</p></noscript>
+<p><small>本頁不構成投資、法律或稅務建議。</small></p>
+</div></main>
+<script>
+var m = document.getElementById("msg");
+if (!window.TRIAL) m.textContent = "暫時無法確認試用期限,請稍後再試。若持續無法開啟,請聯絡提供此連結給你的 Joe。";
+else if (TRIAL.expired) m.textContent = "這個試用版的試用期已於 " + TRIAL.expires + " 結束。" + TRIAL.contact;
+</script></body></html>

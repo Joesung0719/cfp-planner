@@ -1,6 +1,7 @@
 # 同一個 Pages 站台發佈兩個版本：
 #   /          正式版 = main 的 index.html（每次合併到 main 自動更新）
-#   /trial/    客戶試用版 = trial/pinned-ref.txt 指定的 commit 或標籤（固定版本，改這個檔才會更新）
+#   /trial/    客戶試用版 = trial/pinned-ref.txt 指定的 commit 或標籤的 index.html（固定版本，改這個檔才會更新），
+#              用 main 的 trial/build.py 加上橫幅與到期檢查，輸出 app.html；/trial/ 本身是到期閘門頁 gate.html
 # Settings → Pages → Source 需為「GitHub Actions」。
 name: Deploy site (formal + trial)
 
@@ -40,8 +41,7 @@ jobs:
         run: |
           mkdir -p site/trial
           cp main-src/index.html site/index.html
-          (cd trial-src && python3 trial/build.py --release)
-          cp trial-src/dist/index.html site/trial/index.html
+          python3 main-src/trial/build.py --release --src trial-src/index.html --out site/trial/app.html
           touch site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
