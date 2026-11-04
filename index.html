@@ -53,6 +53,16 @@
       .topic-page { break-after: page; page-break-after: always; font-size: 14.5px; line-height: 1.5; }
       .topic-page .print-table { font-size: 13.5px; }
       .topic-page .print-table th, .topic-page .print-table td { padding: 5px 8px; }
+      p, li { orphans: 3; widows: 3; }
+      /* 簡易版：第 1 頁與結論頁收緊，預留空間給 iPhone Safari 等列印字級較大的瀏覽器，避免溢出一行就多一頁 */
+      body.print-simple .print-page1 { font-size: 13px; line-height: 1.35; }
+      body.print-simple .print-page1 svg { max-height: 40mm !important; }
+      body.print-simple .print-page1 [style*="min-height"] { min-height: 0 !important; }
+      body.print-simple .print-page1 [style*="border:3px"] { padding: 6px !important; }
+      body.print-simple .print-page1 p { margin: 4px 0 !important; break-inside: avoid; page-break-inside: avoid; }
+      body.print-simple #printConclusion { font-size: 11.5px; line-height: 1.4; padding-top: 0 !important; }
+      body.print-simple #printConclusion table { font-size: 11px; }
+      body.print-simple #printConclusion li, body.print-simple #printConclusion p { margin-top: 1px !important; margin-bottom: 1px !important; }
       body.print-simple .tab-section, body.print-simple .print-appendix, body.print-simple .print-summary, body.print-simple .print-topics { display: none !important; }
       .print-skip, .tab-section.print-skip, .tab-section.print-excluded { display: none !important; }   /* 依身分未納入報告的分頁 */
     }
