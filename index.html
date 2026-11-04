@@ -54,6 +54,9 @@
       .topic-page .print-table { font-size: 13.5px; }
       .topic-page .print-table th, .topic-page .print-table td { padding: 5px 8px; }
       p, li { orphans: 3; widows: 3; }
+      /* 頁尾摺疊列與報告內的待確認清單重複，列印不印；頁尾縮小，避免單獨落到新的一頁 */
+      #lawStatus { display: none !important; }
+      footer { padding: 2px 4px !important; font-size: 9px !important; line-height: 1.3; border-top: 1px solid #cbd5e1; break-inside: avoid; page-break-inside: avoid; }
       /* 簡易版：第 1 頁與結論頁收緊，預留空間給 iPhone Safari 等列印字級較大的瀏覽器，避免溢出一行就多一頁 */
       body.print-simple .print-page1 { font-size: 13px; line-height: 1.35; }
       body.print-simple .print-page1 svg { max-height: 40mm !important; }
