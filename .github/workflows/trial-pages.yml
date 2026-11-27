@@ -1,9 +1,6 @@
-# 同一個 Pages 站台發佈兩個版本：
-#   /          正式版 = main 的 index.html（每次合併到 main 自動更新）
-#   /trial/    客戶試用版 = trial/pinned-ref.txt 指定的 commit 或標籤的 index.html（固定版本，改這個檔才會更新），
-#              用 main 的 trial/build.py 加上橫幅與到期檢查，輸出 app.html；/trial/ 本身是到期閘門頁 gate.html
+# 發佈正式版 = main 的 index.html（每次合併到 main 自動更新）。客戶試用版已於 2026-11 到期移除。
 # Settings → Pages → Source 需為「GitHub Actions」。
-name: Deploy site (formal + trial)
+name: Deploy site
 
 on:
   push:
@@ -30,18 +27,10 @@ jobs:
         with:
           ref: main
           path: main-src
-      - name: Read pinned trial ref
-        id: pin
-        run: echo "ref=$(tr -d '[:space:]' < main-src/trial/pinned-ref.txt)" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.pin.outputs.ref }}
-          path: trial-src
       - name: Assemble site
         run: |
-          mkdir -p site/trial
+          mkdir -p site
           cp main-src/index.html site/index.html
-          python3 main-src/trial/build.py --release --src trial-src/index.html --out site/trial/app.html
           touch site/.nojekyll
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
