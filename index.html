@@ -1941,7 +1941,8 @@
       // ---- 第一層：國保老年年金（65歲起，隨CPI調整）----
       const natA = LAW.NAT_INS_AMT * natYears * 0.0065 + LAW.NAT_A_ADD;
       const natB = LAW.NAT_INS_AMT * natYears * 0.013;
-      let natToday = natYears > 0 ? ((isLabor && laborYears === 0) ? Math.max(natA, natB) : natB) : 0; // 領勞保/公保/軍保老年給付者不得選A式
+      // 國民年金法§30Ⅱ：領社會福利津貼（含老農津貼）或已領勞保年金、公保、軍保老年給付者不得選A式；農保沒有老年給付，不影響A式
+      let natToday = natYears > 0 ? (((isLabor || career === 'farmer') && laborYears === 0) ? Math.max(natA, natB) : natB) : 0;
 
       // ---- 第一層：老年農民福利津貼（農民、漁會甲類會員；65歲起，每4年依CPI調整）----
       let farmAllow65 = 0;
@@ -2409,7 +2410,8 @@
       // 員工酬勞股票視為獎金：全年獎金超過投保金額 4 倍的部分 × 2.11%
       const bonusLimit = insSal * LAW.NHI_BONUS_X;
       const nhiOn = bonus => Math.max(0, bonus - bonusLimit) * LAW.NHI_RATE;
-      const nhiBonus = nhiBonusOn ? nhiOn(otherBonus + shares * fmv) - nhiOn(otherBonus) : 0;
+      // 單次給付逾 1,000 萬元部分免扣取（扣取及繳納補充保險費辦法§4Ⅱ①），費基以 1,000 萬元為限
+      const nhiBonus = nhiBonusOn ? Math.min(nhiOn(otherBonus + shares * fmv) - nhiOn(otherBonus), LAW.NHI_CAP * LAW.NHI_RATE) : 0;
       const incTax = (base, add) => incomeTax(base + add) - incomeTax(base);
       // 取得後到出售的價差：上市櫃停徵；未上市櫃、外國股票另計入基本所得額
       const gainNote = g => g <= 0 ? '出售時無價差' : (market === 'listed' || market === 'emerging' ? `價差 ${fmt(g)} 元停徵所得稅` : market === 'private' ? `價差 ${fmt(g)} 元計入最低稅負基本所得額` : `價差 ${fmt(g)} 元為海外所得`);
@@ -2510,7 +2512,7 @@
         const pB = plans.find(p => p.key === 'B'), pC = plans.find(p => p.key === 'C');
         if (pB && pC) notes.push(`<p>2. <strong>產創條例緩課：</strong>${sell > fmv ? `出售價高於取得時價時，未滿 2 年出售會以較高的出售價課稅（所得稅 ${fmt(pB.tax)} 元，取得年度課稅為 ${fmt(taxA)} 元）；持有並服務滿 2 年則以取得時價課稅（${fmt(pC.tax)} 元），超過部分${market === 'private' ? '計入最低稅負基本所得額' : '屬停徵的證券交易所得'}。` : '出售價不高於取得時價時，緩課可用較低的出售價計稅，降低稅負，但要承擔股價下跌的風險。'}${saleNet < otherNet ? `出售年度所得較低（例如退休後）時，緩課可適用較低級距。` : ''}緩課須公司向主管機關申報，董監事不適用，一經選擇不得變更；116 年起每年上限提高為 1,000 萬元。</p>`);
       } else notes.push('<p>2. 外國母公司股票不適用產創條例緩課。母公司若有代扣美國等國的稅款，屬於工作所得部分不一定能在台灣扣抵，出售價差與海外股利則併入海外所得，全戶海外所得達 100 萬元須申報最低稅負。</p>');
-      if (nhiBonusOn) notes.push(`<p>3. <strong>補充保費：</strong>員工酬勞股票按時價 ${fmt(shares * fmv)} 元與其他獎金 ${fmt(otherBonus)} 元合計，超過投保金額 4 倍（${fmt(bonusLimit)} 元）的部分以 2.11% 計，估算 ${fmt(nhiBonus)} 元。⚠️ 股票型員工酬勞的補充保費計價方式請洽健保署確認。</p>`);
+      if (nhiBonusOn) notes.push(`<p>3. <strong>補充保費：</strong>員工酬勞股票按時價 ${fmt(shares * fmv)} 元與其他獎金 ${fmt(otherBonus)} 元合計，超過投保金額 4 倍（${fmt(bonusLimit)} 元）的部分以 2.11% 計（單次給付超過 1,000 萬元的部分免扣），估算 ${fmt(nhiBonus)} 元。⚠️ 股票型員工酬勞的補充保費計價方式請洽健保署確認。</p>`);
       if (div > 0) notes.push(`<p>${nhiBonusOn ? 4 : 3}. <strong>股利：</strong>${useCombined ? '合併計稅較有利' : '分開計稅（28%）較有利'}，股利稅後約 ${fmt(div - Math.min(combinedAdd, separateAdd) - nhiDiv)} 元。股票股利 ${fmt(stockDiv)} 元按面額計入所得、可配得 ${fmt(stockDiv / 10)} 股，但沒有現金入帳，要預留繳稅現金。單次股利達 2 萬元會扣 2.11% 補充保費（本例 ${fmt(nhiDiv)} 元）。</p>`);
       document.getElementById('stockAdvisorText').innerHTML = notes.join('');
 
@@ -2526,14 +2528,16 @@
       return rate;
     }
     // 計算一次出售的房地合一稅；回傳 { income, tax, rateText, oldRegime }
-    function reSaleTax({ price, cost, fee, landGain, years, resident, except, selfUse, oldRegime }) {
+    // canElect：105年後繼承、被繼承人104年底前取得且符合自住者，可選擇新制（財政部104.8.19台財稅字第10404620870號令）；本人104年底前取得者一律舊制
+    function reSaleTax({ price, cost, fee, landGain, years, resident, except, selfUse, oldRegime, canElect = false }) {
       const income = +(price - cost - fee - landGain).toFixed(1);
       const selfOk = selfUse && resident && years >= LAW.RE_SELF_YEARS;
-      if (oldRegime && !selfOk) return { income, tax: null, rateText: '舊制（僅房屋所得併入綜所稅）', oldRegime: true };
-      if (income <= 0) return { income, tax: 0, rateText: '無所得（虧損）', selfOk };
+      if (oldRegime && !(canElect && selfOk)) return { income, tax: null, rateText: '舊制（僅房屋所得併入綜所稅）', oldRegime: true };
+      const electText = oldRegime ? '（選擇新制；也可留在舊制，擇低）' : '';
+      if (income <= 0) return { income, tax: 0, rateText: '無所得（虧損）' + electText, selfOk };
       if (selfOk) {
         const taxable = Math.max(0, income - LAW.RE_SELF_EXEMPT);
-        return { income, tax: +(taxable * LAW.RE_SELF_RATE / 100).toFixed(1), rateText: `自住：${LAW.RE_SELF_EXEMPT}萬免稅、超過部分${LAW.RE_SELF_RATE}%`, selfOk };
+        return { income, tax: +(taxable * LAW.RE_SELF_RATE / 100).toFixed(1), rateText: `自住：${LAW.RE_SELF_EXEMPT}萬免稅、超過部分${LAW.RE_SELF_RATE}%${electText}`, selfOk };
       }
       const rate = reTaxRate(years, resident, except);
       return { income, tax: +(income * rate / 100).toFixed(1), rateText: `${rate}%（持有${years}年）`, selfOk };
@@ -2582,7 +2586,7 @@
       if (selfUse && resident && years < LAW.RE_SELF_YEARS) notes.push(`自住優惠須設籍並居住連續滿 ${LAW.RE_SELF_YEARS} 年，目前持有 ${years} 年，未套用。`);
       if (except && !resident) notes.push('非自願出售等例外 20% 僅適用境內居住者。');
       if (except && resident && years > LAW.RE_EXCEPT_YEARS) notes.push(`持有超過 ${LAW.RE_EXCEPT_YEARS} 年，例外規定不影響稅率。`);
-      if (oldRegime) notes.push('104年12月31日以前取得：適用舊制，只有房屋部分的財產交易所得併入綜合所得稅；符合自住條件時可選擇新制。');
+      if (oldRegime) notes.push('104年12月31日以前取得：本人出售一律適用舊制，只有房屋部分的財產交易所得併入綜合所得稅，不能改選新制自住優惠。105年以後由子女繼承後出售，符合自住條件時，子女可選擇改按新制計稅。');
       document.getElementById('reRuleNote').innerText = notes.join(' ');
 
       // 2) 傳承比較：base = 不含此物件的課稅遺產淨額（可為負，代表免稅額與扣除額還有剩）
@@ -2597,7 +2601,7 @@
       const heirB = reSaleTax({ price, cost: heirCost, fee, landGain: 0, years: heirYears, resident, except: false, selfUse: heirSelf, oldRegime: false });
       // C. 繼承：遺產稅以課稅現值計、免徵土增稅；持有期間併計被繼承人；被繼承人104年底前取得者，子女出售適用舊制
       const estC = +(estTax(assess) - baseTax).toFixed(1);
-      const heirC = reSaleTax({ price, cost: heirCost, fee, landGain: 0, years: years + heirYears, resident, except: false, selfUse: heirSelf, oldRegime });
+      const heirC = reSaleTax({ price, cost: heirCost, fee, landGain: 0, years: years + heirYears, resident, except: false, selfUse: heirSelf, oldRegime, canElect: true });
 
       const totA = nowTax + landTax + estA;
       const totB = giftTax + landTax + (heirB.tax || 0);
@@ -2628,7 +2632,7 @@
         const nextCap = LAW.RE_RESIDENT.find(([cap]) => years <= cap)[0];
         if (Number.isFinite(nextCap)) adv.push(`<p>2. <strong>持有期間：</strong>再多持有到超過 ${nextCap} 年，稅率可降為 ${reTaxRate(nextCap + 0.1, true, false)}%。${years < LAW.RE_SELF_YEARS ? `若本人、配偶或未成年子女設籍並實際居住滿 ${LAW.RE_SELF_YEARS} 年、期間沒有出租或營業，可適用自住優惠（400 萬免稅，超過部分 10%）。` : ''}</p>`);
       }
-      adv.push(`<p>3. <strong>傳承方式：</strong>依目前輸入，<strong>${label[bestKey]}</strong> 讓子女實拿最多（${w(best)} 萬）。留現金會以現金全額計入遺產；不動產留待繼承時遺產稅以課稅現值計算，且免徵土地增值稅、持有期間可併計${oldRegime ? '，被繼承人 104 年底前取得者子女出售時適用舊制' : ''}。生前贈與的子女持有期間從受贈日重新起算，依輸入再持有 ${heirYears} 年出售，適用 ${heirB.rateText}。${val('giftYears_num', 0) > 0 ? '上方已規劃每年用掉 244 萬贈與免稅額，若同一年再贈與房地，贈與稅會比本表高。' : ''}</p>`);
+      adv.push(`<p>3. <strong>傳承方式：</strong>依目前輸入，<strong>${label[bestKey]}</strong> 讓子女實拿最多（${w(best)} 萬）。留現金會以現金全額計入遺產；不動產留待繼承時遺產稅以課稅現值計算，且免徵土地增值稅、持有期間可併計${oldRegime ? '，被繼承人 104 年底前取得者子女出售時適用舊制，符合自住條件可選擇改按新制' : ''}。生前贈與的子女持有期間從受贈日重新起算，依輸入再持有 ${heirYears} 年出售，適用 ${heirB.rateText}。${val('giftYears_num', 0) > 0 ? '上方已規劃每年用掉 244 萬贈與免稅額，若同一年再贈與房地，贈與稅會比本表高。' : ''}</p>`);
       adv.push('<p>4. <strong>其他提醒：</strong>贈與房屋另需繳契稅（房屋評定現值 6%）；過世前 2 年內贈與子女的財產仍會併入遺產；二親等間買賣若無法證明確實付款，會被視為贈與。配偶間贈與的持有期間可併計，但不在本表比較範圍。</p>');
       document.getElementById('reAdvisorText').innerHTML = adv.map((x, i) => x.replace(/^<p>\d+\./, `<p>${i + 1}.`)).join('');
 
@@ -2976,7 +2980,7 @@
       const yearsTaxFree = Math.ceil(holding / (LAW.GIFT_EXEMPT * donors));
       const farmVal = val('farm_val_num', 0);
       const farmKeep = document.getElementById('farm_keep').checked;
-      const farmSaved = farmKeep ? estateTaxDelta(farmVal) : 0;
+      const farmSaved = farmKeep ? Math.max(0, -estateTaxDelta(-farmVal)) : 0;   // 農地已含在第3頁淨額內：扣除後少繳的稅
       Object.assign(fd, { bizHolding: holding, bizEstateTax: estateTax, bizGiftTax: giftTaxTotal, giftYears: years });
 
       document.getElementById('bizCards').innerHTML =
@@ -3048,7 +3052,8 @@
       const usTax = usEstateTaxUsd(usUsd) * fx / 10000;   // 萬元
       const forTax = val('os_forTax_num', 0);
       const credit = Math.min(usTax + forTax, twInc);
-      const osExtra = (inTab3 ? 0 : twInc) - credit + usTax + forTax;   // 已含在第3頁時，台灣稅已計入第3頁
+      const twNotInTab3 = inTab3 ? estateTaxDelta(osRe) : twInc;   // 第3頁只含海外金融資產；海外不動產仍要另加
+      const osExtra = twNotInTab3 - credit + usTax + forTax;
       // CFC 與最低稅負
       const lowTax = document.getElementById('os_lowTax').checked;
       const ctrl = val('os_ctrl_num', 0), fam = val('os_fam_num', 0), self = val('os_self_num', 0);
